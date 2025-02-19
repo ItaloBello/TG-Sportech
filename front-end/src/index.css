@@ -141,8 +141,82 @@ body {
 }
 
 /* player-menu */
-.player-menu{
+.player-menu,
+.team-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* create-team */
+.create-team,
+.create-team__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.create-team__image {
+  width: 8.125rem;
+}
+.create-team__title {
+  margin: 1rem;
+  font-size: medium;
+  font-weight: 500;
+}
+
+.create-team__image-label {
+  color: #49454f;
+  font-size: small;
+  margin-top: 0.5rem;
+}
+
+.create-team__input-and-button {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 80%;
+}
+
+.create-team__input-and-button .input-item {
+  width: 100%;
+}
+.create-team__input-and-button .input-item input {
+  width: 100%;
+}
+
+.create-team__input-and-button .button-item {
+  width: 100%;
+  margin: 0;
+}
+.create-team__button-area {
+  display: flex;
+  width: 80%;
+}
+.create-team__button-area a {
+  margin: 1rem 0.5rem;
+}
+
+/* join-team */
+.join-team{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.join-team__text{
+  font-weight: 600;
+  width: 15.625rem;
+  text-align: center;
+}
+
+/* player-profile */
+.player-profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-profile__image{
+  width: 10rem;
 }

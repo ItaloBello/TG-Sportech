@@ -15,10 +15,16 @@ const PlayerMenu = () => {
           "../../public/calendar-icon.png",
           "../../public/log-out-icon.png",
         ]}
-        altArray={["icone de perfil", "icone de time", "icone de campeonato", "icone de agendamento", "icone de log out"]}
+        altArray={[
+          "icone de perfil",
+          "icone de time",
+          "icone de campeonato",
+          "icone de agendamento",
+          "icone de log out",
+        ]}
         links={[]}
         labels={["Meu perfil", "Time", "Campeonato", "Agendamento", "Sair"]}
-        colors={["#14AE5C","#14AE5C","#14AE5C","#14AE5C","#EC221F"]}
+        colors={["#14AE5C", "#14AE5C", "#14AE5C", "#14AE5C", "#EC221F"]}
       />
     </div>
   );

@@ -5,6 +5,10 @@ import { PlayerSingUp } from "./pages/PlayerSingUp";
 import PlayerRecovery from "./pages/PlayerRecovery";
 import PlayerSms from "./pages/PlayerSms";
 import PlayerMenu from "./pages/PlayerMenu";
+import TeamMenu from "./pages/TeamMenu";
+import CreateTeam from "./pages/CreateTeam";
+import JoinTeam from "./pages/JoinTeam";
+import PlayerProfile from "./pages/PlayerProfile";
 const App = () => {
   return (
     <>
@@ -15,6 +19,10 @@ const App = () => {
           <Route path="/player/recovery" element={<PlayerRecovery />} />
           <Route path="/player/recovery/sms" element={<PlayerSms />} />
           <Route path="/player/menu" element={<PlayerMenu />} />
+          <Route path="/player/profile/:id" element={<PlayerProfile />} />
+          <Route path="/player/teammenu" element={<TeamMenu />} />
+          <Route path="/player/createteam" element={<CreateTeam />} />
+          <Route path="/player/jointeam" element={<JoinTeam />} />
         </Routes>
       </BrowserRouter>
     </>
@@ -25,5 +33,5 @@ export default App;
 
 //rotas a definir:
 
-//  player/menu
+
 //  plaver/profile/:id
