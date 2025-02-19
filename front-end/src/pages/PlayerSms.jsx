@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import ButtonItem from "../components/ButtonItem";
 import InputList from "../components/InputList";
+import ButtonList from "../components/ButtonList";
 
 const PlayerSms = () => {
   return (
@@ -13,12 +14,13 @@ const PlayerSms = () => {
           que será enviado ao seu número de celular cadastrado.
         </p>
       </div>
-      <InputList
+      <ButtonList
         items={1}
         type="button-item"
         labels={["Voltar ao Login"]}
         links={["/player/login"]}
-        buttonColors={["#14ae5c"]}
+        colors={["#14ae5c"]}
+
       />
     </div>
   );

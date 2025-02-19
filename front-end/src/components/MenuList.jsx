@@ -12,7 +12,7 @@ const MenuList = ({ items, srcArray, altArray, links, labels, colors }) => {
               src={srcArray[index]}
               alt={altArray[index]}
               label={labels[index]}
-              //link={links[index]}
+              link={links[index]}
               color={colors[index]}
               key={index}
             />
