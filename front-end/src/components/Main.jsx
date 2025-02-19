@@ -11,6 +11,7 @@ const Main = ({
   buttonNumber,
   buttonLabels,
   buttonLinks,
+  buttonColors,
   linkPath,
   linkMessage = "",
 }) => {
@@ -34,6 +35,7 @@ const Main = ({
         items={buttonNumber}
         labels={buttonLabels}
         links={buttonLinks}
+        colors={buttonColors}
       />
     </div>
   );

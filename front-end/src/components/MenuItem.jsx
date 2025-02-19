@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const MenuItem = ({ src, alt, link, label }) => {
+const MenuItem = ({ src, alt, link, label, color }) => {
   return (
     <div className="menu-item">
-      <Link>
-        <img src="../../public/calendar-icon.png" alt="imagem x" />
-        <p>Agendamentos</p>
+      <Link style={{color:color}}>
+        <img src={src} alt={alt} />
+        <p>{label}</p>
       </Link>
     </div>
   );

@@ -18,6 +18,7 @@ const PlayerSms = () => {
         type="button-item"
         labels={["Voltar ao Login"]}
         links={["/player/login"]}
+        buttonColors={["#14ae5c"]}
       />
     </div>
   );

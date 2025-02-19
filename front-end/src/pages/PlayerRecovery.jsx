@@ -10,6 +10,7 @@ const PlayerRecovery = () => {
         buttonNumber={1}
         buttonLabels={["Recuperar Senha"]}
         buttonLinks={["/player/recovery/sms"]}
+        buttonColors={["#14ae5c"]}
       />
     </>
   );

@@ -23,6 +23,7 @@ export const PlayerSingUp = () => {
         buttonNumber={1}
         buttonLabels={["Cadastrar"]}
         buttonLinks={["/player/login"]}
+        buttonColors={["#14ae5c"]}
       />
     </>
   );

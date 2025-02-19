@@ -12,6 +12,7 @@ const PlayerLogin = () => {
         buttonNumber={1}
         buttonLabels={["Entrar"]}
         buttonLinks={["/player/login"]}
+        buttonColors={["#14ae5c"]}
         linkPath="/player/recovery"
         linkMessage="Esqueceu a senha, Jogador?"
       />

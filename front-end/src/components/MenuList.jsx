@@ -1,17 +1,19 @@
 import React from "react";
+import MenuItem from "./MenuItem";
 
-const MenuList = ({ items, srcArray, altArray, links, labels }) => {
+const MenuList = ({ items, srcArray, altArray, links, labels, colors }) => {
   return (
     <div className="item-list">
       {Array(items)
         .fill()
         .map((currentValue, index) => {
           return (
-            <MenuList
+            <MenuItem
               src={srcArray[index]}
               alt={altArray[index]}
               label={labels[index]}
-              link={links[index]}
+              //link={links[index]}
+              color={colors[index]}
               key={index}
             />
           );
