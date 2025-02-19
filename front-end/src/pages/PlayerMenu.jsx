@@ -22,7 +22,7 @@ const PlayerMenu = () => {
           "icone de agendamento",
           "icone de log out",
         ]}
-        links={[]}
+        links={["/player/profile/1","/player/teammenu", "", "", "/"]}
         labels={["Meu perfil", "Time", "Campeonato", "Agendamento", "Sair"]}
         colors={["#14AE5C", "#14AE5C", "#14AE5C", "#14AE5C", "#EC221F"]}
       />
