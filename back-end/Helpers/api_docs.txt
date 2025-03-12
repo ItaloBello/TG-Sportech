@@ -1,0 +1,40 @@
+Cadastro de quadra exemplo -> localhost:8081/api/admin/cadastrarQuadra [POST]
+
+{
+    "nome": "Echad",
+    "tipo": "Society",
+    "horarios": [
+        {"diaSemana": "Sexta", "valorHora": 30, "horaInicio": "09:00", "horaFim": "15:00"},
+        {"diaSemana": "Domingo", "valorHora": 100, "horaInicio": "06:00", "horaFim": "18:00"}],
+    "porcSinal": 20,
+    "meioSlot": false,
+    "donoQuadraId": 1
+}
+----------------------------------------------------------------------------------------------------------
+
+cadastro de dono de quadra -> localhost:8081/api/admin/registro [POST]
+
+{
+    "nome": "Gabriel Jonathan",
+    "email": "gabrielpadawan912@gmail.com",
+    "senha": "Paodoceu7@",
+    "senha2": "Paodoceu7@",
+    "documento": "49187641852",
+    "celular": "5515988029216"
+}
+
+---------------------------------------------------------------------------------------------------------
+
+cadastro de estabelecimento -> localhost:8081/api/admin/cadastrarEstabelecimento [POST]
+
+{
+    "nome": "Gabriel Jonathan",
+    "cep": "18072037",
+    "bairro": "São Bento@",
+    "rua": "Avelino dos Santos, 431",
+    "numero": 431,
+    "cidade_estado": "Sorocaba/SP",
+    "hora_inicio": "09:00",
+    "hora_fim": "19:00",
+    "donoQuadraId": 1
+}
