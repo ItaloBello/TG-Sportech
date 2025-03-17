@@ -1,5 +1,5 @@
 import React from 'react'
-import logoSportech from '../assets/images/sportech-logo.png'
+import logoSportech from '../../assets/images/sportech-logo.png'
 import "./styles.css"
 const Header = () => {
   return (

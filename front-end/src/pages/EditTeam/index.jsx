@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../components/Header";
 import CardList from "../../components/CardList";
-import "styles.css"
+import "./styles.css"
 
 const EditTeam = () => {
   return (

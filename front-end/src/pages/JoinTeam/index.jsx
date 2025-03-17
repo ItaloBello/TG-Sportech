@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../../components/Header'
 import InputList from '../../components/InputList'
 import ButtonList from '../../components/ButtonList'
-import "styles.css"
+import "./styles.css"
 const JoinTeam = () => {
   return (
     <div className='join-team'>

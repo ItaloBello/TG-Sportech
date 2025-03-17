@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../components/Header";
-import MenuList from "../components/MenuList";
+import Header from "../../components/Header";
+import MenuList from "../../components/MenuList";
 
 const TeamMenu = () => {
   return (

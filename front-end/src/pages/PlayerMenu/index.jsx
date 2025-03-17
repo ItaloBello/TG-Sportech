@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../components/Header";
 import MenuList from "../../components/MenuList";
-import "styles.css"
+import "./styles.css"
 const PlayerMenu = () => {
   return (
     <div className="player-menu">

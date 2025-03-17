@@ -1,7 +1,7 @@
 import React from 'react'
 import InputList from '../../components/InputList'
 import ButtonList from '../../components/ButtonList'
-import "styles.css"
+import "./styles.css"
 const PlayerProfile = () => {
   return (
     <div className='player-profile'>

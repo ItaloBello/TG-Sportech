@@ -1,6 +1,6 @@
 import React from "react";
 import Main from "../../components/Main";
-import "styles.css"
+import "./styles.css"
 
 export const PlayerSingUp = () => {
   return (
