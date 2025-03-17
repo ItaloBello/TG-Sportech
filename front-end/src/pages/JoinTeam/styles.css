@@ -1,0 +1,14 @@
+/* join-team */
+.join-team {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .join-team__text {
+    font-weight: 600;
+    width: 15.625rem;
+    text-align: center;
+  }
+  

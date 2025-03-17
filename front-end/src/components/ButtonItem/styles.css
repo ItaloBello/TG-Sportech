@@ -1,0 +1,19 @@
+/* button-item */
+.button-item {
+    display: flex;
+    background-color: #1e1e1e;
+    border: 1px solid #2c2c2c;
+    border-radius: 5px;
+    width: 100%;
+    height: 2.5rem;
+    color: #14ae5c;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin: 1rem;
+  }
+  
+  .button-item span {
+    font-size: 1rem;
+  }
+  

@@ -1,0 +1,10 @@
+/* player-profile */
+.player-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .player-profile__image {
+    width: 10rem;
+  }
