@@ -3,3 +3,17 @@ Criar base de dados chamada sportech
 substituir seu usuário e senha no arquivo database.js
 rodar o comando npm install no projeto
 rodar o comando npm start no projeto
+
+
+
+{{ ... }}
+// Configuração do CORS
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Adicione aqui os domínios do seu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+{{ ... }}
