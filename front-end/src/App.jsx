@@ -9,6 +9,7 @@ import TeamMenu from "./pages/TeamMenu";
 import CreateTeam from "./pages/CreateTeam";
 import JoinTeam from "./pages/JoinTeam";
 import PlayerProfile from "./pages/PlayerProfile";
+import EditTeam from "./pages/EditTeam";
 const App = () => {
   return (
     <>
@@ -24,7 +25,7 @@ const App = () => {
           <Route path="/player/teammenu" element={<TeamMenu />} />
           <Route path="/player/createteam" element={<CreateTeam />} />
           <Route path="/player/jointeam" element={<JoinTeam />} />
-        </Routes>
+v        </Routes>
       </BrowserRouter>
     </>
   );

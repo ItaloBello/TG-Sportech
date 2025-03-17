@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
+/* TODO Criar variaveis de cores */
 /* Reset */
 * {
   margin: 0;
@@ -197,26 +197,76 @@ body {
 }
 
 /* join-team */
-.join-team{
+.join-team {
   display: flex;
   align-items: center;
   flex-direction: column;
   height: 100vh;
 }
 
-.join-team__text{
+.join-team__text {
   font-weight: 600;
   width: 15.625rem;
   text-align: center;
 }
 
 /* player-profile */
-.player-profile{
+.player-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.player-profile__image{
+.player-profile__image {
   width: 10rem;
+}
+
+/* edit-team */
+.edit-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #2c2c2c;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.team-card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.team-card__image {
+  width: 6.25rem;
+  border-radius: 0.5rem;
+}
+
+.team-card__text-area {
+  color: #fff;
+}
+
+.team-card__button-area {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* button-area */
+.button-area__image {
+  width: 2.5rem;
+}
+
+/* card-button */
+.card-button {
+  border: 1px solid;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
 }
