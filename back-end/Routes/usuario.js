@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Usuario = require('../Models/Usuario');
 const Time = require('../Models/Time')
+const JogadorTime = require('../Models/JogadorTime')
 const bcrypt = require('bcrypt');
 const { Op, where } = require('sequelize');
 const passport = require('passport');
@@ -22,12 +23,10 @@ router.post("/registro", async (req, res) => {
 
             erros.push({ texto: "Email inválido!" });
         }
-        console.log(data)
         if(data.data.status === 'invalid'){
                 erros.push({ texto: "Email inválido!" });
             }
     }
-    if (!req.body.celular) erros.push("Data inválida!");
     if (req.body.senha.length < 8) erros.push("Senha muito curta!(adicione no mínimo 8 caracteres)");
     if (req.body.senha !== req.body.senha2) erros.push("As senhas são diferentes!");
 
@@ -55,48 +54,157 @@ router.post("/registro", async (req, res) => {
             nome: req.body.nome,
             documento,
             email: req.body.email,
-            celular: req.body.celular,
-            senha: hash
+            senha: hash,
         });
 
         res.status(201).json({ message: "Usuário registrado com sucesso!" });
     } catch (err) {
-        res.status(500).json({ error: "Erro interno do servidor" });
+        res.status(500).json({ error: err });
     }
 });
 
-router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) return res.status(500).json({ error: "Erro ao autenticar" });
-        if (!user) return res.status(400).json({ error: "Credenciais inválidas" });
-
-        req.login(user, (loginErr) => {
-            if (loginErr) return res.status(500).json({ error: "Erro ao logar" });
-            return res.json({ message: "Login realizado com sucesso!", id: user.id });
-        });
-    })(req, res, next);
+router.post("/login", async (req, res) => {
+    const usuario = req.body.usuario
+    const senha = req.body.senha
+    const usuarioExistente = await Usuario.findOne({where: {documento: usuario}})
+    if (!usuarioExistente){
+        res.status(401).json({error: "Jogador não encontrado."})
+        return
+    }
+    const passwordMatch = await bcrypt.compare(senha,usuarioExistente.senha)
+    if (!passwordMatch){
+        res.status(401).json({error: "Credenciais inválidas."})
+        return
+    }
+    res.status(200).json({message: "Login realizado com sucesso.", id: usuarioExistente.id})
 });
 
 router.get("/times/:userId", async (req, res) => {
     const userId = req.params.userId;
+    const jogadores = [];
     try {
         const times = await Time.findAll({ where: { userId: userId } });
+        for (const time of times) {
+            const jogador = await JogadorTime.findOne({ where: { timeId: time.id } });
+            jogadores.push(jogador);
+        }
+        times.jogadores = jogadores;
         return res.status(200).json({ times });
     } catch (err) {
-        return res.status(400).json({ error: err });
+        return res.status(400).json({ error: err.message });
     }
 });
 
-
-router.post("/times", async (req,res) => {
+router.post("/times", async (req, res) => {
+    const { userId, nome, img, cor_primaria, cor_secundaria } = req.body;
     
-    const userId = req.body.userId;
+    async function generateUniqueInviteCode() {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code;
+        do {
+            code = Array(7).fill().map(() => characters[Math.floor(Math.random() * characters.length)]).join('');
+        } while (await Time.findOne({ where: { invite_code: code } }));
+        return code;
+    }
+
+    try {
+        const invite_code = await generateUniqueInviteCode();
+        const newTime = await Time.create({
+            userId,
+            nome,
+            img,
+            cor_primaria,
+            cor_secundaria,
+            invite_code
+        });
+        return res.status(201).json({ message: "Time criado com sucesso!", time: newTime });
+    } catch (err) {
+        return res.status(400).json({ error: err.message });
+    }
+});
+
+router.post("/entrar", async (req, res) => {
+    const { timeId } = req.body;
+    const {jogadorId} = req.user;
+    const { invite_code } = req.body;
+    try {
+        const time = await Time.findOne({ where: { id } });
+        if (!time) {
+            return res.status(404).json({ error: "Time não encontrado." });
+        }
+        if (time.invite_code !== invite_code) {
+            return res.status(401).json({ error: "Código de convite inválido." });
+        }
+        const jogador = await JogadorTime.create({
+            timeId: timeId,
+            jogadorId: jogadorId
+        });
+        return res.status(200).json({ message: "Entrada no time autorizada." });
+    } catch (err) {
+        return res.status(400).json({ error: err.message });
+    }
+})
+
+router.delete("/remover", async (req, res) => {
+    const { timeId } = req.body;
+    const {jogadorId} = req.user;
+    try {
+        const jogador = await JogadorTime.findOne({ where: { timeId, jogadorId } });
+        if (!jogador) {
+            return res.status(404).json({ error: "Jogador não encontrado no time." });
+        }
+        await jogador.destroy();
+        return res.status(200).json({ message: "Jogador removido do time com sucesso." });
+    } catch (err) {
+        return res.status(400).json({ error: err.message });
+    }
+})
+
+router.put("/times/:id", async (req, res) => {
+    const { id } = req.params;
+    const { nome, img, cor_primaria, cor_secundaria, generateNewInviteCode } = req.body;
+
+    const updatedTime = {
+        nome,
+        img,
+        cor_primaria,
+        cor_secundaria
+    };
+
+    if (generateNewInviteCode) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let invite_code;
+        do {
+            invite_code = Array(7).fill().map(() => characters[Math.floor(Math.random() * characters.length)]).join('');
+        } while (await Time.findOne({ where: { invite_code } }));
+        updatedTime.invite_code = invite_code;
+    }
+
+    try {
+        await Time.update(updatedTime, { where: { id } });
+        return res.status(200).json({ message: "Time atualizado com sucesso!" });
+    } catch (err) {
+        return res.status(400).json({ error: err.message });
+    }
+});
+
+router.put("/edit/:id", async (req,res) => {
     const nome = req.body.nome;
-    const img = req.body.img;
+    const email = req.body.email;
+    const id = req.params.id;
+    const documento = req.body.documento;
+    const celular = req.body.celular;
+
+    const updatedUser = {
+        nome: nome,
+        email: email,
+        documento: documento,
+        celular: celular
+    }
 
     try{
-        await Time.create({userId: userId, nome: nome, img: img})
-        return res.status(200).json({message: "Time criado com sucesso!"})
+        await Usuario.update(updatedUser, {where: {id: id}})
+        return res.status(200).json({message: "Usuário atualizado com sucesso!"})
     }
     catch(err){
         return res.status(400).json({error:err})
