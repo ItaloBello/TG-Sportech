@@ -21,6 +21,18 @@ const Time = sequelize.define('times',{
         type: Sequelize.INTEGER,
         required: true
     },
+    cor_primaria: {
+        type: Sequelize.STRING,
+        required: true
+    },
+    cor_secundaria: {
+        type: Sequelize.STRING,
+        required: true
+    },
+    invite_code: {
+        type: Sequelize.STRING,
+        required: true
+    },
     data_criacao: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
