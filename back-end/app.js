@@ -56,7 +56,7 @@ sequelize.authenticate()
 
 // Rotas da API
 app.use('/api/admin', adminRoute);
-app.use('/api/usuario', userRoute);
+app.use('/api/jogador', userRoute);
 
 // Rota inicial
 app.get('/', (req, res) => {
