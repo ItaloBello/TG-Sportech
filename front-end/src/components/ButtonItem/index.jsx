@@ -4,11 +4,11 @@ import "./styles.css"
 
 const ButtonItem = ({ label, link, color }) => {
   return (
-    <>
-      <Link className="button-item" to={link} style={{ color: color }}>
+    <div className="button-item">
+      <Link className="button-item__link" to={link} style={{ color: color }}>
         <span>{label}</span>
       </Link>
-    </>
+    </div>
   );
 };
 

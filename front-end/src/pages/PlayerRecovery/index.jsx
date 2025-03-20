@@ -1,18 +1,17 @@
 import React from "react";
-import Main from "../../components/Main";
-import "./styles.css"
+import "./styles.css";
+import Header from "../../components/Header";
+import InputItem from "../../components/InputItem";
+import ButtonItem from "../../components/ButtonItem";
 const PlayerRecovery = () => {
   return (
     <>
-      <Main
-        inputNumber={1}
-        inputLabels={[" Usuário"]}
-        inputPlaceholders={["Usuário"]}
-        buttonNumber={1}
-        buttonLabels={["Recuperar Senha"]}
-        buttonLinks={["/player/recovery/sms"]}
-        buttonColors={["#14ae5c"]}
-      />
+
+      <div className="main">
+        <Header />
+        <InputItem label="Usuário" placeholder="Usuário"/>
+        <ButtonItem color="#14ae5c" label="Recuperar Senha" link="/player/recovery/sms"/>
+      </div>
     </>
   );
 };

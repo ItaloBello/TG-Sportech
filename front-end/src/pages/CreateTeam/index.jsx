@@ -1,8 +1,7 @@
 import React from "react";
-import InputList from "../../components/InputList";
 import InputItem from "../../components/InputItem";
 import ButtonItem from "../../components/ButtonItem";
-import "./styles.css"
+import "./styles.css";
 
 const CreateTeam = () => {
   return (
@@ -16,11 +15,9 @@ const CreateTeam = () => {
         />
         <p className="create-team__image-label">Logo do Time</p>
       </div>
-      <InputList
-        items={3}
-        labels={["Nome do Time", "Cor Primaria", "Cor Secundaria"]}
-        placeholders={["Time", "Cor", "Cor"]}
-      />
+      <InputItem label="Nome do Time" placeholder="Time" />
+      <InputItem label="Cor Primaria" placeholder="Cor" />
+      <InputItem label="Cor Secundaria" placeholder="Cor" />
       <div className="create-team__input-and-button">
         <InputItem placeholder={"Code"} label={"Invite Code"} />
         <ButtonItem

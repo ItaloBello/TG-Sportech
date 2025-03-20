@@ -6,8 +6,6 @@ import "./styles.css"
 const TeamCard = ({
   name,
   date,
-  buttonLabels,
-  buttonColors,
   src,
   alt,
   addPlayer,
@@ -21,16 +19,16 @@ const TeamCard = ({
           <p className="team-card__creation-date">Data de Fundação: {date}</p>
         </div>
         <div className="team-card__button-area">
-          <CardButton label={buttonLabels[0]} colorButton={buttonColors[0]} />
-          <CardButton label={buttonLabels[1]} colorButton={buttonColors[1]} />
+          <CardButton label="Excluir" colorButton="#EC221F" />
+          <CardButton label="Editar" colorButton="#14AE5C" />
           {addPlayer ? (
-            <Link>
+            <button style={{border:'none', background:'transparent'}}>
               <img
                 className="button-area__image"
                 src="../../public/add-player-icon.png"
                 alt="icone de adiconar o jogador"
               />
-            </Link>
+            </button>
           ) : (
             <></>
           )}

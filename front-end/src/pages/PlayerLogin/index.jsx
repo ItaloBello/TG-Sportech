@@ -1,21 +1,26 @@
 import React from "react";
-import Main from "../../components/Main";
 import { Link } from "react-router-dom";
-import "./styles.css"
+import "./styles.css";
+import Header from "../../components/Header";
+
+import InputItem from "../../components/InputItem";
+import ButtonItem from "../../components/ButtonItem";
 const PlayerLogin = () => {
   return (
     <>
-      <Main
-        inputNumber={2}
-        inputLabels={["Nome do Usuário", "Senha"]}
-        inputPlaceholders={["Usuário", "Senha"]}
-        buttonNumber={1}
-        buttonLabels={["Entrar"]}
-        buttonLinks={["/player/menu"]}
-        buttonColors={["#14ae5c"]}
-        linkPath="/player/recovery"
-        linkMessage="Esqueceu a senha, Jogador?"
-      />
+      <div className="main">
+        <Header />
+
+        <InputItem label="Nome do Usuário" placeholder="Usuário"/>
+        <InputItem label="Senha" placeholder="Senha"/>
+
+        <Link className="link__message" to="/player/recovery">
+          <p>Esqueceu a senha, jogador?</p>
+        </Link>
+
+        <ButtonItem color="#14ae5c" label="Entrar" link="/player/menu"/>
+        
+      </div>
       <p className="player-login__p">
         Não possúi cadastro?{"  "}
         <Link to={"/player/singup"} className="link__message">

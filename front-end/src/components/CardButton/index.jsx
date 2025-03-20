@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import "./styles.css"
 
 const CardButton = ({ label, colorButton }) => {
  
   return (
-    <div className="card-button" style={{ borderColor:colorButton }}>
-      <Link style={{ textDecoration: "none", color: colorButton}}>
+    <button className="card-button" style={{ borderColor:colorButton, color:colorButton }}>
         <p>{label}</p>
-      </Link>
-    </div>
+    </button>
   );
 };
 

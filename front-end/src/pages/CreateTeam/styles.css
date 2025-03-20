@@ -22,25 +22,26 @@
 
 .create-team__input-and-button {
   display: flex;
-  gap: 1rem;
+  flex-direction: row;
   align-items: center;
-  width: 80%;
+  justify-content: center;
+  width: 90%;
 }
 
 .create-team__input-and-button .input-item {
-  width: 100%;
+  width:    50%;
 }
 .create-team__input-and-button .input-item input {
-  width: 100%;
+  width: 90%;
 }
 
 .create-team__input-and-button .button-item {
-  width: 100%;
+  width: 30%;
   margin: 0;
 }
 .create-team__button-area {
-  display: flex;
-  width: 80%;
+
+  width: 50%;
 }
 .create-team__button-area a {
   margin: 1rem 0.5rem;

@@ -1,31 +1,22 @@
 import React from "react";
-import Main from "../../components/Main";
-import "./styles.css"
+import "./styles.css";
+import Header from "../../components/Header";
+
+import InputItem from "../../components/InputItem";
+import ButtonItem from "../../components/ButtonItem";
 
 export const PlayerSingUp = () => {
   return (
     <>
-      <Main
-        inputNumber={5}
-        inputLabels={[
-          "Nome do Usuário",
-          "Email",
-          "Celular",
-          "Senha",
-          "Confirme a Senha",
-        ]}
-        inputPlaceholders={[
-          "Usuário",
-          "Email",
-          "Celular",
-          "Senha",
-          "Confirme a Senha",
-        ]}
-        buttonNumber={1}
-        buttonLabels={["Cadastrar"]}
-        buttonLinks={["/player/login"]}
-        buttonColors={["#14ae5c"]}
-      />
+      <div className="main">
+        <Header />
+        <InputItem label="Nome do Usuário" placeholder="Usuário"/>
+        <InputItem label="Email" placeholder="Email"/>
+        <InputItem label="Celular" placeholder="Celular"/>
+        <InputItem label="Senha" placeholder="Senha"/>
+        <InputItem label="Confirme a Senha" placeholder="Confirme a Senha"/>
+        <ButtonItem color="#14ae5c" label="Cadastrar" link="/player/login"/>
+      </div>
     </>
   );
 };

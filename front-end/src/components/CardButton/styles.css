@@ -3,5 +3,10 @@
     border: 1px solid;
     padding: 0.75rem;
     border-radius: 0.5rem;
+    background: none;
+    
   }
-  
+.card-button:hover{
+  cursor: pointer;
+}
+

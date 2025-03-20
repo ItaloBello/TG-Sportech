@@ -6,8 +6,6 @@ const CardList = ({
   items,
   names,
   dates,
-  buttonLabelsArray,
-  buttonColorsArray,
   srcArray,
   altArray,
   addPlayerType,
@@ -23,8 +21,6 @@ const CardList = ({
               alt={altArray[index]}
               name={names[index]}
               date={dates[index]}
-              buttonLabels={buttonLabelsArray}
-              buttonColors={buttonColorsArray}
               addPlayer={addPlayerType}
               key={index}
             />

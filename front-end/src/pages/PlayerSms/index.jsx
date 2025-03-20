@@ -1,7 +1,8 @@
 import React from "react";
 import Header from "../../components/Header";
-import ButtonList from "../../components/ButtonList";
+
 import "./styles.css"
+import ButtonItem from "../../components/ButtonItem";
 const PlayerSms = () => {
   return (
     <div className="player-sms">
@@ -12,14 +13,7 @@ const PlayerSms = () => {
           que será enviado ao seu número de celular cadastrado.
         </p>
       </div>
-      <ButtonList
-        items={1}
-        type="button-item"
-        labels={["Voltar ao Login"]}
-        links={["/player/login"]}
-        colors={["#14ae5c"]}
-
-      />
+      <ButtonItem label={"Voltar ao Login"} color={"#14ae5c"} link={"/player/login"}/>
     </div>
   );
 };

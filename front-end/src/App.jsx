@@ -21,10 +21,11 @@ const App = () => {
           <Route path="/player/recovery" element={<PlayerRecovery />} />
           <Route path="/player/recovery/sms" element={<PlayerSms />} />
           <Route path="/player/menu" element={<PlayerMenu />} />
-          <Route path="/player/profile/:id" element={<PlayerProfile />} />
+          <Route path="/player/profile/" element={<PlayerProfile />} />
           <Route path="/player/teammenu" element={<TeamMenu />} />
           <Route path="/player/createteam" element={<CreateTeam />} />
           <Route path="/player/jointeam" element={<JoinTeam />} />
+          <Route path="/player/editteam" element={<EditTeam />} />
 v        </Routes>
       </BrowserRouter>
     </>

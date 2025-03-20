@@ -1,29 +1,15 @@
 import React from "react";
 import Header from "../../components/Header";
-import MenuList from "../../components/MenuList";
+import MenuItem from "../../components/MenuItem";
 
 const TeamMenu = () => {
   return (
     <div className="team-menu">
       <Header />
-      <MenuList
-        items={4}
-        srcArray={[
-          "../../public/create-team-icon.png",
-          "../../public/join-team-icon.png",
-          "../../public/edit-team-icon.png",
-          "../../public/arrow-icon.png",
-        ]}
-        altArray={[
-          "icone de criar time",
-          "icone de entrar em time",
-          "icone de editar time",
-          "icone de voltar",
-        ]}
-        links={["/player/createteam", "/player/jointeam", "/player/editteam", "/player/menu"]}
-        labels={["Criar Time", "Entrar em Time", "Editar Time", "Voltar"]}
-        colors={["#14AE5C", "#14AE5C", "#14AE5C", "#EC221F"]}
-      />
+      <MenuItem src="../../public/create-team-icon.png" alt="icone de criar time" link="/player/createteam" label="Criar Time"/>
+      <MenuItem src="../../public/join-team-icon.png" alt="icone de entrar em time" link="/player/jointeam" label="Entrar em Time"/>
+      <MenuItem src="../../public/edit-team-icon.png" alt="icone de editar time" link="/player/editteam" label="Editar Time"/>
+      <MenuItem src="../../public/arrow-icon.png" alt="icone de voltar" link="/player/menu" label="Voltar" color="#EC221F"/>
     </div>
   );
 };
