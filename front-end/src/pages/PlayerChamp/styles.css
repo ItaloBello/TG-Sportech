@@ -1,0 +1,20 @@
+.player-champ {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-champ__title, .player-champ__subtitle {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.player-champ__title{
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,34 @@
+.champ-card{
+    display: flex;
+    flex-direction: column;
+    width: 21.875rem;
+    height: 11.25rem;
+    border-radius: .5rem;
+    background-color: #2C2C2C;
+}
+
+.champ-card__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.champ-card__header img{
+    width: 6.25rem;
+}
+
+.champ-card__button-area {
+    margin: 1rem;
+    color: white;
+    text-align: center;
+}
+.champ-card__button-area button {
+    margin-top: 1rem;
+    color: red;
+}
+
+.champ-card__data{
+    color: white;
+    text-align: center;
+    margin-top: .5rem;
+}

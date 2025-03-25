@@ -20,17 +20,18 @@ const TeamCard = ({
         </div>
         <div className="team-card__button-area">
           <CardButton label="Excluir" colorButton="#EC221F" />
-          <CardButton label="Editar" colorButton="#14AE5C" />
-          {addPlayer ? (
+          {addPlayer ? (<>
+            <CardButton label="Editar" colorButton="#14AE5C" link='/player/editteam'/>
             <button style={{border:'none', background:'transparent'}}>
               <img
                 className="button-area__image"
                 src="../../public/add-player-icon.png"
                 alt="icone de adiconar o jogador"
-              />
+                />
             </button>
+                </>
           ) : (
-            <></>
+            <><CardButton label="Visualizar" colorButton="#14AE5C" link='/player/viewteam'/></>
           )}
         </div>
       </div>

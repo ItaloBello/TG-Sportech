@@ -1,0 +1,15 @@
+/* edit-team */
+.show-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.show-team__title {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  font-weight: 500;
+  margin-top: 1rem;
+}

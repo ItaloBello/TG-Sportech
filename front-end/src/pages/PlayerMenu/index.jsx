@@ -21,7 +21,7 @@ const PlayerMenu = () => {
       <MenuItem
         src="../../public/championship-icon.png"
         alt="icone de campeonato"
-        link=""
+        link="/player/championship"
         label="Campeonato"
       />
       <MenuItem

@@ -1,0 +1,21 @@
+.view-team__header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin:1rem 0;
+}
+
+.view-team__header p{
+    margin: .5rem;
+    font-weight: 700;
+}
+
+.view-team__header img{
+    width: 10rem;
+}
+
+.view-team__button-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

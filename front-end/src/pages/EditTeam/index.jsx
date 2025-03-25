@@ -1,38 +1,24 @@
-import React from "react";
-import Header from "../../components/Header";
-import CardList from "../../components/CardList";
+import React from 'react'
 import "./styles.css"
-
+import InputItem from '../../components/InputItem'
+import ButtonItem from '../../components/ButtonItem'
 const EditTeam = () => {
   return (
-    <div className="edit-team">
-      <Header />
-      <div className="edit-team__title">
-        <p>Meus times:</p>
-      </div>
-      <CardList
-        items={1}
-        names={["Fatec FC"]}
-        dates={["25/01/2025"]}
-        srcArray={["../../public/team-1-icon.png"]}
-        altArray={["imagem do time 1"]}
-        addPlayerType={1}
-      />
-      <div className="edit-team__title">
-        <p>Times que participo:</p>
-      </div>
-      <CardList
-        items={1}
-        names={["Fatec FC"]}
-        dates={["25/01/2025"]}
-        buttonColorsArray={["#EC221F", "#14AE5C"]}
-        buttonLabelsArray={["Excluir", "Editar"]}
-        srcArray={["../../public/team-1-icon.png"]}
-        altArray={["imagem do time 1"]}
-        addPlayerType={0}
-      />
+    <div className='edit-team'>
+        <div className="edit-team__header">
+            <p>Editar Time</p>
+            <img src="../../../public/add-img-team.png" alt="adicione a imagem time"/>
+        </div>
+        <InputItem label="Nome do Time" placeholder="Time"/>
+        <InputItem label="Cor Primaria" placeholder="Cor"/>
+        <InputItem label="Cor Secundaria" placeholder="Cor"/>
+        <div className="edit-team__button-area">
+            <ButtonItem label="Cancelar" link="/player/showteam" color="#EC221F"/>
+            <ButtonItem label="Salvar" link="/player/showteam"/>
+        </div>
+        {/* TODO: Criar a tabela de jogadores dentro do time, mostrar o capitao, colocar um botao de X para remover alguem do time */}
     </div>
-  );
-};
+  )
+}
 
-export default EditTeam;
+export default EditTeam
