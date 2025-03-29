@@ -2,10 +2,14 @@ import React from "react";
 import Header from "../../components/Header";
 import "./styles.css";
 import MenuItem from "../../components/MenuItem";
+import { usePlayerAuth } from "../../hooks/usePlayerAuth";
 const PlayerMenu = () => {
+  //no player estou guardando os dados do player obtidos apos o login
+  const { player, handleLogOut } = usePlayerAuth();
   return (
     <div className="player-menu">
       <Header />
+      <p>ola {player?.name ? player.name : "sem nome"}</p>
       <MenuItem
         src="../../public/profile-icon.png"
         alt="icone de perfil"
@@ -30,13 +34,13 @@ const PlayerMenu = () => {
         link=""
         label="Agendamento"
       />
-      <MenuItem
-        src="../../public/log-out-icon.png"
-        alt="icone de log out"
-        link="/"
-        label="Sair"
-        color="#EC221F"
-      />
+   
+      <div className="player-menu__log-out-button">
+        <button onClick={handleLogOut}>
+          <img src="../../public/log-out-icon.png" alt="icone de log out" />
+          <span>Sair</span>
+        </button>
+      </div>
     </div>
   );
 };

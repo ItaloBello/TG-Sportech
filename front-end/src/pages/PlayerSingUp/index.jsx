@@ -1,21 +1,54 @@
 import React from "react";
 import "./styles.css";
 import Header from "../../components/Header";
-
+import * as yup from "yup";
 import InputItem from "../../components/InputItem";
-import ButtonItem from "../../components/ButtonItem";
+import { usePlayerAuth } from "../../hooks/usePlayerAuth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import FormButton from "../../components/FormButton";
+
+ const schema = yup
+  .object({
+    name: yup.string().required("Campo obigatorio"),
+    email: yup.string().email().required("Campo Obrigatorio"),
+    cellphone: yup.string().required("Campo obrigatorio"),
+    password: yup.string().required("Campo obrigatorio"),
+    confirmPassword: yup.string().required("Campo Obrigatorio"),
+  })
+  .required();
 
 export const PlayerSingUp = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
+
+  const {handleSingUp} = usePlayerAuth()
+
+  //funçao de POST
+  const onSubmit = (formData)=>{
+    handleSingUp(formData)
+    console.log("OK")
+  }
+
   return (
     <>
       <div className="main">
         <Header />
-        <InputItem label="Nome do Usuário" placeholder="Usuário"/>
-        <InputItem label="Email" placeholder="Email"/>
-        <InputItem label="Celular" placeholder="Celular"/>
-        <InputItem label="Senha" placeholder="Senha"/>
-        <InputItem label="Confirme a Senha" placeholder="Confirme a Senha"/>
-        <ButtonItem color="#14ae5c" label="Cadastrar" link="/player/login"/>
+        <form onSubmit={handleSubmit(onSubmit)}>
+
+        <InputItem label="Nome do Usuário" placeholder="Usuário" control={control} errorMessage={errors?.name?.message} name={'name'} type={'text'} />
+        <InputItem label="Email" placeholder="Email" control={control} errorMessage={errors?.email?.message} name={'email'} type={'email'}/>
+        <InputItem label="Celular" placeholder="Celular" control={control} errorMessage={errors?.cellphone?.message} name={'cellphone'} type={'text'}/>
+        <InputItem label="Senha" placeholder="Senha" control={control} errorMessage={errors?.password?.message} name={'password'} type={'password'}/>
+        <InputItem label="Confirme a Senha" placeholder="Confirme a Senha" control={control} errorMessage={errors?.confirmPassword?.message} name={'confirmPassword'} type={'password'}/>
+        <FormButton label="Cadastrar"/>
+        </form>
       </div>
     </>
   );

@@ -1,0 +1,26 @@
+.champ-description{
+    width: 22rem;
+    border-radius: .5rem;
+    background-color: #2C2C2C;
+    padding: 0.5rem 1rem;
+    color: #FFF;
+}
+.champ-description__header{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: .5rem;
+}
+
+.champ-description__header img{
+    width: 6.25rem;
+}
+
+.champ-description__data{
+    margin: 1rem 0;
+}
+
+.champ-description__button{
+    display: flex;
+    justify-content: center;
+}

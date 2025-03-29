@@ -1,0 +1,12 @@
+{
+  "players": [
+    {
+      "id": "70b5",
+      "name": "Italo Bello Silva",
+      "email": "italo.bello10@gmail.com",
+      "cellphone": "123",
+      "password": "123",
+      "confirmPassword": "123"
+    }
+  ]
+}

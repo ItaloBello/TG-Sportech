@@ -13,26 +13,34 @@ import ShowTeam from "./pages/ShowTeam";
 import EditTeam from "./pages/EditTeam";
 import ViewTeam from "./pages/ViewTeam";
 import PlayerChamp from "./pages/PlayerChamp";
+import SubscribeTeam from "./pages/SubscribeTeam";
+import { PlayerAuthContextProvider } from "./context/playerAuth";
 const App = () => {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<PlayerLogin />} />
-          <Route path="/player/login" element={<PlayerLogin />} />
-          <Route path="/player/singup" element={<PlayerSingUp />} />
-          <Route path="/player/recovery" element={<PlayerRecovery />} />
-          <Route path="/player/recovery/sms" element={<PlayerSms />} />
-          <Route path="/player/menu" element={<PlayerMenu />} />
-          <Route path="/player/profile/" element={<PlayerProfile />} />
-          <Route path="/player/teammenu" element={<TeamMenu />} />
-          <Route path="/player/createteam" element={<CreateTeam />} />
-          <Route path="/player/jointeam" element={<JoinTeam />} />
-          <Route path="/player/showteam" element={<ShowTeam />} />
-          <Route path="/player/editteam" element={<EditTeam/>}/>
-          <Route path="/player/viewteam" element={<ViewTeam/>}/>
-          <Route path="/player/championship" element={<PlayerChamp/>}/>
-v        </Routes>
+        <PlayerAuthContextProvider>
+          <Routes>
+            <Route path="/" element={<PlayerLogin />} />
+            <Route path="/player/login" element={<PlayerLogin />} />
+            <Route path="/player/singup" element={<PlayerSingUp />} />
+            <Route path="/player/recovery" element={<PlayerRecovery />} />
+            <Route path="/player/recovery/sms" element={<PlayerSms />} />
+            <Route path="/player/menu" element={<PlayerMenu />} />
+            <Route path="/player/profile/" element={<PlayerProfile />} />
+            <Route path="/player/teammenu" element={<TeamMenu />} />
+            <Route path="/player/createteam" element={<CreateTeam />} />
+            <Route path="/player/jointeam" element={<JoinTeam />} />
+            <Route path="/player/showteam" element={<ShowTeam />} />
+            <Route path="/player/editteam" element={<EditTeam />} />
+            <Route path="/player/viewteam" element={<ViewTeam />} />
+            <Route path="/player/championship" element={<PlayerChamp />} />
+            <Route
+              path="/player/subscribeteam"
+              element={<SubscribeTeam />}
+            />
+          </Routes>
+        </PlayerAuthContextProvider>
       </BrowserRouter>
     </>
   );
@@ -41,6 +49,5 @@ v        </Routes>
 export default App;
 
 //rotas a definir:
-
 
 //  plaver/profile/:id

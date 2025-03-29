@@ -1,0 +1,26 @@
+.form-button{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-button button{
+    display: flex;
+    background-color: #1e1e1e;
+    border: 1px solid #2c2c2c;
+    border-radius: 5px;
+    width: 50%;
+    height: 2.5rem;
+    color: #14ae5c;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin: 1rem;
+    padding: .5rem;
+}
+
+.form-button span {
+    font-size: 1rem;
+    text-align: center;
+  }
