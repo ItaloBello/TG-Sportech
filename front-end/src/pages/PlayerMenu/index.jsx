@@ -3,13 +3,16 @@ import Header from "../../components/Header";
 import "./styles.css";
 import MenuItem from "../../components/MenuItem";
 import { usePlayerAuth } from "../../hooks/usePlayerAuth";
+import { api } from "../../services/api";
 const PlayerMenu = () => {
   //no player estou guardando os dados do player obtidos apos o login
   const { player, handleLogOut } = usePlayerAuth();
+
   return (
     <div className="player-menu">
       <Header />
-      <p>ola {player?.name ? player.name : "sem nome"}</p>
+      {/* remover este p depois, é so para testar */}
+      <p>ola {player?.name ? player.name : "sem nome "}</p>
       <MenuItem
         src="../../public/profile-icon.png"
         alt="icone de perfil"

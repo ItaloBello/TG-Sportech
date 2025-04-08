@@ -19,12 +19,7 @@ const Usuario = sequelize.define('usuarios',{
         unique: true
         
     },
-    eAdmin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false 
-
-    },
-    endereco: {
+    celular: {
         type: Sequelize.STRING,
         allowNull: false,
     },
@@ -36,18 +31,9 @@ const Usuario = sequelize.define('usuarios',{
     senha: {
         type: Sequelize.CHAR(60),
         allowNull: false
-    },
-    data_nascimento: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    data_criacao: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        allowNull: false
     }
 }, {
-    timestamps: false 
+    timestamps: true 
 })
 
 module.exports = Usuario;

@@ -11,8 +11,9 @@ import FormButton from "../../components/FormButton";
  const schema = yup
   .object({
     name: yup.string().required("Campo obigatorio"),
-    email: yup.string().email().required("Campo Obrigatorio"),
+    email: yup.string().email("Email inválido").required("Campo Obrigatorio"),
     cellphone: yup.string().required("Campo obrigatorio"),
+    cpf: yup.string().required("Campo obrigatorio"),
     password: yup.string().required("Campo obrigatorio"),
     confirmPassword: yup.string().required("Campo Obrigatorio"),
   })
@@ -45,6 +46,7 @@ export const PlayerSingUp = () => {
         <InputItem label="Nome do Usuário" placeholder="Usuário" control={control} errorMessage={errors?.name?.message} name={'name'} type={'text'} />
         <InputItem label="Email" placeholder="Email" control={control} errorMessage={errors?.email?.message} name={'email'} type={'email'}/>
         <InputItem label="Celular" placeholder="Celular" control={control} errorMessage={errors?.cellphone?.message} name={'cellphone'} type={'text'}/>
+        <InputItem label="CPF" placeholder="CPF" control={control} errorMessage={errors?.cpf?.message} name={'cpf'} type={'text'}/>
         <InputItem label="Senha" placeholder="Senha" control={control} errorMessage={errors?.password?.message} name={'password'} type={'password'}/>
         <InputItem label="Confirme a Senha" placeholder="Confirme a Senha" control={control} errorMessage={errors?.confirmPassword?.message} name={'confirmPassword'} type={'password'}/>
         <FormButton label="Cadastrar"/>

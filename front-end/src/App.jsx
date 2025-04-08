@@ -15,6 +15,9 @@ import ViewTeam from "./pages/ViewTeam";
 import PlayerChamp from "./pages/PlayerChamp";
 import SubscribeTeam from "./pages/SubscribeTeam";
 import { PlayerAuthContextProvider } from "./context/playerAuth";
+import { AdminAuthContextProvider } from "./context/adminAuth";
+import AdminLogin from "./pages/AdminLogin";
+
 const App = () => {
   return (
     <>
@@ -35,12 +38,14 @@ const App = () => {
             <Route path="/player/editteam" element={<EditTeam />} />
             <Route path="/player/viewteam" element={<ViewTeam />} />
             <Route path="/player/championship" element={<PlayerChamp />} />
-            <Route
-              path="/player/subscribeteam"
-              element={<SubscribeTeam />}
-            />
+            <Route path="/player/subscribeteam" element={<SubscribeTeam />} />
           </Routes>
         </PlayerAuthContextProvider>
+        <AdminAuthContextProvider>
+          <Routes>
+            <Route path="/admin/login" element={<AdminLogin/>}/>
+          </Routes>
+        </AdminAuthContextProvider>
       </BrowserRouter>
     </>
   );

@@ -12,24 +12,26 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const handleLogin = async (dataform) => {
     try {
       const { data } = await api.get(
-        `players?name=${dataform.name}&password=${dataform.password}`
+        `/api/jogador/login?name=${dataform.name}&password=${dataform.password}`
       );
+      console.log(data)
 
-      if (data.length === 1) {
-        setPlayer(data[0]);
+      if (data.id) {
+        setPlayer(data);
         navigate("/player/menu");
       } else {
         alert("email ou senha incorretos");
       }
     } catch (error) {
       alert("houve um erro, tente novamente");
+      console.log(error)
     }
   };
 
   //função de sing up
   const handleSingUp = (formData) => {
     if(formData.password === formData.confirmPassword){
-      api.post("/players", formData);
+      api.post("/api/jogador/registro", formData);
       navigate("/player/login");
     }
     else

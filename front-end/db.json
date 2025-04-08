@@ -5,6 +5,16 @@
       "name": "Italo Bello Silva",
       "email": "italo.bello10@gmail.com",
       "cellphone": "123",
+      "cpf":"1624124",
+      "password": "123",
+      "confirmPassword": "123"
+    },
+    {
+      "id": "7fd3",
+      "name": "andre",
+      "email": "andre@ande",
+      "cellphone": "123",
+      "cpf":"9992342",
       "password": "123",
       "confirmPassword": "123"
     }

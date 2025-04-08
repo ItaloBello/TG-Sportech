@@ -1,0 +1,24 @@
+.admin-login__p {
+    font-size: small;
+    font-weight: 400;
+  }
+  .link__message {
+    color: #0000ff;
+    font-size: small;
+    font-weight: bold;
+    text-align: center;
+    
+  }
+  
+  .link__message p{
+    margin: 1rem 0;
+  }
+  
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100svh;
+  }
+  
