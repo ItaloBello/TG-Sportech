@@ -5,7 +5,7 @@
       "name": "Italo Bello Silva",
       "email": "italo.bello10@gmail.com",
       "cellphone": "123",
-      "cpf":"1624124",
+      "cpf": "1624124",
       "password": "123",
       "confirmPassword": "123"
     },
@@ -14,9 +14,20 @@
       "name": "andre",
       "email": "andre@ande",
       "cellphone": "123",
-      "cpf":"9992342",
+      "cpf": "9992342",
       "password": "123",
       "confirmPassword": "123"
+    }
+  ],
+  "admin": [
+    {
+      "id": "e1ec",
+      "name": "andre",
+      "email": "jaca@re",
+      "cellphone": "123",
+      "cpf": "555.322.123-09",
+      "password": "SAPOPEMBA10",
+      "confirmPassword": "SAPOPEMBA10"
     }
   ]
 }

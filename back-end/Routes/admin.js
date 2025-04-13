@@ -14,7 +14,7 @@ const { message } = require("statuses");
 router.post("/registro", async (req, res) => {
     let erros = [];
 
-    if (!req.body.nome) erros.push("Nome inválido!");
+    if (!req.body.name) erros.push("Nome inválido!");
     if (!req.body.email || typeof req.body.email == undefined || req.body.email == null || !validarEmail(req.body.email)) {
         erros.push({ texto: "Email inválido!" });
     }
@@ -30,10 +30,10 @@ router.post("/registro", async (req, res) => {
                 erros.push({ texto: "Email inválido!" });
             }
     }
-    if (req.body.senha.length < 8) erros.push("Senha muito curta!(adicione no mínimo 8 caracteres)");
-    if (req.body.senha !== req.body.senha2) erros.push("As senhas são diferentes!");
+    if (req.body.password.length < 8) erros.push("Senha muito curta!(adicione no mínimo 8 caracteres)");
+    // if (req.body.password !== req.body.senha2) erros.push("As senhas são diferentes!");
 
-    const documento = req.body.documento.replace(/\D/g, '');
+    const documento = req.body.cpf.replace(/\D/g, '');
     if (documento.length === 11 && !validarCPF(documento)) erros.push("CPF inválido!");
     if (documento.length === 14 && !validarCNPJ(documento)) erros.push("CNPJ inválido!");
 
@@ -43,7 +43,7 @@ router.post("/registro", async (req, res) => {
 
     try {
         const usuarioExistente = await DonoQuadra.findOne({
-            where: { [Op.or]: [{ email: req.body.email }, { documento }] }
+            where: { [Op.or]: [{ email: req.body.email }, { documento: req.body.cpf }] }
         });
 
         if (usuarioExistente) {
@@ -51,11 +51,11 @@ router.post("/registro", async (req, res) => {
         }
 
         const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(req.body.senha, salt);
+        const hash = await bcrypt.hash(req.body.password, salt);
 
         const novoUsuario = await DonoQuadra.create({
-            nome: req.body.nome,
-            documento,
+            nome: req.body.name,
+            documento: req.body.cpf,
             email: req.body.email,
             senha: hash,
         });
@@ -68,13 +68,13 @@ router.post("/registro", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     const usuario = req.body.documento
-    const senha = req.body.senha
+    const senha = req.body.password
     const usuarioExistente = await DonoQuadra.findOne({where: {documento: usuario}})
     if (!usuarioExistente){
         res.status(401).json({error: "Usuário não encontrado."})
         return
     }
-    const passwordMatch = await bcrypt.compare(senha,usuarioExistente.senha)
+    const passwordMatch = await bcrypt.compare(senha,usuarioExistente.password)
     if (!passwordMatch){
         res.status(401).json({error: "Credenciais inválidas."})
         return

@@ -17,6 +17,7 @@ import SubscribeTeam from "./pages/SubscribeTeam";
 import { PlayerAuthContextProvider } from "./context/playerAuth";
 import { AdminAuthContextProvider } from "./context/adminAuth";
 import AdminLogin from "./pages/AdminLogin";
+import AdminSingUp from "./pages/AdminSingUp";
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const App = () => {
         <AdminAuthContextProvider>
           <Routes>
             <Route path="/admin/login" element={<AdminLogin/>}/>
+            <Route path="/admin/singup" element={<AdminSingUp/>}/>
           </Routes>
         </AdminAuthContextProvider>
       </BrowserRouter>

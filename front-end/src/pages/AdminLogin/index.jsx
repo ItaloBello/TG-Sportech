@@ -26,15 +26,17 @@ const AdminLogin = () => {
     mode: "onBlur",
   });
 
-  const {} = useAdminAuth();
+  const {handleLogin} = useAdminAuth();
 
   //funcao de login
-
+  const onSubmit = (dataForm) =>{
+    handleLogin(dataForm)
+  }
   return (
     <>
       <div className="main">
         <Header />
-        <form className="admin-login__form">
+        <form className="admin-login__form" onSubmit={handleSubmit(onSubmit)}>
           <InputItem
             control={control}
             errorMessage={errors?.name?.message}
@@ -52,14 +54,14 @@ const AdminLogin = () => {
             type="password"
           />
           <Link className="link__message">
-            <p>Esqueceu a senha, paizao</p>
+            <p>Esqueceu a senha?</p>
           </Link>
           <FormButton label="entrar" />
         </form>
       </div>
       <p className="admin-login__p">
         Não possúi cadastro?{"  "}
-        <Link className="link__message">
+        <Link className="link__message" to="/admin/singup">
           Cadastre-se
         </Link>
       </p>

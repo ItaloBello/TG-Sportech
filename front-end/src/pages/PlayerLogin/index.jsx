@@ -24,8 +24,9 @@ const PlayerLogin = () => {
     mode: "onBlur",
   });
 
-  const {handleLogin} = usePlayerAuth()
+  const {handleLogin, error} = usePlayerAuth()
 
+  let deuPau = 0
   //funcao do login
   const onSubmit = (dataForm) =>{
     handleLogin(dataForm)
@@ -58,6 +59,7 @@ const PlayerLogin = () => {
           </Link>
           <FormButton label="Entrar" />
         </form>
+        {error?<p className="error-message">{error}</p>:<></>}
       </div>
       <p className="player-login__p">
         Não possúi cadastro?{"  "}

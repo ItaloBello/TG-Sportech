@@ -6,14 +6,16 @@ export const PlayerAuthContext = createContext({});
 
 export const PlayerAuthContextProvider = ({ children }) => {
   const [player, setPlayer] = useState({});
+  const [error, setError] = useState(null)
   const navigate = useNavigate();
 
   //função de login
   const handleLogin = async (dataform) => {
     try {
-      const { data } = await api.get(
-        `/api/jogador/login?name=${dataform.name}&password=${dataform.password}`
+       const { data } = await api.get(
+         `/api/jogador/login?name=${dataform.name}&password=${dataform.password}`
       );
+      //const {data} = await api.get(`/players?name=${dataform.name}&password=${dataform.password}`)
       console.log(data)
 
       if (data.id) {
@@ -23,8 +25,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         alert("email ou senha incorretos");
       }
     } catch (error) {
-      alert("houve um erro, tente novamente");
-      console.log(error)
+      alert(error.response.data.error);
+      console.log(error.response.data.error)
+      setError(error.response.data.error)
     }
   };
 
@@ -32,6 +35,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const handleSingUp = (formData) => {
     if(formData.password === formData.confirmPassword){
       api.post("/api/jogador/registro", formData);
+      //api.post(`/players`,formData)
       navigate("/player/login");
     }
     else
@@ -45,7 +49,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
 
   return (
     <PlayerAuthContext.Provider
-      value={{ player, handleLogin, handleLogOut, handleSingUp }}
+      value={{ player, error, handleLogin, handleLogOut, handleSingUp }}
     >
       {children}
     </PlayerAuthContext.Provider>
