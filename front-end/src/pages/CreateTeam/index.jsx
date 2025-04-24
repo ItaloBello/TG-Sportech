@@ -2,8 +2,29 @@ import React from "react";
 import InputItem from "../../components/InputItem";
 import ButtonItem from "../../components/ButtonItem";
 import "./styles.css";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup
+  .object({
+    name: yup.string().required("Campo obigatorio"),
+    primaryColor: yup.string().required("Campo obrigatorio"),
+    secondaryColor: yup.string().required("Campo obrigatorio"),
+    inviteCode: yup.string().required("Campo obrigatorio"),
+  })
+  .required();
 
 const CreateTeam = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
+
   return (
     <div className="create-team">
       <div className="create-team__header">
@@ -15,11 +36,11 @@ const CreateTeam = () => {
         />
         <p className="create-team__image-label">Logo do Time</p>
       </div>
-      <InputItem label="Nome do Time" placeholder="Time" />
-      <InputItem label="Cor Primaria" placeholder="Cor" />
-      <InputItem label="Cor Secundaria" placeholder="Cor" />
+      <InputItem label="Nome do Time" placeholder="Time" control={control} errorMessage={errors?.name?.message} name='name' type='text' />
+      <InputItem label="Cor Primaria" placeholder="Cor" control={control} errorMessage={errors?.primaryColor?.message} name='primaryColor' type='text'/>
+      <InputItem label="Cor Secundaria" placeholder="Cor" control={control} errorMessage={errors?.secondaryColor?.message} name='secondaryColor' type='text'/>
       <div className="create-team__input-and-button">
-        <InputItem placeholder={"Code"} label={"Invite Code"} />
+        <InputItem placeholder={"Code"} label={"Invite Code"} control={control} errorMessage={errors?.inviteCode?.message} name='inviteCode' type='text '/>
         <ButtonItem
           label={"Copiar"}
           link={"/player/createteam"}
