@@ -53,7 +53,7 @@ router.post("/registro", async (req, res) => {
 
   try {
     const usuarioExistente = await Usuario.findOne({
-      where: { [Op.or]: [{ email: req.body.email }, { documento }] },
+      where: { [Op.or]: [{ email: req.body.email }, { cpf }] },
     });
 
     if (usuarioExistente) {
@@ -66,11 +66,11 @@ router.post("/registro", async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, salt);
     const celular = req.body.cellphone;
     const novoUsuario = await Usuario.create({
-      nome: req.body.name,
-      documento: req.body.cpf,
+      name: req.body.name,
+      cpf: req.body.cpf,
       email: req.body.email,
-      celular: celular,
-      senha: hash,
+      cellphone: celular,
+      password: hash,
     });
 
     res.status(201).json({ message: "Usuário registrado com sucesso!" });
@@ -87,7 +87,7 @@ router.get("/login", async (req, res) => {
     res.status(401).json({ error: "Jogador não encontrado." });
     return;
   }
-  const passwordMatch = await bcrypt.compare(senha, usuarioExistente.senha);
+  const passwordMatch = await bcrypt.compare(senha, usuarioExistente.password);
   if (!passwordMatch) {
     res.status(401).json({ error: "Credenciais inválidas." });
     return;

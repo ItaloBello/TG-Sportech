@@ -13,6 +13,7 @@ const schema = yup
     name: yup.string().required("Campo Obrigatorio"),
     email: yup.string().email().required("Campo Obrigatorio"),
     cellphone: yup.string().required("Campo Obrigatorio"),
+    cpf: yup.string().required(),
     password: yup.string().required("Campo Obrigatorio"),
     confirmPassword: yup.string().required("Campo Obrigatorio"),
   })

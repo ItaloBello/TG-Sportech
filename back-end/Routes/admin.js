@@ -43,7 +43,7 @@ router.post("/registro", async (req, res) => {
 
     try {
         const usuarioExistente = await DonoQuadra.findOne({
-            where: { [Op.or]: [{ email: req.body.email }, { documento: req.body.cpf }] }
+            where: { [Op.or]: [{ email: req.body.email }, { cpf: req.body.cpf }] }
         });
 
         if (usuarioExistente) {
@@ -54,10 +54,10 @@ router.post("/registro", async (req, res) => {
         const hash = await bcrypt.hash(req.body.password, salt);
 
         const novoUsuario = await DonoQuadra.create({
-            nome: req.body.name,
-            documento: req.body.cpf,
+            name: req.body.name,
+            cpf: req.body.cpf,
             email: req.body.email,
-            senha: hash,
+            password: hash,
         });
 
         res.status(201).json({ message: "Usuário registrado com sucesso!" });
@@ -66,10 +66,10 @@ router.post("/registro", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
-    const usuario = req.body.documento
-    const senha = req.body.password
-    const usuarioExistente = await DonoQuadra.findOne({where: {documento: usuario}})
+router.get("/login", async (req, res) => {
+    const usuario = req.query.name
+    const senha = req.query.password
+    const usuarioExistente = await DonoQuadra.findOne({where: {email: usuario}})
     if (!usuarioExistente){
         res.status(401).json({error: "Usuário não encontrado."})
         return

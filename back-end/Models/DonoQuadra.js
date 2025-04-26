@@ -9,7 +9,7 @@ const DonoQuadra = sequelize.define('donoQuadra',{
         autoIncrement: true,
         primaryKey: true
     },
-    nome: {
+    name: {
         type: Sequelize.STRING(100),
         allowNull: false
     },
@@ -19,12 +19,12 @@ const DonoQuadra = sequelize.define('donoQuadra',{
         unique: true
         
     },
-    documento: {
+    cpf: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
     },
-    senha: {
+    password: {
         type: Sequelize.CHAR(60),
         allowNull: false
     },
