@@ -53,7 +53,7 @@ router.post("/registro", async (req, res) => {
 
   try {
     const usuarioExistente = await Usuario.findOne({
-      where: { [Op.or]: [{ email: req.body.email }, { cpf }] },
+      where: { [Op.or]: [{ email: req.body.email }, { cpf:documento }] },
     });
 
     if (usuarioExistente) {
@@ -75,7 +75,7 @@ router.post("/registro", async (req, res) => {
 
     res.status(201).json({ message: "Usuário registrado com sucesso!" });
   } catch (err) {
-    res.status(500).json({ error: err });
+     res.status(500).json({ error: err });
   }
 });
 
@@ -94,7 +94,7 @@ router.get("/login", async (req, res) => {
   }
   res
     .status(200)
-    .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id });
+    .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id, name:usuarioExistente.name, email:usuarioExistente.email, cpf: usuarioExistente.cpf, cellphone:usuarioExistente.cellphone });
 });
 
 router.get("/times/:userId", async (req, res) => {
@@ -218,17 +218,17 @@ router.put("/times/:id", async (req, res) => {
 });
 
 router.put("/edit/:id", async (req, res) => {
-  const nome = req.body.nome;
+  const nome = req.body.name;
   const email = req.body.email;
   const id = req.params.id;
-  const documento = req.body.documento;
-  const celular = req.body.celular;
-
+  const documento = req.body.cpf;
+  const celular = req.body.cellphone;
+  
   const updatedUser = {
-    nome: nome,
+    name: nome,
     email: email,
-    documento: documento,
-    celular: celular,
+    cpf: documento,
+    cellphone: celular,
   };
 
   try {

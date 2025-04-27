@@ -15,6 +15,20 @@ const schema = yup
   })
   .required();
 
+
+const copyCode = async () => {
+  console.log('oi')
+    const code = document.getElementById('btnCopy').value
+    try {
+      await navigator.clipboard.writeText(code)
+      alert ("OK")
+    } catch (error) {
+      alert("ERRO")
+    }
+  }
+
+
+
 const CreateTeam = () => {
   const {
     control,
@@ -24,6 +38,8 @@ const CreateTeam = () => {
     resolver: yupResolver(schema),
     mode: "onBlur",
   });
+
+
 
   return (
     <div className="create-team">
@@ -40,11 +56,13 @@ const CreateTeam = () => {
       <InputItem label="Cor Primaria" placeholder="Cor" control={control} errorMessage={errors?.primaryColor?.message} name='primaryColor' type='text'/>
       <InputItem label="Cor Secundaria" placeholder="Cor" control={control} errorMessage={errors?.secondaryColor?.message} name='secondaryColor' type='text'/>
       <div className="create-team__input-and-button">
-        <InputItem placeholder={"Code"} label={"Invite Code"} control={control} errorMessage={errors?.inviteCode?.message} name='inviteCode' type='text '/>
+        <InputItem id='btnCopy' placeholder={"Code"} label={"Invite Code"} control={control} errorMessage={errors?.inviteCode?.message} name='inviteCode' type='text' isDisabled={true}/>
         <ButtonItem
+          
           label={"Copiar"}
           link={"/player/createteam"}
           color={"#ffffff"}
+          onClick = {copyCode}
         />
       </div>
       <div className="create-team__button-area">

@@ -6,6 +6,7 @@ import { usePlayerAuth } from "../../hooks/usePlayerAuth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import FormButton from "../../components/FormButton";
 
 const schema = yup
   .object({
@@ -17,7 +18,7 @@ const schema = yup
   .required();
 
 const PlayerProfile = () => {
-  const { player } = usePlayerAuth();
+  const { player, handleEdit, error} = usePlayerAuth();
 
   const {
     control,
@@ -28,17 +29,20 @@ const PlayerProfile = () => {
     mode: "onBlur",
   });
 
-//TODO: colocar a requisição PUT do axios 
 
 
+ const onSubmit = (dataForm) =>{
+  handleEdit(dataForm)
+ }
   return (
     <div className="player-profile">
-      <form>
-        <img
+      <img
           className="player-profile__image"
           src="../../public/profile-placeholder-icon.png"
           alt="placeholdr da foto de perfil"
         />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        
         <InputItem
           label="Usuario"
           placeholder={player.name}
@@ -71,7 +75,8 @@ const PlayerProfile = () => {
           control={control}
           errorMessage={errors?.cpf?.message}
         />
-        <ButtonItem color="#14ae5c" label="Sair e Salvar" link="/player/menu" />
+        <FormButton label="Sair e salvar"/>
+        
       </form>
     </div>
   );

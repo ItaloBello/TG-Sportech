@@ -26,7 +26,6 @@ const PlayerLogin = () => {
 
   const {handleLogin, error} = usePlayerAuth()
 
-  let deuPau = 0
   //funcao do login
   const onSubmit = (dataForm) =>{
     handleLogin(dataForm)
@@ -38,8 +37,8 @@ const PlayerLogin = () => {
         <Header />
         <form className="player-login__form" onSubmit={handleSubmit(onSubmit)}>
           <InputItem
-            label="Nome do Usuário"
-            placeholder="Usuário"
+            label="email"
+            placeholder="email"
             type="text"
             name="name"
             control={control}
