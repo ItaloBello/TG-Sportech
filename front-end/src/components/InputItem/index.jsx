@@ -5,7 +5,7 @@ import { Controller } from "react-hook-form";
 const InputItem = ({
   placeholder,
   label,
-  type,
+  type = 'text',
   name,
   control,
   errorMessage,

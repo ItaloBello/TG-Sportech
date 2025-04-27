@@ -1,23 +1,23 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PlayerLogin from "./pages/PlayerLogin";
-import { PlayerSingUp } from "./pages/PlayerSingUp";
-import PlayerRecovery from "./pages/PlayerRecovery";
-import PlayerSms from "./pages/PlayerSms";
-import PlayerMenu from "./pages/PlayerMenu";
-import TeamMenu from "./pages/TeamMenu";
-import CreateTeam from "./pages/CreateTeam";
-import JoinTeam from "./pages/JoinTeam";
-import PlayerProfile from "./pages/PlayerProfile";
-import ShowTeam from "./pages/ShowTeam";
-import EditTeam from "./pages/EditTeam";
-import ViewTeam from "./pages/ViewTeam";
-import PlayerChamp from "./pages/PlayerChamp";
-import SubscribeTeam from "./pages/SubscribeTeam";
+import PlayerLogin from "./pages/Player/Login";
+import { PlayerSingUp } from "./pages/Player/SingUp";
+import PlayerRecovery from "./pages/Player/Recovery";
+import PlayerSms from "./pages/Player/Sms";
+import PlayerMenu from "./pages/Player/Menu";
+import TeamMenu from "./pages/Player/TeamMenu";
+import CreateTeam from "./pages/Player/CreateTeam";
+import JoinTeam from "./pages/Player/JoinTeam";
+import PlayerProfile from "./pages/Player/Profile";
+import ShowTeam from "./pages/Player/ShowTeam";
+import EditTeam from "./pages/Player/EditTeam";
+import ViewTeam from "./pages/Player/ViewTeam";
+import PlayerChamp from "./pages/Player/ChampionshipMenu";
+import SubscribeTeam from "./pages/Player/SubscribeTeam";
 import { PlayerAuthContextProvider } from "./context/playerAuth";
 import { AdminAuthContextProvider } from "./context/adminAuth";
-import AdminLogin from "./pages/AdminLogin";
-import AdminSingUp from "./pages/AdminSingUp";
+import AdminLogin from "./pages/Admin/Login";
+import AdminSingUp from "./pages/Admin/SingUp";
 
 const App = () => {
   return (
@@ -41,7 +41,7 @@ const App = () => {
               <Route path="/player/viewteam" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
               <Route path="/player/subscribeteam" element={<SubscribeTeam />} />
-              
+
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/singup" element={<AdminSingUp />} />
