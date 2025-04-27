@@ -24,30 +24,30 @@ const App = () => {
     <>
       <BrowserRouter>
         <PlayerAuthContextProvider>
-          <Routes>
-            <Route path="/" element={<PlayerLogin />} />
-            <Route path="/player/login" element={<PlayerLogin />} />
-            <Route path="/player/singup" element={<PlayerSingUp />} />
-            <Route path="/player/recovery" element={<PlayerRecovery />} />
-            <Route path="/player/recovery/sms" element={<PlayerSms />} />
-            <Route path="/player/menu" element={<PlayerMenu />} />
-            <Route path="/player/profile/" element={<PlayerProfile />} />
-            <Route path="/player/teammenu" element={<TeamMenu />} />
-            <Route path="/player/createteam" element={<CreateTeam />} />
-            <Route path="/player/jointeam" element={<JoinTeam />} />
-            <Route path="/player/showteam" element={<ShowTeam />} />
-            <Route path="/player/editteam" element={<EditTeam />} />
-            <Route path="/player/viewteam" element={<ViewTeam />} />
-            <Route path="/player/championship" element={<PlayerChamp />} />
-            <Route path="/player/subscribeteam" element={<SubscribeTeam />} />
-          </Routes>
+          <AdminAuthContextProvider>
+            <Routes>
+              <Route path="/" element={<PlayerLogin />} />
+              <Route path="/player/login" element={<PlayerLogin />} />
+              <Route path="/player/singup" element={<PlayerSingUp />} />
+              <Route path="/player/recovery" element={<PlayerRecovery />} />
+              <Route path="/player/recovery/sms" element={<PlayerSms />} />
+              <Route path="/player/menu" element={<PlayerMenu />} />
+              <Route path="/player/profile/" element={<PlayerProfile />} />
+              <Route path="/player/teammenu" element={<TeamMenu />} />
+              <Route path="/player/createteam" element={<CreateTeam />} />
+              <Route path="/player/jointeam" element={<JoinTeam />} />
+              <Route path="/player/showteam" element={<ShowTeam />} />
+              <Route path="/player/editteam" element={<EditTeam />} />
+              <Route path="/player/viewteam" element={<ViewTeam />} />
+              <Route path="/player/championship" element={<PlayerChamp />} />
+              <Route path="/player/subscribeteam" element={<SubscribeTeam />} />
+              
+              {/* Rotas de admin */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/singup" element={<AdminSingUp />} />
+            </Routes>
+          </AdminAuthContextProvider>
         </PlayerAuthContextProvider>
-        <AdminAuthContextProvider>
-          <Routes>
-            <Route path="/admin/login" element={<AdminLogin/>}/>
-            <Route path="/admin/singup" element={<AdminSingUp/>}/>
-          </Routes>
-        </AdminAuthContextProvider>
       </BrowserRouter>
     </>
   );
