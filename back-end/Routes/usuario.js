@@ -97,6 +97,16 @@ router.get("/login", async (req, res) => {
     .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id, name:usuarioExistente.name, email:usuarioExistente.email, cpf: usuarioExistente.cpf, cellphone:usuarioExistente.cellphone });
 });
 
+router.get("/info/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await Usuario.findOne({where: {id}});
+  if (!user){
+    res.status(401).json({error: "Jogador não encontrado."});
+    return;
+  }
+  res.status(200).json({name: user.name, email: user.email, cpf: user.cpf, cellphone: user.cellphone});
+});
+
 router.get("/times/:userId", async (req, res) => {
   const userId = req.params.userId;
   const jogadores = [];
