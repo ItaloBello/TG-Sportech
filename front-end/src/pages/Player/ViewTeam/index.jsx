@@ -60,7 +60,7 @@ const ViewTeam = () => {
           isDisabled={true}
         />
         <div className="view-team__button-area">
-          <ButtonItem label="OK" link="/player/showteam" className="a" />
+          <ButtonItem label="OK" link="/player/show-team" className="a" />
         </div>
       </form>
     </div>

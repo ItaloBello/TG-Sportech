@@ -59,7 +59,7 @@ const EditTeam = () => {
         <div className="edit-team__button-area">
           <ButtonItem
             label="Cancelar"
-            link="/player/showteam"
+            link="/player/show-team"
             color="#EC221F"
           />
           <FormButton label="Salvar" />

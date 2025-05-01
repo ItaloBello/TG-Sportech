@@ -35,12 +35,13 @@ const AdminSingUp = () => {
   //funcao POST
   const onSubmit = (formData)=>{
     handleSingUp(formData)
-    
+
   }
 
   return (
     <div className="main">
       <Header />
+      <p>Dados Pessoais</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputItem label="Nome do Usuário" placeholder="Usuário" control={control} errorMessage={errors?.name?.message} name="name" type="text"/>
         <InputItem label="Email" placeholder="Email" control={control} errorMessage={errors?.email?.message} name="email" type="email"/>

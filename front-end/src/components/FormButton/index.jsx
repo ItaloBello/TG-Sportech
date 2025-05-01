@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-const FormButton = ({ label }) => {
+const FormButton = ({ label="" }) => {
   return (
     <div className="form-button">
       <button>

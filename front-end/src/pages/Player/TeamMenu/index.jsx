@@ -9,19 +9,19 @@ const TeamMenu = () => {
       <MenuItem
         src="../../public/create-team-icon.png"
         alt="icone de criar time"
-        link="/player/createteam"
+        link="/player/create-team"
         label="Criar Time"
       />
       <MenuItem
         src="../../public/join-team-icon.png"
         alt="icone de entrar em time"
-        link="/player/jointeam"
+        link="/player/join-team"
         label="Entrar em Time"
       />
       <MenuItem
         src="../../public/edit-team-icon.png"
         alt="icone de editar time"
-        link="/player/showteam"
+        link="/player/show-team"
         label="Editar Time"
       />
       <MenuItem

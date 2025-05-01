@@ -18,6 +18,13 @@ import { PlayerAuthContextProvider } from "./context/playerAuth";
 import { AdminAuthContextProvider } from "./context/adminAuth";
 import AdminLogin from "./pages/Admin/Login";
 import AdminSingUp from "./pages/Admin/SingUp";
+import Home from "./pages/Home";
+import Welcome from "./pages/Admin/Welcome";
+import CreateCourt from "./pages/Admin/CreateCourt";
+import AdminMenu from './pages/Admin/Menu'
+import CourtMenu from "./pages/Admin/CourtMenu";
+import ChampionshipMenu from "./pages/Admin/ChampionshipMenu";
+import CreateChampionship from "./pages/Admin/CreateChampionship";
 
 const App = () => {
   return (
@@ -26,25 +33,33 @@ const App = () => {
         <PlayerAuthContextProvider>
           <AdminAuthContextProvider>
             <Routes>
-              <Route path="/" element={<PlayerLogin />} />
+              <Route path="/" element={<Home />} />
+
+              {/* Rotas de Jogador */}
               <Route path="/player/login" element={<PlayerLogin />} />
               <Route path="/player/singup" element={<PlayerSingUp />} />
               <Route path="/player/recovery" element={<PlayerRecovery />} />
               <Route path="/player/recovery/sms" element={<PlayerSms />} />
               <Route path="/player/menu" element={<PlayerMenu />} />
               <Route path="/player/profile/" element={<PlayerProfile />} />
-              <Route path="/player/teammenu" element={<TeamMenu />} />
-              <Route path="/player/createteam" element={<CreateTeam />} />
-              <Route path="/player/jointeam" element={<JoinTeam />} />
-              <Route path="/player/showteam" element={<ShowTeam />} />
-              <Route path="/player/editteam" element={<EditTeam />} />
-              <Route path="/player/viewteam" element={<ViewTeam />} />
+              <Route path="/player/team-menu" element={<TeamMenu />} />
+              <Route path="/player/create-team" element={<CreateTeam />} />
+              <Route path="/player/join-team" element={<JoinTeam />} />
+              <Route path="/player/show-team" element={<ShowTeam />} />
+              <Route path="/player/edit-team" element={<EditTeam />} />
+              <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
-              <Route path="/player/subscribeteam" element={<SubscribeTeam />} />
+              <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
 
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/singup" element={<AdminSingUp />} />
+              <Route path="/admin/welcome" element={<Welcome/>}/>
+              <Route path="/admin/create-court" element={<CreateCourt/>}/>
+              <Route path="/admin/menu" element={<AdminMenu/>}/>
+              <Route path="/admin/court-menu" element={<CourtMenu/>}/>
+              <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
+              <Route path="/admin/create-championship" element={<CreateChampionship/>}/>
             </Routes>
           </AdminAuthContextProvider>
         </PlayerAuthContextProvider>

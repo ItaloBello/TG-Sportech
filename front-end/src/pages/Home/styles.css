@@ -1,12 +1,9 @@
-.main {
+.main-page{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height: 100svh;
+    width: 14rem;
+    height: 100vh;
 }
 
-.main p{
-  font-size: small;
-  font-weight: 500;
-}

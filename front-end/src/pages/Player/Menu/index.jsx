@@ -11,7 +11,7 @@ const PlayerMenu = () => {
   return (
     <div className="player-menu">
       <Header />
-      {/* remover este p depois, é so para testar */}
+      {/* TODO remover este p depois, é so para testar */}
       <p>Olá, {player?.name ? player.name : "sem nome "}</p>
       <MenuItem
         src="../../public/profile-icon.png"
@@ -22,7 +22,7 @@ const PlayerMenu = () => {
       <MenuItem
         src="../../public/team-icon.png"
         alt="icone de time"
-        link="/player/teammenu"
+        link="/player/team-menu"
         label="Time"
       />
       <MenuItem

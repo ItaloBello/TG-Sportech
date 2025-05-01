@@ -82,7 +82,7 @@ const CreateTeam = () => {
         />
         <ButtonItem
           label={"Copiar"}
-          link={"/player/createteam"}
+          link={"/player/create-team"}
           color={"#ffffff"}
           onClick={copyCode}
         />
@@ -90,12 +90,12 @@ const CreateTeam = () => {
       <div className="create-team__button-area">
         <ButtonItem
           label={"Cancelar"}
-          link={"/player/teammenu"}
+          link={"/player/team-menu"}
           color={"#EC221F"}
         />
         <ButtonItem
           label={"Salvar"}
-          link={"/player/teammenu"}
+          link={"/player/team-menu"}
           color={"#14AE5C"}
         />
       </div>
