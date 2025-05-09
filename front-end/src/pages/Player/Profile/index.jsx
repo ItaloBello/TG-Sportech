@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import "./styles.css";
 import InputItem from "../../../components/InputItem";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
+import FormButton from "../../../components/FormButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import FormButton from "../../../components/FormButton";
 
 const schema = yup
   .object({
@@ -17,7 +17,7 @@ const schema = yup
   .required();
 
 const PlayerProfile = () => {
-  const { player, handleEdit, error} = usePlayerAuth();
+  const { player, handleEdit, handleGetNewInfos, error } = usePlayerAuth();
 
   const {
     control,
@@ -28,20 +28,25 @@ const PlayerProfile = () => {
     mode: "onBlur",
   });
 
+  useEffect(() => {
+    const getData = async () => {
+     await handleGetNewInfos();
+    };
+    getData();
+  }, [player.id]);
 
+  const onSubmit = (dataForm) => {
+    handleEdit(dataForm);
+  };
 
- const onSubmit = (dataForm) =>{
-  handleEdit(dataForm)
- }
   return (
     <div className="player-profile">
       <img
-          className="player-profile__image"
-          src="../../public/profile-placeholder-icon.png"
-          alt="placeholdr da foto de perfil"
-        />
+        className="player-profile__image"
+        src="../../public/profile-placeholder-icon.png"
+        alt="placeholdr da foto de perfil"
+      />
       <form onSubmit={handleSubmit(onSubmit)}>
-        
         <InputItem
           label="Usuario"
           placeholder={player.name}
@@ -74,8 +79,7 @@ const PlayerProfile = () => {
           control={control}
           errorMessage={errors?.cpf?.message}
         />
-        <FormButton label="Sair e salvar"/>
-        
+        <FormButton label="Sair e salvar" />
       </form>
     </div>
   );

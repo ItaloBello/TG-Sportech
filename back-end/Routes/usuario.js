@@ -99,13 +99,20 @@ router.get("/login", async (req, res) => {
 
 router.get("/info/:id", async (req, res) => {
   const id = req.params.id;
-  const user = await Usuario.findOne({where: {id}});
+  //console.log(id)
+  if (id === "undefined"){
+    //console.log(id)
+    res.status(400).json({error: "o id está indefinido"})
+  }
+else{
+const user = await Usuario.findOne({where: {id}});
   if (!user){
     res.status(401).json({error: "Jogador não encontrado."});
     return;
   }
-  res.status(200).json({name: user.name, email: user.email, cpf: user.cpf, cellphone: user.cellphone});
-});
+  res.status(200).json({name: user.name, email: user.email, cpf: user.cpf, cellphone: user.cellphone, id: user.id});
+
+}});
 
 router.get("/times/:userId", async (req, res) => {
   const userId = req.params.userId;
