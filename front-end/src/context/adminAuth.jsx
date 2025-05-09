@@ -52,6 +52,16 @@ export const AdminAuthContextProvider = ({ children }) => {
     navigate(`/admin/login`);
   };
 
+//TODO: adaptar esta função para o endpoint de adm
+  const handleGetNewInfos = async () => {
+    const { data } = await api.get(`api/jogador/info/${player.id}`);
+    console.log(data);
+     if (data.id){
+      setPlayer(data);
+      localStorage.setItem("user", JSON.stringify(data));
+    } 
+  };
+
   return (
     <AdminAuthContext.Provider
       value={{ admin, handleLogin, handleSingUp, handleLogOut }}

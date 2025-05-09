@@ -3,7 +3,8 @@
 .team-menu,
 .admin-menu,
 .court-menu,
-.championship-menu {
+.championship-menu,
+.scheduling-menu {
   display: flex;
   flex-direction: column;
   align-items: center;

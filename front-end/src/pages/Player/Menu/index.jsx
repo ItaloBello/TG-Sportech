@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../../components/Header";
 import "./styles.css";
 import MenuItem from "../../../components/MenuItem";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 const PlayerMenu = () => {
   //no player estou guardando os dados do player obtidos apos o login
-  const { player, handleLogOut } = usePlayerAuth();
-  
+  const { player, handleLogOut, handleGetNewInfos } = usePlayerAuth();
 
+  useEffect(() => {
+    const getData = async () => {
+      await handleGetNewInfos();
+    };
+    getData();
+  }, [player.id]);
+  
   return (
     <div className="player-menu">
       <Header />
@@ -34,10 +40,10 @@ const PlayerMenu = () => {
       <MenuItem
         src="../../public/calendar-icon.png"
         alt="icone de agendamento"
-        link=""
+        link="/player/scheduling"
         label="Agendamento"
       />
-   
+
       <div className="player-menu__log-out-button">
         <button onClick={handleLogOut}>
           <img src="../../public/log-out-icon.png" alt="icone de log out" />

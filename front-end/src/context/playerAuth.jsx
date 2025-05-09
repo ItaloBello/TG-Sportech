@@ -55,12 +55,23 @@ export const PlayerAuthContextProvider = ({ children }) => {
 
   //função edit
   const handleEdit = (dataform) => {
-    
     if (dataform.name == null) dataform.name = player.name;
     if (dataform.email == null) dataform.email = player.email;
     if (dataform.cellphone == null) dataform.cellphone = player.cellphone;
     if (dataform.cpf == null) dataform.cpf = player.cpf;
     api.put(`/api/jogador/edit/${player.id}`, dataform);
+    alert('Dados alterados com sucesso')
+    navigate('player/menu')
+  };
+
+  const handleGetNewInfos = async () => {
+    const { data } = await api.get(`api/jogador/info/${player.id}`);
+    console.log(data);
+    if (data.id){
+      setPlayer(data);
+      localStorage.setItem("user", JSON.stringify(data));
+    } 
+      
   };
   return (
     <PlayerAuthContext.Provider
@@ -71,6 +82,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleLogOut,
         handleSingUp,
         handleEdit,
+        handleGetNewInfos,
       }}
     >
       {children}
