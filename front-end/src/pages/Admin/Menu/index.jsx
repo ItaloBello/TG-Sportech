@@ -4,7 +4,7 @@ import MenuItem from '../../../components/MenuItem'
 import { useAdminAuth } from '../../../hooks/useAdminAuth'
 
 const AdminMenu = () => {
-  const {handleLogOut} = useAdminAuth()
+  const {handleLogOut, admin} = useAdminAuth()
 
   return (
     <div className='admin-menu'>
