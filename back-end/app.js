@@ -21,8 +21,13 @@ app.use(cors());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
+
+// Body Parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -37,9 +42,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Body Parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Conexão com o banco de dados e sincronização de tabelas
 sequelize.authenticate()
@@ -71,3 +73,8 @@ app.get("/logout", (req, res) => {
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta " + PORT);
 });
+
+const listEndpoints = require('express-list-endpoints');
+
+console.log("ROTAS DISPONÍVEIS:");
+console.table(listEndpoints(app));

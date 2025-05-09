@@ -38,7 +38,16 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleSingUp = async (formData) => {
     if (formData.password === formData.confirmPassword) {
       const response = await api.post(`/api/admin/registro`, formData);
-      if (response.status == 200) navigate("/admin/login");
+      console.log(response.status);
+      if (response.status == 201) {
+        const payload = {
+          ...formData, 
+          name : formData.email
+        } 
+        handleLogin(payload)
+        navigate("/admin/menu")
+
+      }
       else console.log(response);
     } else {
       alert("ERRO: senhas incompativeis");

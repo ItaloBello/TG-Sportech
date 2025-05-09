@@ -60,7 +60,10 @@ router.post("/registro", async (req, res) => {
             password: hash,
         });
 
-        res.status(201).json({ message: "Usuário registrado com sucesso!" });
+
+        req.session.user = { id: novoUsuario.id, email: novoUsuario.email, nome: novoUsuario.name };
+
+        res.status(201).json({ message: "Usuário registrado com sucesso!" , redirect: '/admin/menu'});
     } catch (err) {
         res.status(500).json({ error: err });
     }
@@ -79,7 +82,7 @@ router.get("/login", async (req, res) => {
         res.status(401).json({error: "Credenciais inválidas."})
         return
     }
-    res.status(200).json({message: "Login realizado com sucesso.", id: usuarioExistente.id})
+    res.status(201).json({message: "Login realizado com sucesso.", id: usuarioExistente.id, name: usuarioExistente.name}) //TODO retornar todos os dados do admin
 });
 
 router.post('/cadastrarQuadra', async (req, res) => {
