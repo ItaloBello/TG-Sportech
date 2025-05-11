@@ -1,6 +1,14 @@
-.scheduling-simple{
+.scheduling-simple, .scheduling-simple form{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.scheduling-simple-form-text{
+    margin: 1rem 0 .5rem 0;
+}
+
+.scheduling-simple form .input-item{
+    margin-bottom: 1rem;
 }

@@ -4,7 +4,8 @@
 .admin-menu,
 .court-menu,
 .championship-menu,
-.scheduling-menu {
+.scheduling-menu,
+.create-championship-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
