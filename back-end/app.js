@@ -8,6 +8,7 @@ const userRoute = require('./Routes/usuario');
 const cors = require('cors'); // Novo módulo para CORS
 const session = require('express-session');
 const flash = require('connect-flash');
+const upload = require('./Helpers/upload'); //Rota para o Cloudnary
 const passport = require('passport');
 require('./Config/auth')(passport);
 
@@ -70,6 +71,18 @@ app.get("/logout", (req, res) => {
     req.session.destroy();
 });
 
+
+// Cloudnary para salvar as imagens do jogador
+app.post('/upload', upload.single('image'), (req, res) => {
+  try {
+    return res.json({ imageUrl: req.file.path }); // URL da imagem
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao enviar imagem' });
+  }
+});
+
+
+
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta " + PORT);
 });
@@ -78,3 +91,4 @@ const listEndpoints = require('express-list-endpoints');
 
 console.log("ROTAS DISPONÍVEIS:");
 console.table(listEndpoints(app));
+
