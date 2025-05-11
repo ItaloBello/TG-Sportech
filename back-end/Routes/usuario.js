@@ -53,7 +53,7 @@ router.post("/registro", async (req, res) => {
 
   try {
     const usuarioExistente = await Usuario.findOne({
-      where: { [Op.or]: [{ email: req.body.email }, { cpf }] },
+      where: { [Op.or]: [{ email: req.body.email }, { cpf: documento }] },
     });
 
     if (usuarioExistente) {
@@ -64,18 +64,17 @@ router.post("/registro", async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(req.body.password, salt);
-    const celular = req.body.cellphone;
     const novoUsuario = await Usuario.create({
       name: req.body.name,
-      cpf: req.body.cpf,
+      cpf: documento,
       email: req.body.email,
-      cellphone: celular,
+      cellphone: req.body.cellphone,
       password: hash,
     });
 
     res.status(201).json({ message: "Usuário registrado com sucesso!" });
   } catch (err) {
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: err.message });
   }
 });
 
