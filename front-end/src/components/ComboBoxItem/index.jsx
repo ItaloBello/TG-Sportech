@@ -9,7 +9,7 @@ const ComboBoxItem = ({
   errorMessage,
   id,
   options = [],
-  onChange
+  onChange,
 }) => {
   return (
     <div>
@@ -19,7 +19,12 @@ const ComboBoxItem = ({
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <select {...field} className="input-item__input" id={id} onChange={(e)=>onChange(e.target.value)}>
+            <select
+              {...field}
+              className="input-item__input"
+              id={id}
+              onChange={(e) => onChange(e.target.value)}
+            >
               <option value="">{placeholder}</option>
               {options.map((value, index) => {
                 return (

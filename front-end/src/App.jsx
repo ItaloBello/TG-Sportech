@@ -24,9 +24,11 @@ import CreateCourt from "./pages/Admin/CreateCourt";
 import AdminMenu from './pages/Admin/Menu'
 import CourtMenu from "./pages/Admin/CourtMenu";
 import ChampionshipMenu from "./pages/Admin/ChampionshipMenu";
-import CreateChampionship from "./pages/Admin/CreateChampionship";
+import PlayoffsCreateChampionship from "./pages/Admin/PlayoffsCreateChampionship";
 import SchedulingMenu from "./pages/Player/SchedulingMenu";
 import SchedulingSimple from "./pages/Player/SchedulingSimple";
+import CreateChampionshipMenu from "./pages/Admin/CreateChampionshipMenu";
+import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
 
 const App = () => {
   return (
@@ -63,7 +65,9 @@ const App = () => {
               <Route path="/admin/menu" element={<AdminMenu/>}/>
               <Route path="/admin/court-menu" element={<CourtMenu/>}/>
               <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
-              <Route path="/admin/create-championship" element={<CreateChampionship/>}/>
+              <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/>
+              <Route path="/admin/create-championship/playoffs" element={<PlayoffsCreateChampionship/>}/>
+              <Route path="/admin/create-championship/points" element={<PointsCreateChampionship/>}/>
             </Routes>
           </AdminAuthContextProvider>
         </PlayerAuthContextProvider>
