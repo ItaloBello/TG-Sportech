@@ -29,6 +29,7 @@ import SchedulingMenu from "./pages/Player/SchedulingMenu";
 import SchedulingSimple from "./pages/Player/SchedulingSimple";
 import CreateChampionshipMenu from "./pages/Admin/CreateChampionshipMenu";
 import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
+import RegisterEstab from "./pages/Admin/RegisterEstab";
 
 const App = () => {
   return (
@@ -60,6 +61,7 @@ const App = () => {
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/singup" element={<AdminSingUp />} />
+              <Route path="/admin/register-establishment" element={<RegisterEstab />} />
               <Route path="/admin/welcome" element={<Welcome/>}/>
               <Route path="/admin/create-court" element={<CreateCourt/>}/>
               <Route path="/admin/menu" element={<AdminMenu/>}/>
