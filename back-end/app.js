@@ -71,7 +71,7 @@ app.get("/logout", (req, res) => {
     req.session.destroy();
 });
 
-
+// TODO criar um botão para testar o cloudnary no registro de time
 // Cloudnary para salvar as imagens do jogador
 app.post('/upload', upload.single('image'), (req, res) => {
   try {
