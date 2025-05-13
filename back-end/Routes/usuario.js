@@ -3,6 +3,7 @@ const router = express.Router();
 const Usuario = require("../Models/Usuario");
 const Time = require("../Models/Time");
 const JogadorTime = require("../Models/JogadorTime");
+const Quadra = require("../Models/Quadra")
 const bcrypt = require("bcrypt");
 const { Op, where } = require("sequelize");
 const passport = require("passport");
@@ -254,5 +255,21 @@ router.put("/edit/:id", async (req, res) => {
     return res.status(400).json({ error: err });
   }
 });
+
+router.get("/quadras", async (req,res) =>{
+  const quadras = await Quadra.findAll();
+  let quadrasDisponiveis = [];
+  for (const quadra of quadras) {
+      quadrasDisponiveis.push({id: quadra.id, nome: quadra.nome});
+  }
+  return res.status(200).json(quadrasDisponiveis);
+})
+
+router.get("/quadras/:id",async (req,res) => {
+  const id = req.params.id;
+  const quadra = await Quadra.findOne({where: {id}});
+  return res.status(200).json(quadra);
+  
+})
 
 module.exports = router;
