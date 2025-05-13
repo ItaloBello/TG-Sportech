@@ -2,7 +2,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 
 const ComboBoxItem = ({
-  placeholder,
+  placeholder = "selecione",
   label,
   name,
   control,
@@ -10,6 +10,7 @@ const ComboBoxItem = ({
   id,
   options = [],
   onChange,
+  values = undefined,
 }) => {
   return (
     <div>
@@ -26,16 +27,31 @@ const ComboBoxItem = ({
               onChange={(e) => onChange(e.target.value)}
             >
               <option value="">{placeholder}</option>
-              {options.map((value, index) => {
-                return (
-                  <option value={value} key={index}>
-                    {value}
-                  </option>
-                );
-              })}
+              {!values ? (
+                <>
+                  {options.map((value, index) => {
+                    return (
+                      <option value={value} key={index}>
+                        {options[index]}
+                      </option>
+                    );
+                  })}
+                </>
+              ) : (
+                <>{
+                  values.map((value,index)=>{
+                    return(
+                      <option value={value} key={index}>
+                        {options[index]}
+                      </option>
+                    )
+                  })
+                }</>
+              )}
             </select>
           )}
         />
+
         {errorMessage ? (
           <p style={{ color: "red" }}>{errorMessage}</p>
         ) : (
