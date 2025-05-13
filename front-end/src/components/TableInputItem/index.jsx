@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 import { Controller } from "react-hook-form";
 
-const TableInputItem = ({ name, control, errorMessage}) => {
+const TableInputItem = ({ name, control, errorMessage, type = 'text'}) => {
   return (
     <div className="table-input-item">
       <Controller
@@ -12,7 +12,7 @@ const TableInputItem = ({ name, control, errorMessage}) => {
         render={({ field }) => (
           <input
             {...field}
-            type="text"
+            type={type}
             className="table-input-item__input"
           />
         )}

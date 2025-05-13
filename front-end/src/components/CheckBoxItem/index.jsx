@@ -2,7 +2,11 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import "./styles.css";
 
-const CheckBoxItem = ({ label, name, control, errorMessage, id }) => {
+const CheckBoxItem = ({ label, name, control, errorMessage, id, onChange }) => {
+  const handleChange = (e) => {
+    const isChecked = e.target.checked
+    onChange(label,isChecked)
+  };
   return (
     <div>
       <div className="check-box-item">
@@ -17,6 +21,7 @@ const CheckBoxItem = ({ label, name, control, errorMessage, id }) => {
                 type="checkbox"
                 className="check-box-item__input"
                 id={id}
+                onChange={handleChange}
               />
               <label htmlFor={id}>{label}</label>
             </>

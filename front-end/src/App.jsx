@@ -24,9 +24,12 @@ import CreateCourt from "./pages/Admin/CreateCourt";
 import AdminMenu from './pages/Admin/Menu'
 import CourtMenu from "./pages/Admin/CourtMenu";
 import ChampionshipMenu from "./pages/Admin/ChampionshipMenu";
-import CreateChampionship from "./pages/Admin/CreateChampionship";
+import PlayoffsCreateChampionship from "./pages/Admin/PlayoffsCreateChampionship";
 import SchedulingMenu from "./pages/Player/SchedulingMenu";
 import SchedulingSimple from "./pages/Player/SchedulingSimple";
+import CreateChampionshipMenu from "./pages/Admin/CreateChampionshipMenu";
+import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
+import RegisterEstab from "./pages/Admin/RegisterEstab";
 
 const App = () => {
   return (
@@ -58,12 +61,15 @@ const App = () => {
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/singup" element={<AdminSingUp />} />
+              <Route path="/admin/register-establishment" element={<RegisterEstab />} />
               <Route path="/admin/welcome" element={<Welcome/>}/>
               <Route path="/admin/create-court" element={<CreateCourt/>}/>
               <Route path="/admin/menu" element={<AdminMenu/>}/>
               <Route path="/admin/court-menu" element={<CourtMenu/>}/>
               <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
-              <Route path="/admin/create-championship" element={<CreateChampionship/>}/>
+              <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/>
+              <Route path="/admin/create-championship/playoffs" element={<PlayoffsCreateChampionship/>}/>
+              <Route path="/admin/create-championship/points" element={<PointsCreateChampionship/>}/>
             </Routes>
           </AdminAuthContextProvider>
         </PlayerAuthContextProvider>
