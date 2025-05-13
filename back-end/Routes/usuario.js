@@ -93,8 +93,25 @@ router.get("/login", async (req, res) => {
   }
   res
     .status(200)
-    .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id });
+    .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id, name:usuarioExistente.name, email:usuarioExistente.email, cpf: usuarioExistente.cpf, cellphone:usuarioExistente.cellphone });
 });
+
+router.get("/info/:id", async (req, res) => {
+  const id = req.params.id;
+  //console.log(id)
+  if (id === "undefined"){
+    //console.log(id)
+    res.status(400).json({error: "o id está indefinido"})
+  }
+else{
+const user = await Usuario.findOne({where: {id}});
+  if (!user){
+    res.status(401).json({error: "Jogador não encontrado."});
+    return;
+  }
+  res.status(200).json({name: user.name, email: user.email, cpf: user.cpf, cellphone: user.cellphone, id: user.id});
+
+}});
 
 router.get("/times/:userId", async (req, res) => {
   const userId = req.params.userId;
@@ -217,17 +234,17 @@ router.put("/times/:id", async (req, res) => {
 });
 
 router.put("/edit/:id", async (req, res) => {
-  const nome = req.body.nome;
+  const nome = req.body.name;
   const email = req.body.email;
   const id = req.params.id;
-  const documento = req.body.documento;
-  const celular = req.body.celular;
-
+  const documento = req.body.cpf;
+  const celular = req.body.cellphone;
+  
   const updatedUser = {
-    nome: nome,
+    name: nome,
     email: email,
-    documento: documento,
-    celular: celular,
+    cpf: documento,
+    cellphone: celular,
   };
 
   try {

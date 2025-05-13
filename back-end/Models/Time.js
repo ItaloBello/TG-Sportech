@@ -9,7 +9,7 @@ const Time = sequelize.define('times',{
         autoIncrement: true,
         primaryKey: true
     },
-    nome: {
+    name: {
         type: Sequelize.STRING(100),
         allowNull: false
     },
@@ -21,15 +21,15 @@ const Time = sequelize.define('times',{
         type: Sequelize.INTEGER,
         required: true
     },
-    cor_primaria: {
+    primaryColor: {
         type: Sequelize.STRING,
         required: true
     },
-    cor_secundaria: {
+    secondaryColor: {
         type: Sequelize.STRING,
         required: true
     },
-    invite_code: {
+    inviteCode: {
         type: Sequelize.STRING,
         required: true
     },

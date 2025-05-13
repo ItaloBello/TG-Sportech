@@ -1,0 +1,13 @@
+.check-box-item{
+    display: flex;
+    align-items: center;
+    margin: .1rem;
+}
+
+
+.check-box-item__input {
+  height: 1.2rem;
+  width: 1.2rem;
+  border:none;
+  margin-right: .3rem;
+}

@@ -5,10 +5,12 @@ import { Controller } from "react-hook-form";
 const InputItem = ({
   placeholder,
   label,
-  type,
+  type = 'text',
   name,
   control,
   errorMessage,
+  isDisabled = false,
+  id
 }) => {
   return (
     <div className="input-item">
@@ -22,6 +24,8 @@ const InputItem = ({
             type={type}
             className="input-item__input"
             placeholder={placeholder}
+            disabled = {isDisabled}
+            id={id}
           />
         )}
       />

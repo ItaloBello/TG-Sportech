@@ -1,0 +1,7 @@
+.table-input-item {
+  margin: .1rem .2rem;
+}
+.table-input-item__input {
+  border: none;
+  width: 4.375rem;
+}
