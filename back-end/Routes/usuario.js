@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Usuario = require("../Models/Usuario");
 const Time = require("../Models/Time");
+const Agendamento = require("../Models/Agendamentos");
+const Horario = require("../Models/Horarios");
 const JogadorTime = require("../Models/JogadorTime");
 const Quadra = require("../Models/Quadra")
 const bcrypt = require("bcrypt");
@@ -12,6 +14,7 @@ const {
   validarCNPJ,
   validarEmail,
 } = require("../Utils/validarDocumento");
+const { message } = require("statuses");
 
 router.post("/registro", async (req, res) => {
   let erros = [];
@@ -267,9 +270,30 @@ router.get("/quadras", async (req,res) =>{
 
 router.get("/quadras/:id",async (req,res) => {
   const id = req.params.id;
-  const quadra = await Quadra.findOne({where: {id}});
-  return res.status(200).json(quadra);
-  
+  const agendamentos = await Agendamento.findAll({where: {idQuadra: id}})
+  const horarios = await Horario.findAll({where: {quadraId: id}})
+  let diasOcupados = [];
+  for (let agendamento of agendamentos){
+    diasOcupados.push(agendamento.data + agendamento.horaInicio + '-' + agendamento.horaFim)
+  }
+  return res.status(200).json({diasOcupados: diasOcupados, horarios: horarios});
+})
+
+router.post("/agendar",async (req,res) => {
+  const idJogador = req.body.idJogador;
+  const idQuadra = req.body.idQuadra;
+  const horaInicio = req.body.HoraInicio;
+  const horaFim = req.body.horaFim;
+  const data = req.body.data
+  const agendamento = {
+    idJogador: idJogador,
+    idQuadra: idQuadra,
+    horaInicio: horaInicio,
+    horaFim: horaFim,
+    data: data,
+  }
+  await Agendamento.create(agendamento)
+  res.status(200).json({message:"Sucesso!"})  
 })
 
 module.exports = router;
