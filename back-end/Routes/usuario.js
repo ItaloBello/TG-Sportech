@@ -15,6 +15,7 @@ const {
   validarEmail,
 } = require("../Utils/validarDocumento");
 const { message } = require("statuses");
+const { getDaySlots } = require("../Utils/agendamentoUtils");
 
 router.post("/registro", async (req, res) => {
   let erros = [];
@@ -263,21 +264,49 @@ router.get("/quadras", async (req,res) =>{
   const quadras = await Quadra.findAll();
   let quadrasDisponiveis = [];
   for (const quadra of quadras) {
-      quadrasDisponiveis.push({id: quadra.id, nome: quadra.nome});
+      quadrasDisponiveis.push({id: quadra.id, name: quadra.nome});
   }
   return res.status(200).json(quadrasDisponiveis);
 })
 
-router.get("/quadras/:id",async (req,res) => {
+router.get("/quadras/horarios/:id",async (req,res) => {
   const id = req.params.id;
-  const agendamentos = await Agendamento.findAll({where: {idQuadra: id}})
-  const horarios = await Horario.findAll({where: {quadraId: id}})
-  let diasOcupados = [];
+  const data = req.query.data;
+  const agendamentos = await Agendamento.findAll({where: {idQuadra: id, data: data}})
+  let slotsOcupados = [];
   for (let agendamento of agendamentos){
-    diasOcupados.push(agendamento.data + agendamento.horaInicio + '-' + agendamento.horaFim)
+    slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
   }
-  return res.status(200).json({diasOcupados: diasOcupados, horarios: horarios});
+  //a data deve estar no 2025-05-14 ou ser convertida para esse formato
+  const slots = await getDaySlots(new Date(data), id, slotsOcupados);
+  return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
+
+router.get('/quadras/:id/dias-bloqueados', async (req, res) => {
+  const id = req.params.id;
+  const horarios = await Horario.findAll({ where: { quadraId: id } });
+  const cadastrados = horarios.map(h => Number(h.diaSemana));
+  const todosDias = [0,1,2,3,4,5,6];
+  const naoCadastrados = todosDias.filter(dia => !cadastrados.includes(dia));
+  return res.json({ diasBloqueados: naoCadastrados });
+});
+
+router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
+  const id = req.params.id;
+  const inicio = new Date(req.query.inicio);
+  const fim = new Date(req.query.fim);
+  let datasIndisponiveis = [];''
+  for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+    const slots = await getDaySlots(new Date(d), id, []);
+    const agendamentos = await Agendamento.findAll({ where: { idQuadra: id, data: d.toISOString().slice(0,10) } });
+    let slotsOcupados = agendamentos.map(a => `${a.horaInicio}-${a.horaFim}`);
+    // Se todos os slots estão ocupados, a data está indisponível
+    if (slots.every(slot => slotsOcupados.includes(slot))) {
+      datasIndisponiveis.push(new Date(d));
+    }
+  }
+  return res.json({ datasIndisponiveis });
+});
 
 router.post("/agendar",async (req,res) => {
   const idJogador = req.body.idJogador;
