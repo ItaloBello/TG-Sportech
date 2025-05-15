@@ -18,6 +18,9 @@ const schema = yup
   })
   .required();
 
+  //TODO Adicionar descrição, Taxa de inscrição e premiação no cadastro de campeonato
+
+
 const CreateChampionship = () => {
   const {
     control,

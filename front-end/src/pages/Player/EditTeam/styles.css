@@ -28,3 +28,29 @@
 .edit-team__button-area .button-item{
     width: 40%;
 }
+
+.edit-team__players-table{
+    width: 13.125rem;
+}
+
+.players-table__header, .players-table__row{
+    border-bottom: .1rem solid #000;
+    margin-bottom: .5rem;
+}
+
+.players-table__row,.row__name-area{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.row__name-area{
+    width: 50%;
+}
+.row__button{
+    border: none;
+    background-color: transparent;
+    font-weight: 800;
+    margin: 0 .5rem ;
+    color: #FF0000;
+}

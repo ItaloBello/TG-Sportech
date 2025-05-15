@@ -30,6 +30,7 @@ import SchedulingSimple from "./pages/Player/SchedulingSimple";
 import CreateChampionshipMenu from "./pages/Admin/CreateChampionshipMenu";
 import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
 import RegisterEstab from "./pages/Admin/RegisterEstab";
+import MyAppointments from "./pages/Player/MyAppointments";
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/scheduling" element={<SchedulingMenu />} />
               <Route path="/player/scheduling-simple" element={<SchedulingSimple />} />
+              <Route path="/player/my-appointments" element={<MyAppointments />} />
 
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />

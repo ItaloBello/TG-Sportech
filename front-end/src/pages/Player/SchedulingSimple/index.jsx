@@ -11,6 +11,7 @@ import * as yup from "yup";
 import ComboBoxItem from "../../../components/ComboBoxItem";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 import CheckBoxItem from "../../../components/checkBoxItem";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -40,11 +41,17 @@ const SchedulingSimple = () => {
   const minDate = new Date(Date.now());
   const maxDate = new Date(Date.now() + moreDays * 24 * 60 * 60 * 1000);
 
+  const navigate = useNavigate();
+
   useLayoutEffect(() => {
     const getCourts = async () => {
       await handleGetCourt();
     };
     getCourts();
+    if(!courts){
+      alert('Não há quadras cadastradas ainda, não é possivel agendar no momento')
+      navigate('/player/menu')
+    }
     console.log(courts);
   }, [player.id]);
 

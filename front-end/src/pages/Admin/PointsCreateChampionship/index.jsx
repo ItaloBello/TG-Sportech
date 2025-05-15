@@ -20,6 +20,8 @@ const schema = yup
     maxPositionDesc: yup.number(),
   })
   .required();
+//TODO Adicionar descrição, Taxa de inscrição e premiação no cadastro de campeonato
+
 const PointsCreateChampionship = () => {
   const {
     control,
@@ -29,7 +31,6 @@ const PointsCreateChampionship = () => {
     resolver: yupResolver(schema),
     mode: "onBlur",
   });
-
 
   const onSubmit = (dataForm) => {
     const payload = {

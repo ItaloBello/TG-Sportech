@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import FormButton from "../../../components/FormButton";
+import { Link } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -66,6 +67,24 @@ const EditTeam = () => {
         </div>
       </form>
       {/* TODO: Criar a tabela de jogadores dentro do time, mostrar o capitao, colocar um botao de X para remover alguem do time */}
+      <div className="edit-team__players-table">
+        <div className="players-table__header">
+          <p>Jogadores</p>
+        </div>
+        <div className="players-table__row">
+          <div className="row__name-area">
+            <span>Jefão</span>
+            <span>C</span>
+          </div>
+          <button onClick={()=>console.log('clicou')} className="row__button">X</button>
+        </div>
+        <div className="players-table__row">
+          <div className="row__name-area">
+            <span>Messi</span>
+          </div>
+          <button onClick={()=>console.log('clicou')} className="row__button">X</button>
+        </div>
+      </div>
     </div>
   );
 };
