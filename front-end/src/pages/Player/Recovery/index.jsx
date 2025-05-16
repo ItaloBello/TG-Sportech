@@ -6,8 +6,13 @@ import ButtonItem from "../../../components/ButtonItem";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import FormButton from "../../../components/FormButton";
 
-const schema = yup.object().required()
+const schema = yup
+  .object({
+    name: yup.string(),
+  })
+  .required();
 
 const PlayerRecovery = () => {
   const {
@@ -19,16 +24,28 @@ const PlayerRecovery = () => {
     mode: "onBlur",
   });
 
+
+  const onSubmit = (formData)=>{
+    console.log(formData);
+  }
   return (
     <>
       <div className="main">
         <Header />
-        <InputItem label="Usuário" placeholder="Usuário" control={control} name=''/>
-        <ButtonItem
-          color="#14ae5c"
-          label="Recuperar Senha"
-          link="/player/recovery/sms"
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <InputItem
+            label="Email"
+            placeholder="Digite seu email"
+            control={control}
+            name="email"
+          />
+          <ButtonItem
+            color="#14ae5c"
+            label="Recuperar Senha falso"
+            link="/player/recovery/sms"
+          />
+          <FormButton label="Recuperar Senha"/>
+        </form>
       </div>
     </>
   );

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PlayerLogin from "./pages/Player/Login";
 import { PlayerSingUp } from "./pages/Player/SingUp";
 import PlayerRecovery from "./pages/Player/Recovery";
-import PlayerSms from "./pages/Player/Sms";
+import PlayerEmail from "./pages/Player/Email";
 import PlayerMenu from "./pages/Player/Menu";
 import TeamMenu from "./pages/Player/TeamMenu";
 import CreateTeam from "./pages/Player/CreateTeam";
@@ -31,6 +31,8 @@ import CreateChampionshipMenu from "./pages/Admin/CreateChampionshipMenu";
 import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
 import RegisterEstab from "./pages/Admin/RegisterEstab";
 import MyAppointments from "./pages/Player/MyAppointments";
+import ChooseTeam from "./pages/Player/ChooseTeam";
+import ChampionshipProgress from "./pages/Player/ChampionshipProgress";
 
 const App = () => {
   return (
@@ -45,7 +47,7 @@ const App = () => {
               <Route path="/player/login" element={<PlayerLogin />} />
               <Route path="/player/singup" element={<PlayerSingUp />} />
               <Route path="/player/recovery" element={<PlayerRecovery />} />
-              <Route path="/player/recovery/sms" element={<PlayerSms />} />
+              <Route path="/player/recovery/email" element={<PlayerEmail />} />
               <Route path="/player/menu" element={<PlayerMenu />} />
               <Route path="/player/profile/" element={<PlayerProfile />} />
               <Route path="/player/team-menu" element={<TeamMenu />} />
@@ -55,7 +57,9 @@ const App = () => {
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
+              <Route path="/player/championship-progress" element={<ChampionshipProgress />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
+              <Route path="/player/choose-team" element={<ChooseTeam />} />
               <Route path="/player/scheduling" element={<SchedulingMenu />} />
               <Route path="/player/scheduling-simple" element={<SchedulingSimple />} />
               <Route path="/player/my-appointments" element={<MyAppointments />} />

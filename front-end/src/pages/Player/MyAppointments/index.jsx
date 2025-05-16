@@ -3,6 +3,8 @@ import Header from '../../../components/Header'
 import ApoointmentCard from '../../../components/AppointmentCard'
 import './styles.css'
 
+//TODO Integrar
+
 // TODO vou precisar de uma requisição que eu envie um id de agendamento ela me retorna: tipo de agendamento (Amistoso ou rachão), se for amistoso, me retorna o nome do adversário, a data,, dai ela verifica o status do agendamento e me retorna uma dessas coisas
 // 	- Pagamento pendente: Ambos //quando nenhum dos dois time pagou ainda
 // 	- Pagamento pendente: 'nome do time' //quando um time pagou, mas o outro não, no caso, retorne junto o nome do time

@@ -1,0 +1,27 @@
+.choose-team,
+.choose-team__area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.choose-team__area{
+    padding:1rem 2rem;
+
+    border-radius: .5rem;
+}
+
+.choose-team__area,.choose-team__area .form-button button {
+    background-color: #2C2C2C;
+    
+}
+
+.choose-team__area p{
+    color: #FFF;
+    margin-bottom: 1rem;
+}
+
+.choose-team__area .form-button button{
+    border-color: #14AE5C;
+}

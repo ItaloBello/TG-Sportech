@@ -5,6 +5,7 @@
     height: 11.25rem;
     border-radius: .5rem;
     background-color: #2C2C2C;
+    margin: .5rem 0;
 }
 
 .champ-card__header{

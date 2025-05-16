@@ -10,6 +10,7 @@ const ChampCard = ({
   finalDate,
   team,
   premiation,
+  onClick
 }) => {
   return (
     <>
@@ -19,9 +20,9 @@ const ChampCard = ({
           <div className="champ-card__button-area">
             <p>{title}</p>
             {isInProgress ? (
-              <CardButton label={"Visualizar"} colorButton={"#14AE5C"}/>
+              <CardButton label="Visualizar" colorButton="#14AE5C" link={'/player/championship-progress'} onClick={onClick}/>
             ) : (
-              <CardButton label={"Mais Detalhe"} colorButton={'#14AE5C'}/>
+              <CardButton label={"Mais Detalhe"} colorButton={'#14AE5C'} link='/player/subscribe-team' onClick={onClick}/>
             )}
           </div>
         </div>

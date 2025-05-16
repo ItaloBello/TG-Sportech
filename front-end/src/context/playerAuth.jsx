@@ -8,15 +8,25 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [player, setPlayer] = useState({});
   const [error, setError] = useState(null);
   const [courts, setCourts] = useState([]);
+  const [selectedChampionship, setSelectedChampionship] = useState({});
+
+  const [teamsByCaptain, setTeamsByCaptain] = useState([])
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
   const [disabledDates, setDisabledDates] = useState([]);
   const [avaliableTimes, setAvaliableTimes] = useState([]);
+  const [inProgressChampionship, setInProgressChampionship] = useState([]);
+  const [avaliableChampionship, setAvaliableChampionship] = useState([]);
 
   const navigate = useNavigate();
 
+  //este useEffect controla os dados armazenados em localStorage e os passa para as variaveis de estado
   useEffect(() => {
     const storedPlayer = localStorage.getItem("user");
     if (storedPlayer) setPlayer(JSON.parse(storedPlayer));
+
+    const storedSelectedChampionship = localStorage.getItem("champ");
+    if (storedSelectedChampionship)
+      setSelectedChampionship(JSON.parse(storedSelectedChampionship));
   }, []);
 
   //função de login
@@ -89,6 +99,14 @@ export const PlayerAuthContextProvider = ({ children }) => {
     ]);
   };
 
+  const handleGetTeamsByCaptain = (playerId)=>{
+    //TODO Requisição para pegar todos os times que um certo jogador é capitao
+    setTeamsByCaptain([
+      {name: 'Fatec FC', id:1},
+      {name: 'Amigos do Levi', id:2},
+    ])
+  }
+
   const handleGetWeekDaysToFilter = (selectedCourt) => {
     //TODO requisição para receber os dias da semana a serem bloqueados, que não foram cadastrados na quadra
     console.log("court id:" + selectedCourt);
@@ -105,17 +123,80 @@ export const PlayerAuthContextProvider = ({ children }) => {
 
   const handleGetAvaliableTimes = (selectedCourt, selectedDate) => {
     //TODO requisição para pegar os horarios de uma quadra determinada
-    if ((selectedCourt == 1 && selectedDate != '24-05-2025')|| selectedDate == '24-05-2025')
+    if (
+      (selectedCourt == 1 && selectedDate != "24-05-2025") ||
+      selectedDate == "24-05-2025"
+    )
       setAvaliableTimes([
         "14:00-15:00",
         "15:00-16:00",
         "16:00-17:00",
         "17:00-18:00",
       ]);
-    else if (selectedCourt == 2||selectedDate=='20-05-2025')
+    else if (selectedCourt == 2 || selectedDate == "20-05-2025")
       setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
   };
 
+  const handleGetInProgressChampionship = (playerId) => {
+    //TODO Requisição para pegar os campeonatos em andamento que determinado jogador está participando
+    setInProgressChampionship([
+      {
+        id: 1,
+        initialDate: "01/02/2025",
+        finalDate: "15/04/2025",
+        subscribedTeam: "Fatec FC",
+        image: "../../public/copa-fatec-icon.png",
+        title: "COPA FATEC",
+        altImage: "Logo COPA FATEC",
+      },
+      {
+        id: 2,
+        initialDate: "07/05/2025",
+        finalDate: "15/08/2025",
+        subscribedTeam: "Fatec FC",
+        image: "../../public/copa-fatec-icon.png",
+        title: "COPA PINHEIROS",
+        altImage: "Logo COPA PINHEIROS",
+      },
+    ]);
+  };
+
+  const handleGetAvaliableChampionship = (playerId) => {
+    //TODO Requisição para pegar os campeonatos que não foram iniciados e que o jogador não esta participando
+    setAvaliableChampionship([
+      {
+        id: 3,
+        initialDate: "01/02/2025",
+        finalDate: "15/04/2025",
+        premiation: "R$ 400,00",
+        image: "../../public/copa-zn-icon.png",
+        title: "COPA ZONA NORTE",
+        altImage: "Logo COPA ZONA NORTE",
+        registration:'R$40,00',
+        description:
+          "A Copa Zona Norte será um competição realizada em nossa quadra Amigos da Bola, " +
+          "localizada na Av. Ipanema, 800. Os jogos do meio de semana serão realizados de noite já durante o fim de semana " +
+          "serão na parte da manhã. Traga a família para acompanhar os jogos e desfrutar de nosso espaço!",
+      },
+      {
+        id: 4,
+        initialDate: "01/09/2025",
+        finalDate: "15/10/2025",
+        premiation: "R$ 900,00",
+        image: "../../public/copa-zn-icon.png",
+        title: "COPA ZONA LESTE",
+        altImage: "Logo COPA ZONA LESTE",
+        description:
+          "A Copa Zona Leste será um competição realizada em nossa quadra Amigos da Bola, " +
+          "localizada na Av. Ipanema, 800. Os jogos do meio de semana serão realizados de noite já durante o fim de semana " +
+          "serão na parte da manhã. Traga a família para acompanhar os jogos e desfrutar de nosso espaço!",
+      },
+    ]);
+  };
+  const handleSetSelectedChamp = (champ) => {
+    setSelectedChampionship(champ);
+    localStorage.setItem("champ", JSON.stringify(champ));
+  };
   return (
     <PlayerAuthContext.Provider
       value={{
@@ -125,6 +206,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
         weekDaysToFilter,
         disabledDates,
         avaliableTimes,
+        inProgressChampionship,
+        avaliableChampionship,
+        selectedChampionship,
+        teamsByCaptain,
         handleLogin,
         handleLogOut,
         handleSingUp,
@@ -133,7 +218,11 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleGetCourt,
         handleGetWeekDaysToFilter,
         handleGetDisabledDates,
-        handleGetAvaliableTimes
+        handleGetAvaliableTimes,
+        handleGetInProgressChampionship,
+        handleGetAvaliableChampionship,
+        handleSetSelectedChamp,
+        handleGetTeamsByCaptain,
       }}
     >
       {children}

@@ -6,7 +6,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import FormButton from "../../../components/FormButton";
-import { Link } from "react-router-dom";
+
+//TODO integrar
 
 const schema = yup
   .object({

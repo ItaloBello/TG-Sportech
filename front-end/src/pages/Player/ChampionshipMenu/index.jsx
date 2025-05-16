@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./styles.css";
 import Header from "../../../components/Header";
-import ChampCardList from "../../../components/ChampCardList";
+import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
+import ChampCard from "../../../components/ChampCard";
+
+//TODO Integrar
 const PlayerChamp = () => {
+  const {
+    player,
+    inProgressChampionship,
+    avaliableChampionship,
+    handleGetInProgressChampionship,
+    handleGetAvaliableChampionship,
+    handleSetSelectedChamp
+  } = usePlayerAuth();
+
+  useEffect(() => {
+    handleGetInProgressChampionship(player.id);
+    handleGetAvaliableChampionship(player.id);
+  }, [player.id]);
+
   return (
     <div className="player-champ">
       <div className="player-champ__title">
@@ -12,31 +29,36 @@ const PlayerChamp = () => {
       <div className="player-champ__subtitle">
         <p>Em Andamento</p>
       </div>
-      <ChampCardList
-        items={1}
-        isInProgress={true}
-        altArray={["logo 1"]}
-        finalDateArray={["15/04/2025"]}
-        initialDateArray={["01/02/2025"]}
-        srcArray={["../../public/team-1-icon.png"]}
-        teamArray={["Fatec FC"]}
-        titleArray={["COPA FATEC"]}
-        premiationArray={[]}
-      />
+      {inProgressChampionship.map((champ, index) => (
+        <ChampCard
+          alt={champ.altImage}
+          finalDate={champ.finalDate}
+          initialDate={champ.initialDate}
+          src={champ.image}
+          team={champ.subscribedTeam}
+          title={champ.title}
+          isInProgress={true}
+          key={champ.id}
+          onClick={()=>handleSetSelectedChamp(champ)}
+        />
+      ))}
+
       <div className="player-champ__subtitle">
         <p>Não iniciados</p>
       </div>
-      <ChampCardList
-        items={1}
-        isInProgress={false}
-        altArray={["logo 1"]}
-        finalDateArray={["15/04/2025"]}
-        initialDateArray={["01/02/2025"]}
-        srcArray={["../../public/team-1-icon.png"]}
-        teamArray={["Fatec FC"]}
-        titleArray={["COPA FATEC"]}
-        premiationArray={["R$100,00"]}
-      />
+      {avaliableChampionship.map((champ, index) => (
+        <ChampCard
+          alt={champ.altImage}
+          finalDate={champ.finalDate}
+          initialDate={champ.initialDate}
+          src={champ.image}
+          premiation={champ.premiation}
+          title={champ.title}
+          isInProgress={false}
+          key={champ.id}
+          onClick={()=>handleSetSelectedChamp(champ)}
+        />
+      ))}
     </div>
   );
 };

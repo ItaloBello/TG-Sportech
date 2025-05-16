@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+//TODO Integrar
+
 const schema = yup
   .object({ inviteCode: yup.string().required("Campo obigatorio") })
   .required();

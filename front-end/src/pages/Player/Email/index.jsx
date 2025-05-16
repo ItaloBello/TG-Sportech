@@ -9,14 +9,14 @@ const PlayerSms = () => {
       <Header />
       <div className="player-sms__text">
         <p>
-          Pronto, você receberá um lembrete sobre sua senha por meio de um SMS,
-          que será enviado ao seu número de celular cadastrado.
+          Pronto, você receberá um lembrete sobre sua senha por meio de um email,
+          que será enviado ao seu email cadastrado.
         </p>
       </div>
       <ButtonItem
-        label={"Voltar ao Login"}
-        color={"#14ae5c"}
-        link={"/player/login"}
+        label="Voltar ao Login"
+        color="#14ae5c"
+        link="/player/login"
       />
     </div>
   );
