@@ -15,7 +15,7 @@ const {
   validarEmail,
 } = require("../Utils/validarDocumento");
 const { message } = require("statuses");
-const { getDaySlots } = require("../Utils/agendamentoUtils");
+const { getDaySlots,getCadastrados } = require("../Utils/agendamentoUtils");
 
 router.post("/registro", async (req, res) => {
   let erros = [];
@@ -285,7 +285,7 @@ router.get("/quadras/horarios/:id",async (req,res) => {
 router.get('/quadras/:id/dias-bloqueados', async (req, res) => {
   const id = req.params.id;
   const horarios = await Horario.findAll({ where: { quadraId: id } });
-  const cadastrados = horarios.map(h => Number(h.diaSemana));
+  const cadastrados = getCadastrados(horarios)
   const todosDias = [0,1,2,3,4,5,6];
   const naoCadastrados = todosDias.filter(dia => !cadastrados.includes(dia));
   return res.json({ diasBloqueados: naoCadastrados });
