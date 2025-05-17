@@ -284,7 +284,8 @@ router.get("/quadras/horarios/:id",async (req,res) => {
     slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
   }
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
-  const slots = await getDaySlots(new Date(data), id, slotsOcupados);
+   console.log(new Date(data).getDay())
+  const slots = await getDaySlots(new Date(data).setDate(new Date(data).getDate()+1), id, slotsOcupados);
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 
@@ -309,6 +310,7 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
     const agendamentos = await Agendamento.findAll({ where: { idQuadra: id, data: d.toISOString().slice(0,10) } });
     let slotsOcupados = agendamentos.map(a => `${a.horaInicio}-${a.horaFim}`);
     // Se todos os slots estão ocupados, a data está indisponível
+   
     if (slots.every(slot => slotsOcupados.includes(slot))) {
       datasIndisponiveis.push(new Date(d).toISOString().slice(0, 10));
     }
