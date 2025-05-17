@@ -271,7 +271,8 @@ router.get("/quadras", async (req,res) =>{
 
 router.get("/quadras/horarios/:id",async (req,res) => {
   const id = req.params.id;
-  const data = req.query.data;
+  let dataInput = req.query.data.split('-');
+  const data = dataInput[2]+'-'+dataInput[1]+'-'+dataInput[0]
   const agendamentos = await Agendamento.findAll({where: {
     idQuadra: id,
     [Op.and]: [
