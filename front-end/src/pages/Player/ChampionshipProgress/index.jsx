@@ -2,7 +2,9 @@ import React from 'react'
 
 const ChampionshipProgress = () => {
   return (
-    <div>ChampionshipProgress</div>
+    <div className='championship-in-progress'>
+      
+    </div>
   )
 }
 
