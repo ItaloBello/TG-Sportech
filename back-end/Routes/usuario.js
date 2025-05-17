@@ -7,7 +7,7 @@ const Horario = require("../Models/Horarios");
 const JogadorTime = require("../Models/JogadorTime");
 const Quadra = require("../Models/Quadra")
 const bcrypt = require("bcrypt");
-const { Op, where } = require("sequelize");
+const { Op, where, fn, col } = require("sequelize");
 const passport = require("passport");
 const {
   validarCPF,
@@ -272,7 +272,12 @@ router.get("/quadras", async (req,res) =>{
 router.get("/quadras/horarios/:id",async (req,res) => {
   const id = req.params.id;
   const data = req.query.data;
-  const agendamentos = await Agendamento.findAll({where: {idQuadra: id, data: data}})
+  const agendamentos = await Agendamento.findAll({where: {
+    idQuadra: id,
+    [Op.and]: [
+      where(fn('DATE', col('data')), data) // compara apenas a parte da data
+    ]
+  }})
   let slotsOcupados = [];
   for (let agendamento of agendamentos){
     slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
