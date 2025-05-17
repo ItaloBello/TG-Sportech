@@ -27,7 +27,6 @@ async function getDaySlots(data, idQuadra, unavailableSlots) {
     const quadra = await Quadra.findOne({where: {id: idQuadra}});
     const diaSemana = arrayDias[data.getDay()]  
     const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
-    console.log(diaSemana)
     if(!horario){
         return [];
     }

@@ -52,7 +52,6 @@ const SchedulingSimple = () => {
       alert('Não há quadras cadastradas ainda, não é possivel agendar no momento')
       navigate('/player/menu')
     }
-    console.log(courts);
   }, [player.id]);
 
   useEffect(() => {
@@ -111,7 +110,7 @@ const SchedulingSimple = () => {
   const onSubmit = (dataForm) => {
     const payload = {
       ...dataForm,
-      date: format(dataForm.date, "dd-MM-yyyy"),
+      date: format(dataForm.date, "yyyy-MM-dd"),
       times: selectedTimes,
       court: selectedCourt,
     };
@@ -170,6 +169,7 @@ const SchedulingSimple = () => {
                   name="times"
                   id={index}
                   onChange={handleSelectedTimesChange}
+                  key={index}
                 />
               );
             })}
