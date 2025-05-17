@@ -63,7 +63,12 @@ const SchedulingSimple = () => {
       getWeekDaysToFilter();
 
       const getDisabledDates = async () => {
-        await handleGetDisabledDates(selectedCourt);
+        const payload = {
+          minDate: format(minDate,'yyyy-MM-dd'),
+          maxDate: format(maxDate,'yyyy-MM-dd')
+        }
+
+        await handleGetDisabledDates(selectedCourt,payload.minDate,payload.maxDate);
       };
       getDisabledDates();
     } else console.log("nao mudou o court");

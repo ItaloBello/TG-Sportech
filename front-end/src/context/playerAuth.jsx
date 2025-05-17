@@ -104,19 +104,21 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   const handleGetWeekDaysToFilter = async (selectedCourt) => {
-    //TODO revisar a requisição
     const { data } = await api.get(
       `/api/jogador/quadras/${selectedCourt}/dias-bloqueados`
     );
-    console.log(data);
+    
     setWeekDaysToFilter(data.diasBloqueados);
   };
 
-  const handleGetDisabledDates = (selectedCourt) => {
+  const handleGetDisabledDates = async (selectedCourt,minDate,maxDate) => {
     //TODO requisição para retornar os dias sem agendamento disponível, ela deve retornar um array de varios Date
-    if (selectedCourt == 1)
-      setDisabledDates([new Date(2025, 4, 22), new Date(2025, 4, 17)]);
-    else if (selectedCourt == 2) setDisabledDates([new Date(2025, 4, 19)]);
+     const {data} = await api.get(`/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`)
+     console.log(data);
+    
+     setDisabledDates(data)
+    console.log(`court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`);
+    
   };
 
   const handleGetAvaliableTimes = (selectedCourt, selectedDate) => {

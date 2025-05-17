@@ -2,13 +2,14 @@ const Agendamento = require("../Models/Agendamentos");
 const Horario = require("../Models/Horarios");
 const Quadra = require("../Models/Quadra");
 
-const dias = {"domingo": 0, "segunda": 1, "terça": 2, "quarta": 3, "quinta": 4, "sexta": 5}
-
+const dias = {"domingo": 0, "segunda": 1, "terça": 2, "quarta": 3, "quinta": 4, "sexta": 5, "sabado":6}
+const arrayDias = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sabado"]
 function getCadastrados(horarios){
     let cadastrados = [];
     for(hor of horarios){
         cadastrados.push(dias[hor.diaSemana])
     }
+    return cadastrados
 }
 
 function timeStringToDecimal(timeStr) {
@@ -23,9 +24,11 @@ function decimalToTimeString(decimal) {
 }
 
 async function getDaySlots(data, idQuadra, unavailableSlots) {
-    const quadra = await Quadra.findOne({where: {idQuadra: idQuadra}});
-    const diaSemana = data.getDay();
-    const horario = await Horario.findOne({where: {quadraId: idQuadra, diaSemana: diaSemana}});
+    const quadra = await Quadra.findOne({where: {id: idQuadra}});
+    const diaSemana = arrayDias[data.getDay()]
+  
+    
+    const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
     let tempoInicial = timeStringToDecimal(horario.horaInicio);
     let tempoFinal = timeStringToDecimal(horario.horaFim);
     let contador = tempoInicial;
