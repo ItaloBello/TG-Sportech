@@ -10,7 +10,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [courts, setCourts] = useState([]);
   const [selectedChampionship, setSelectedChampionship] = useState({});
 
-  const [teamsByCaptain, setTeamsByCaptain] = useState([])
+  const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
   const [disabledDates, setDisabledDates] = useState([]);
   const [avaliableTimes, setAvaliableTimes] = useState([]);
@@ -89,36 +89,36 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   //TODO aqui vai as requisições do back
-  const handleGetCourt = () => {
-    //TODO requisição para pegar todas as quadras, retornar pelo menos o id e o nome de cada
-    //const { data } = await api.get(`api/jogador/info/${player.id}`);
-    //setCourts(data)
-    setCourts([
-      { name: "quadra 1", id: 1 },
-      { name: "quadra 2", id: 2 },
+
+  const handleGetCourt = async () => {
+    const { data } = await api.get("/api/jogador/quadras");
+    setCourts(data);
+  };
+
+  const handleGetTeamsByCaptain = (playerId) => {
+    //TODO Requisição para pegar todos os times que um certo jogador é capitao
+    setTeamsByCaptain([
+      { name: "Fatec FC", id: 1 },
+      { name: "Amigos do Levi", id: 2 },
     ]);
   };
 
-  const handleGetTeamsByCaptain = (playerId)=>{
-    //TODO Requisição para pegar todos os times que um certo jogador é capitao
-    setTeamsByCaptain([
-      {name: 'Fatec FC', id:1},
-      {name: 'Amigos do Levi', id:2},
-    ])
-  }
-
-  const handleGetWeekDaysToFilter = (selectedCourt) => {
-    //TODO requisição para receber os dias da semana a serem bloqueados, que não foram cadastrados na quadra
-    console.log("court id:" + selectedCourt);
-    if (selectedCourt == 1) setWeekDaysToFilter([1, 3]);
-    else if (selectedCourt == 2) setWeekDaysToFilter([0, 2, 5]);
+  const handleGetWeekDaysToFilter = async (selectedCourt) => {
+    const { data } = await api.get(
+      `/api/jogador/quadras/${selectedCourt}/dias-bloqueados`
+    );
+    
+    setWeekDaysToFilter(data.diasBloqueados);
   };
 
-  const handleGetDisabledDates = (selectedCourt) => {
+  const handleGetDisabledDates = async (selectedCourt,minDate,maxDate) => {
     //TODO requisição para retornar os dias sem agendamento disponível, ela deve retornar um array de varios Date
-    if (selectedCourt == 1)
-      setDisabledDates([new Date(2025, 4, 22), new Date(2025, 4, 17)]);
-    else if (selectedCourt == 2) setDisabledDates([new Date(2025, 4, 19)]);
+     const {data} = await api.get(`/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`)
+     console.log(data);
+    
+     setDisabledDates(data)
+    console.log(`court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`);
+    
   };
 
   const handleGetAvaliableTimes = (selectedCourt, selectedDate) => {
@@ -172,7 +172,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         image: "../../public/copa-zn-icon.png",
         title: "COPA ZONA NORTE",
         altImage: "Logo COPA ZONA NORTE",
-        registration:'R$40,00',
+        registration: "R$40,00",
         description:
           "A Copa Zona Norte será um competição realizada em nossa quadra Amigos da Bola, " +
           "localizada na Av. Ipanema, 800. Os jogos do meio de semana serão realizados de noite já durante o fim de semana " +

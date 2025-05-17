@@ -73,7 +73,7 @@ export const AdminAuthContextProvider = ({ children }) => {
 
 
   const handleCreateCourt = (dataForm)=>{
-
+    const response = api.post(`/api/admin/cadastrarQuadra/${dataForm.id}`, dataForm)
   }
   return (
     <AdminAuthContext.Provider
