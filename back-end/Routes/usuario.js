@@ -304,7 +304,7 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
     let slotsOcupados = agendamentos.map(a => `${a.horaInicio}-${a.horaFim}`);
     // Se todos os slots estão ocupados, a data está indisponível
     if (slots.every(slot => slotsOcupados.includes(slot))) {
-      datasIndisponiveis.push(new Date(d));
+      datasIndisponiveis.push(new Date(d).toISOString().slice(0, 10));
     }
   }
   return res.json({ datasIndisponiveis });
