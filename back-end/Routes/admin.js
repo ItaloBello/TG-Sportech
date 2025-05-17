@@ -148,7 +148,7 @@ router.post('/cadastrarQuadra', async (req, res) => {
     }
 });
 
-router.post('/cadastrarEstabelecimento', async (req, res) => {
+router.post('/cadastrarEstabelecimento/:id', async (req, res) => {
     
     try{
         const nome = req.body.nome;
