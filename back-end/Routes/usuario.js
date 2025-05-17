@@ -284,7 +284,6 @@ router.get("/quadras/horarios/:id",async (req,res) => {
     slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
   }
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
-   console.log(new Date(data).getDay())
   const slots = await getDaySlots(new Date(data).setDate(new Date(data).getDate()+1), id, slotsOcupados);
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
@@ -319,19 +318,19 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
 });
 
 router.post("/agendar",async (req,res) => {
-  const idJogador = req.body.idJogador;
-  const idQuadra = req.body.idQuadra;
-  const horaInicio = req.body.HoraInicio;
-  const horaFim = req.body.horaFim;
-  const data = req.body.data
-  const agendamento = {
+  const idJogador = req.body.playerId;
+  const idQuadra = req.body.court;
+  const horarios = req.body.times;
+  const data = new Date(req.body.date + 'T03:00:00')
+  for (hor of horarios){
+    await Agendamento.create({
     idJogador: idJogador,
     idQuadra: idQuadra,
-    horaInicio: horaInicio,
-    horaFim: horaFim,
-    data: data,
+    horaInicio: hor.split('-')[0],
+    horaFim: hor.split('-')[1],
+    data: data.toISOString().slice(0,10),
+  })
   }
-  await Agendamento.create(agendamento)
   res.status(200).json({message:"Sucesso!"})  
 })
 
