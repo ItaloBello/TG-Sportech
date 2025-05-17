@@ -23,9 +23,12 @@ function decimalToTimeString(decimal) {
 }
 
 async function getDaySlots(data, idQuadra, unavailableSlots) {
-    const quadra = await Quadra.findOne({where: {idQuadra: idQuadra}});
+    const quadra = await Quadra.findOne({where: {id: idQuadra}});
     const diaSemana = data.getDay();
-    const horario = await Horario.findOne({where: {quadraId: idQuadra, diaSemana: diaSemana}});
+    const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
+    if(!horario){
+        [];
+    }
     let tempoInicial = timeStringToDecimal(horario.horaInicio);
     let tempoFinal = timeStringToDecimal(horario.horaFim);
     let contador = tempoInicial;
