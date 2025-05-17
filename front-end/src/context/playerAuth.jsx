@@ -107,26 +107,34 @@ export const PlayerAuthContextProvider = ({ children }) => {
     const { data } = await api.get(
       `/api/jogador/quadras/${selectedCourt}/dias-bloqueados`
     );
-    
+
     setWeekDaysToFilter(data.diasBloqueados);
   };
 
-  const handleGetDisabledDates = async (selectedCourt,minDate,maxDate) => {
-     const {data} = await api.get(`/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`)
-     console.log(data);
-     const newDate= data.datasIndisponiveis.map((date,index)=>{return new Date(date)})
+  const handleGetDisabledDates = async (selectedCourt, minDate, maxDate) => {
+    const { data } = await api.get(
+      `/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`
+    );
+    console.log(data);
+    const newDate = data.datasIndisponiveis.map((date, index) => {
+      return new Date(date);
+    });
 
-     setDisabledDates(newDate)
-    console.log(`court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`);
-    
+    setDisabledDates(newDate);
+    console.log(
+      `court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`
+    );
   };
 
-  const handleGetAvaliableTimes = (selectedCourt, selectedDate) => {
+  const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
     //TODO requisição para pegar os horarios de uma quadra determinada
-    const {data} = api.get(`/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`)
+    const { data } = await api.get(
+      `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
+    );
 
-    console.log(data)
+    console.log(data);
 
+    setAvaliableTimes(data.slots);
     // if (
     //   (selectedCourt == 1 && selectedDate != "24-05-2025") ||
     //   selectedDate == "24-05-2025"

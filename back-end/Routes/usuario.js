@@ -284,8 +284,9 @@ router.get("/quadras/horarios/:id",async (req,res) => {
     slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
   }
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
-   console.log(new Date(data).getDay())
-  const slots = await getDaySlots(new Date(data).setDate(new Date(data).getDate()+1), id, slotsOcupados);
+  
+  const slots = await getDaySlots(new Date(data), id, slotsOcupados);
+  console.log(slots)
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 
