@@ -305,7 +305,7 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
   let datasIndisponiveis = [];''
   for (let d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
     const slots = await getDaySlots(new Date(d), id, []);
-    const agendamentos = await agendamentos.findAll({ where: { idQuadra: id, data: d.toISOString().slice(0,10) } });
+    const agendamentos = await Agendamento.findAll({ where: { idQuadra: id, data: d.toISOString().slice(0,10) } });
     let slotsOcupados = agendamentos.map(a => `${a.horaInicio}-${a.horaFim}`);
     // Se todos os slots estão ocupados, a data está indisponível
     if (slots.every(slot => slotsOcupados.includes(slot))) {
