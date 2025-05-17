@@ -86,14 +86,49 @@ router.get("/login", async (req, res) => {
 });
 
 router.post('/cadastrarQuadra', async (req, res) => {
-    
     try{
-        const nome = req.body.nome;
-        const tipo = req.body.tipo;
-        const meioSlot = req.body.meioSlot;
-        const porcSinal = req.body.porcSinal;
-        const userId = req.body.donoQuadraId;
-        const horarios = req.body.horarios;
+        let horarios = [];
+        const nome = req.body.name;
+        const tipo = req.body.typeCourt;
+        const meioSlot = req.body.timeDivision != "1 hora";
+        const porcSinal = req.body.percent / 100;
+        const userId = req.params.id;
+        const sundayInitial = req.body.sundayInitial
+        const sundayEnd = req.body.sundayEnd
+        const sundayHour = req.body.sundayHour
+        if (sundayEnd){
+            horarios.push({diaSemana: "domingo", horaFim: sundayEnd, horaInicio: sundayInitial, valorHora: sundayHour})
+        }
+        const mondayInitial = req.body.mondayInitial;
+        const mondayEnd = req.body.mondayEnd;
+        const mondayHour = req.body.mondayHour;
+        if (mondayEnd){
+            horarios.push({diaSemana: "segunda", horaFim: mondayEnd, horaInicio: mondayInitial, valorHora: mondayHour})
+        }
+        const tuesdayInitial = req.body.tuesdayInitial;
+        const tuesdayEnd = req.body.tuesdayEnd;
+        const tuesdayHour = req.body.tuesdayHour;
+        if (tuesdayEnd){
+            horarios.push({diaSemana: "terça", horaFim: tuesdayEnd, horaInicio: tuesdayInitial, valorHora: tuesdayHour})
+        }
+        const wednesdayInitial = req.body.wednesdayInitial;
+        const wednesdayEnd = req.body.wednesdayEnd;
+        const wednesdayHour = req.body.wednesdayHour;
+        if (wednesdayEnd){
+            horarios.push({diaSemana: "quarta", horaFim: sundayEnd, horaInicio: sundayInitial, valorHora: sundayHour})
+        }
+        const thursdayInitial = req.body.thursdayInitial;
+        const thursdayEnd = req.body.thursdayEnd;
+        const thursdayHour = req.body.thursdayHour;
+        if (thursdayEnd){
+            horarios.push({diaSemana: "quinta", horaFim: thursdayEnd, horaInicio: thursdayInitial, valorHora: thursdayHour})
+        }
+        const fridayInitial = req.body.fridayInitial;
+        const fridayEnd = req.body.fridayEnd;
+        const fridayHour = req.body.fridayHour;
+        if (fridayEnd){
+            horarios.push({diaSemana: "sexta", horaFim: fridayEnd, horaInicio: fridayInitial, valorHora: fridayHour})
+        }
         const quadra = {
             nome: nome,
             tipo: tipo,
@@ -113,7 +148,7 @@ router.post('/cadastrarQuadra', async (req, res) => {
     }
 });
 
-router.post('/cadastrarEstabelecimento', async (req, res) => {
+router.post('/cadastrarEstabelecimento/:id', async (req, res) => {
     
     try{
         const nome = req.body.nome;
