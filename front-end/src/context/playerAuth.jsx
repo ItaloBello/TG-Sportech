@@ -112,29 +112,33 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   const handleGetDisabledDates = async (selectedCourt,minDate,maxDate) => {
-    //TODO requisição para retornar os dias sem agendamento disponível, ela deve retornar um array de varios Date
      const {data} = await api.get(`/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`)
      console.log(data);
-    
-     setDisabledDates(data)
+     const newDate= data.datasIndisponiveis.map((date,index)=>{return new Date(date)})
+
+     setDisabledDates(newDate)
     console.log(`court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`);
     
   };
 
   const handleGetAvaliableTimes = (selectedCourt, selectedDate) => {
     //TODO requisição para pegar os horarios de uma quadra determinada
-    if (
-      (selectedCourt == 1 && selectedDate != "24-05-2025") ||
-      selectedDate == "24-05-2025"
-    )
-      setAvaliableTimes([
-        "14:00-15:00",
-        "15:00-16:00",
-        "16:00-17:00",
-        "17:00-18:00",
-      ]);
-    else if (selectedCourt == 2 || selectedDate == "20-05-2025")
-      setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
+    const {data} = api.get(`/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`)
+
+    console.log(data)
+
+    // if (
+    //   (selectedCourt == 1 && selectedDate != "24-05-2025") ||
+    //   selectedDate == "24-05-2025"
+    // )
+    //   setAvaliableTimes([
+    //     "14:00-15:00",
+    //     "15:00-16:00",
+    //     "16:00-17:00",
+    //     "17:00-18:00",
+    //   ]);
+    // else if (selectedCourt == 2 || selectedDate == "20-05-2025")
+    //   setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
   };
 
   const handleGetInProgressChampionship = (playerId) => {
