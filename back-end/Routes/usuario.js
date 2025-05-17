@@ -277,7 +277,7 @@ router.get("/quadras/horarios/:id",async (req,res) => {
     [Op.and]: [
       where(fn('DATE', col('data')), data) // compara apenas a parte da data
     ]
-  }})
+  }});
   let slotsOcupados = [];
   for (let agendamento of agendamentos){
     slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
