@@ -149,6 +149,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
     //   setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
   };
 
+  const handleCreateAppointment = (dataForm) =>{
+    api.post('/api/jogador/agendar', dataForm)
+  }
+
   const handleGetInProgressChampionship = (playerId) => {
     //TODO Requisição para pegar os campeonatos em andamento que determinado jogador está participando
     setInProgressChampionship([
@@ -235,6 +239,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleGetAvaliableChampionship,
         handleSetSelectedChamp,
         handleGetTeamsByCaptain,
+        handleCreateAppointment
       }}
     >
       {children}

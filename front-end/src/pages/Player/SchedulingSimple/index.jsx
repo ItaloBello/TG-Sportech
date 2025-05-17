@@ -31,6 +31,7 @@ const SchedulingSimple = () => {
     handleGetWeekDaysToFilter,
     handleGetDisabledDates,
     handleGetAvaliableTimes,
+    handleCreateAppointment
   } = usePlayerAuth();
 
   const [selectedCourt, setSelectedCourt] = useState(null);
@@ -116,6 +117,7 @@ const SchedulingSimple = () => {
     };
     console.log("enviando");
     console.log(payload);
+    handleCreateAppointment(payload)
   };
 
   

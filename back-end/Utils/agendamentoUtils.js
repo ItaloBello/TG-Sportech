@@ -28,7 +28,7 @@ async function getDaySlots(data, idQuadra, unavailableSlots) {
     const diaSemana = arrayDias[data.getDay()]  
     const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
     if(!horario){
-        console.log(`nao achei ${idQuadra}, ${diaSemana}`);
+        
         return [];
     }
     let tempoInicial = timeStringToDecimal(horario.horaInicio);

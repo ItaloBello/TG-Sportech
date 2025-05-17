@@ -286,7 +286,7 @@ router.get("/quadras/horarios/:id",async (req,res) => {
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
   
   const slots = await getDaySlots(new Date(data), id, slotsOcupados);
-  console.log(slots)
+  
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 
@@ -321,10 +321,10 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
 
 router.post("/agendar",async (req,res) => {
   const idJogador = req.body.idJogador;
-  const idQuadra = req.body.idQuadra;
+  const idQuadra = req.body.court;
   const horaInicio = req.body.HoraInicio;
   const horaFim = req.body.horaFim;
-  const data = req.body.data
+  const data = req.body.date
   const agendamento = {
     idJogador: idJogador,
     idQuadra: idQuadra,
