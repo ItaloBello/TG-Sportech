@@ -114,6 +114,7 @@ const SchedulingSimple = () => {
       date: format(dataForm.date, "yyyy-MM-dd"),
       times: selectedTimes,
       court: selectedCourt,
+      playerId: player.id
     };
     console.log("enviando");
     console.log(payload);

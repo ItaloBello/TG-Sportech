@@ -320,12 +320,12 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
 });
 
 router.post("/agendar",async (req,res) => {
-  const idJogador = req.body.idJogador;
-  const idQuadra = req.body.idQuadra;
-  const horaInicio = req.body.HoraInicio;
-  const horaFim = req.body.horaFim;
-  const data = req.body.data
-  const agendamento = {
+  const idJogador = req.body.playerId;
+  const idQuadra = req.body.court;
+  const horarios = req.body.times;
+  const data = new Date(req.body.date + 'T03:00:00')
+  for (hor of horarios){
+    await Agendamento.create({
     idJogador: idJogador,
     idQuadra: idQuadra,
     horaInicio: hor.split('-')[0],
@@ -333,7 +333,7 @@ router.post("/agendar",async (req,res) => {
     data: data.toISOString().slice(0,10),
   })
   }
-  res.status(200).json({message:"Sucesso!"})  
+  res.status(200).json({message:"Sucesso!"})
 })
 
 module.exports = router;
