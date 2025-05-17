@@ -85,7 +85,7 @@ router.get("/login", async (req, res) => {
     res.status(201).json({message: "Login realizado com sucesso.", id: usuarioExistente.id, name: usuarioExistente.name}) //TODO retornar todos os dados do admin
 });
 
-router.post('/cadastrarQuadra', async (req, res) => {
+router.post('/cadastrarQuadra/:id', async (req, res) => {
     try{
         let horarios = [];
         const nome = req.body.name;

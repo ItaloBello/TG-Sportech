@@ -54,7 +54,7 @@ const schema = yup
   .required();
 
 const CreateCourt = () => {
-  const {admin} = useAdminAuth()
+  const {admin, handleCreateCourt} = useAdminAuth()
   const {
     control,
     handleSubmit,
@@ -83,6 +83,7 @@ const CreateCourt = () => {
       id: admin.id,
     };
     console.log(payload);
+    handleCreateCourt(payload)
   };
   return (
     <div className="create-court">
@@ -101,7 +102,7 @@ const CreateCourt = () => {
           name="typeCourt"
           label="tipo da quadra"
           placeholder="selecione o tipo da quadra"
-          options={["teste1", "teste2"]}
+          options={["society", "gramado"]}
           onChange={setSelectedValue}
         />
         <p className="create-court__sutitle">

@@ -113,6 +113,8 @@ const SchedulingSimple = () => {
     console.log("enviando");
     console.log(payload);
   };
+
+  
   return (
     <div className="scheduling-simple">
       <Header />
