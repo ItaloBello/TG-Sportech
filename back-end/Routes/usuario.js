@@ -321,18 +321,18 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
 
 router.post("/agendar",async (req,res) => {
   const idJogador = req.body.idJogador;
-  const idQuadra = req.body.court;
+  const idQuadra = req.body.idQuadra;
   const horaInicio = req.body.HoraInicio;
   const horaFim = req.body.horaFim;
-  const data = req.body.date
+  const data = req.body.data
   const agendamento = {
     idJogador: idJogador,
     idQuadra: idQuadra,
-    horaInicio: horaInicio,
-    horaFim: horaFim,
-    data: data,
+    horaInicio: hor.split('-')[0],
+    horaFim: hor.split('-')[1],
+    data: data.toISOString().slice(0,10),
+  })
   }
-  await Agendamento.create(agendamento)
   res.status(200).json({message:"Sucesso!"})  
 })
 
