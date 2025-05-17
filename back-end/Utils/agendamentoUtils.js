@@ -2,6 +2,15 @@ const Agendamento = require("../Models/Agendamentos");
 const Horario = require("../Models/Horarios");
 const Quadra = require("../Models/Quadra");
 
+const dias = {"domingo": 0, "segunda": 1, "terça": 2, "quarta": 3, "quinta": 4, "sexta": 5}
+
+function getCadastrados(horarios){
+    let cadastrados = [];
+    for(hor of horarios){
+        cadastrados.push(dias[hor.diaSemana])
+    }
+}
+
 function timeStringToDecimal(timeStr) {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours + minutes / 60;
@@ -41,5 +50,6 @@ async function getDaySlots(data, idQuadra, unavailableSlots) {
 }
 
 module.exports = {
-    getDaySlots
+    getDaySlots,
+    getCadastrados
 };
