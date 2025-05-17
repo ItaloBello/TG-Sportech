@@ -10,6 +10,7 @@ import FormButton from "../../../components/FormButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
 const schema = yup
   .object({
@@ -53,6 +54,7 @@ const schema = yup
   .required();
 
 const CreateCourt = () => {
+  const {admin} = useAdminAuth()
   const {
     control,
     handleSubmit,
@@ -78,6 +80,7 @@ const CreateCourt = () => {
       ...formData,
       typeCourt: selectedValue,
       weekDays: selectedDays,
+      id: admin.id,
     };
     console.log(payload);
   };

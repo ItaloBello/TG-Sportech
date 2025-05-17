@@ -71,9 +71,13 @@ export const AdminAuthContextProvider = ({ children }) => {
     } 
   };
 
+
+  const handleCreateCourt = (dataForm)=>{
+
+  }
   return (
     <AdminAuthContext.Provider
-      value={{ admin, handleLogin, handleSingUp, handleLogOut }}
+      value={{ admin, handleLogin, handleSingUp, handleLogOut,handleCreateCourt }}
     >
       {children}
     </AdminAuthContext.Provider>

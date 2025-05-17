@@ -32,7 +32,7 @@ import PointsCreateChampionship from "./pages/Admin/PointsCreateChampionship";
 import RegisterEstab from "./pages/Admin/RegisterEstab";
 import MyAppointments from "./pages/Player/MyAppointments";
 import ChooseTeam from "./pages/Player/ChooseTeam";
-import ChampionshipProgress from "./pages/Player/ChampionshipProgress";
+import ChampionshipProgressPlayoffs from "./pages/Player/ChampionshipProgressPlayoffs";
 
 const App = () => {
   return (
@@ -57,7 +57,7 @@ const App = () => {
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
-              <Route path="/player/championship-progress" element={<ChampionshipProgress />} />
+              <Route path="/player/championship-progress" element={<ChampionshipProgressPlayoffs />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/choose-team" element={<ChooseTeam />} />
               <Route path="/player/scheduling" element={<SchedulingMenu />} />
