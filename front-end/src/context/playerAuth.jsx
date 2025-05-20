@@ -9,6 +9,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [courts, setCourts] = useState([]);
   const [selectedChampionship, setSelectedChampionship] = useState({});
+  const [playoffsMatches, setPlayoffsMatches] = useState([]);
+  const [champTablePoints, setChampTablePoints] = useState([])
+  const [topPlayers, setTopPlayers] = useState([])
 
   const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
@@ -149,9 +152,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
     //   setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
   };
 
-  const handleCreateAppointment = (dataForm) =>{
-    api.post('/api/jogador/agendar', dataForm)
-  }
+  const handleCreateAppointment = (dataForm) => {
+    api.post("/api/jogador/agendar", dataForm);
+  };
 
   const handleGetInProgressChampionship = (playerId) => {
     //TODO Requisição para pegar os campeonatos em andamento que determinado jogador está participando
@@ -213,6 +216,216 @@ export const PlayerAuthContextProvider = ({ children }) => {
     setSelectedChampionship(champ);
     localStorage.setItem("champ", JSON.stringify(champ));
   };
+
+  const handlePlayoffsGetChampMatches =async (champId) => {
+    
+    await setPlayoffsMatches([
+      {
+        id:1,
+        type: "oitavas",
+        names: ["team1", "team2"],
+        points: [1, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:2,
+        type: "oitavas",
+        names: ["team3", "team4"],
+        points: [4, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:3,
+        type: "oitavas",
+        names: ["team5", "team6"],
+        points: [1, 0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:4,
+        type: "oitavas",
+        names: ["team7", "team8"],
+        points: [1, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:5,
+        type: "oitavas",
+        names: ["team9", "team10"],
+        points: [0, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:6,
+        type: "oitavas",
+        names: ["team11", "team12"],
+        points: [4,0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:7,
+        type: "oitavas",
+        names: ["team13", "team14"],
+        points: [3, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:8,
+        type: "oitavas",
+        names: ["team15", "team16"],
+        points: [1, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:9,
+        type: "quartas",
+        names: ["team2", "team3"],
+        points: [5, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:10,
+        type: "quartas",
+        names: ["team5", "team8"],
+        points: [1, 0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:11,
+        type: "quartas",
+        names: ["team10", "team11"],
+        points: [0, 2],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:12,
+        type: "quartas",
+        names: ["team13", "team16"],
+        points: [1, 3],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:13,
+        type: "semi",
+        names: ["team2", "team5"],
+        points: [1, 0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:14,
+        type: "semi",
+        names: ["team11", "team16"],
+        points: [4, 0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+      {
+        id:15,
+        type: "final",
+        names: ["team2", "team11"],
+        points: [4, 0],
+        images: [
+          "../../../public/team-1-icon.png",
+          "../../../public/team-1-icon.png",
+        ],
+      },
+    ]);
+  };
+
+  const handleGetChampPointsTable = async (champId) =>{
+    await setChampTablePoints([
+    {
+      position:1,
+      name:'Fatec Amigos',
+      playedMatches:8,
+      victories:5,
+      draws: 2,
+      defeats:1,
+      goalDifference:9,
+      points:17
+    },
+    {
+      position:2,
+      name:'Sorocaba Team',
+      playedMatches:8,
+      victories:4,
+      draws: 2,
+      defeats:2,
+      goalDifference:5,
+      points:14
+    },
+    {
+      position:3,
+      name:'Amigos do Levi',
+      playedMatches:8,
+      victories:3,
+      draws: 2,
+      defeats:3,
+      goalDifference:2,
+      points:11
+    }
+  ])
+  }
+
+  const handleGetTopPlayersChamp = async (champId)=>{
+    await setTopPlayers([
+      {
+        name:'Jefão',
+        goals:8
+      },
+      {
+        name:'Levi',
+        goals:7
+      },
+      {
+        name:'Dimas',
+        goals:6
+      }
+    ])
+  }
+
+
   return (
     <PlayerAuthContext.Provider
       value={{
@@ -226,6 +439,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         avaliableChampionship,
         selectedChampionship,
         teamsByCaptain,
+        playoffsMatches,
+        champTablePoints,
+        topPlayers,
         handleLogin,
         handleLogOut,
         handleSingUp,
@@ -239,7 +455,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleGetAvaliableChampionship,
         handleSetSelectedChamp,
         handleGetTeamsByCaptain,
-        handleCreateAppointment
+        handleCreateAppointment,
+        handlePlayoffsGetChampMatches,
+        handleGetChampPointsTable,
+        handleGetTopPlayersChamp
       }}
     >
       {children}

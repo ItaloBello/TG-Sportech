@@ -1,0 +1,29 @@
+.progress-card__points-table {
+  border: 2px solid black;
+}
+
+.progress-card__table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.progress-card__table-row {
+  display: flex;
+}
+.progress-card__table-header span {
+  font-weight: 600;
+
+}
+.progress-card__table-column{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.progress-card__table-header span,
+.progress-card__table-column {
+  border: 1px solid #000;
+  min-width: 12.5%;
+  text-align: center;
+  color: #000;
+}

@@ -1,0 +1,64 @@
+.championship-in-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 75vw;
+  height: 100vh;
+}
+
+.progress-card {
+  background-color: #2c2c2c;
+  color: #fff;
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 0.5rem;
+}
+
+.progress-card__title-area,
+.progress-card__button-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.progress-card__title-area-image {
+  width: 100px;
+}
+
+.progress-card__button,
+.progress-card__button-selected,
+.my-matches-button {
+  width: 50%;
+  margin: 0.4rem;
+  padding: 0.3rem;
+  color: #14ae5c;
+  background-color: #2c2c2c;
+  border: 0.1rem solid #14ae5c;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.progress-card__button-selected,
+.my-matches-button {
+  color: #2c2c2c;
+  background-color: #14ae5c;
+}
+
+.my-matches-button {
+  width: 100%;
+}
+
+.progress-card__display-area {
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #d9d9d9;
+  padding: 0.5rem;
+}
+
+.display-area__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}

@@ -67,7 +67,7 @@ const EditTeam = () => {
           <FormButton label="Salvar" />
         </div>
       </form>
-      {/* TODO: Criar a tabela de jogadores dentro do time, mostrar o capitao, colocar um botao de X para remover alguem do time */}
+      
       <div className="edit-team__players-table">
         <div className="players-table__header">
           <p>Jogadores</p>

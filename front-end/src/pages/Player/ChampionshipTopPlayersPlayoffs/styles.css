@@ -1,0 +1,18 @@
+.progress-card__top-players,.top-players {
+  width: 50%;
+}
+
+.top-players__display-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.top-players__header,.top-players__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding: 0.1rem 0.5rem ;
+}

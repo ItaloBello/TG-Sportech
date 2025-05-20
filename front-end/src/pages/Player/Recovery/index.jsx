@@ -7,7 +7,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormButton from "../../../components/FormButton";
+import { useNavigate } from "react-router-dom";
 
+
+//TODO Integrar
 const schema = yup
   .object({
     name: yup.string(),
@@ -24,9 +27,10 @@ const PlayerRecovery = () => {
     mode: "onBlur",
   });
 
-
+  const navigate = useNavigate()
   const onSubmit = (formData)=>{
     console.log(formData);
+    navigate("/player/recovery/email")
   }
   return (
     <>
@@ -38,11 +42,6 @@ const PlayerRecovery = () => {
             placeholder="Digite seu email"
             control={control}
             name="email"
-          />
-          <ButtonItem
-            color="#14ae5c"
-            label="Recuperar Senha falso"
-            link="/player/recovery/sms"
           />
           <FormButton label="Recuperar Senha"/>
         </form>

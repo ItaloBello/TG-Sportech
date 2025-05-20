@@ -33,6 +33,10 @@ import RegisterEstab from "./pages/Admin/RegisterEstab";
 import MyAppointments from "./pages/Player/MyAppointments";
 import ChooseTeam from "./pages/Player/ChooseTeam";
 import ChampionshipProgressPlayoffs from "./pages/Player/ChampionshipProgressPlayoffs";
+import ChampionshipProgressPoints from "./pages/Player/ChampionshipProgressPoints";
+import ChampionshipTopPlayersPlayoffs from "./pages/Player/ChampionshipTopPlayersPlayoffs";
+import ChampionshipTopPlayersPoints from "./pages/Player/ChampionshipTopPlayersPoints";
+
 
 const App = () => {
   return (
@@ -57,7 +61,10 @@ const App = () => {
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
-              <Route path="/player/championship-progress" element={<ChampionshipProgressPlayoffs />} />
+              <Route path="/player/championship-progress/playoffs" element={<ChampionshipProgressPlayoffs />} />
+              <Route path="/player/championship-progress/playoffs/top-players" element={<ChampionshipTopPlayersPlayoffs />} />
+              <Route path="/player/championship-progress/points" element={<ChampionshipProgressPoints />} />
+              <Route path="/player/championship-progress/points/top-players" element={<ChampionshipTopPlayersPoints />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/choose-team" element={<ChooseTeam />} />
               <Route path="/player/scheduling" element={<SchedulingMenu />} />
