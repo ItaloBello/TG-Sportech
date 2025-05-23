@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FormButton from "../../../components/FormButton";
 import { format } from "date-fns";
-import "./styles.css";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -20,7 +19,7 @@ const schema = yup
   })
   .required();
 
-const SchedulingSimple = () => {
+const SchedulingTeam = () => {
   const {
     player,
     courts,
@@ -35,6 +34,8 @@ const SchedulingSimple = () => {
   } = usePlayerAuth();
 
   const [selectedCourt, setSelectedCourt] = useState(null);
+  const [selectedOpponent, setSelectedOpponent] = useState(null);
+  const [selectedMyTeam, setSelectedMyTeam] = useState(null);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -119,6 +120,8 @@ const SchedulingSimple = () => {
       date: format(dataForm.date, "yyyy-MM-dd"),
       times: selectedTimes,
       court: selectedCourt,
+      myTeam:selectedMyTeam,
+      opponent: selectedOpponent,
       playerId: player.id,
     };
     console.log("enviando");
@@ -132,16 +135,34 @@ const SchedulingSimple = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <ComboBoxItem
           control={control}
+          name="myTeam"
+          onChange={setSelectedMyTeam}
+          label="Selecione seu time"
+          placeholder="Selecione"
+          options={['time1', 'time2']}
+          values={[1,2]}
+        />
+        <ComboBoxItem
+          control={control}
+          name="opponent"
+          onChange={setSelectedOpponent}
+          label="Selecione seu adversario"
+          placeholder="Selecione"
+          options={['time3', 'time4']}
+          values={[3,4]}
+        />
+        <ComboBoxItem
+          control={control}
           name="court"
           options={Array(courts.length)
             .fill("")
-            .map((value, index) => (value = courts[index].name))} //aqui vai ter um map() para passar de um array de obj para um array de str com o nome da quadra
+            .map((value, index) => (value = courts[index].name))}
           onChange={setSelectedCourt}
           label="Selecione a quadra"
           placeholder="Selecione"
           values={Array(courts.length)
             .fill("")
-            .map((value, index) => (value = courts[index].id))} //aqui vai ter um map() para passar de um array de obj para um array de str com o id da quadra
+            .map((value, index) => (value = courts[index].id))}
         />
         <Controller
           control={control}
@@ -190,4 +211,4 @@ const SchedulingSimple = () => {
   );
 };
 
-export default SchedulingSimple;
+export default SchedulingTeam;

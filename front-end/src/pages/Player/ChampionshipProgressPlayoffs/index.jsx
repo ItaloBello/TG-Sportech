@@ -33,7 +33,7 @@ const ChampionshipProgressPlayoffs = () => {
         </div>
         <div className="progress-card__button-area">
           <button className="progress-card__button-selected">Playoffs</button>
-          <button className="progress-card__button" onClick={()=>navigate('/player/championship-progress/playoffs/top-players')}>Artilheiros</button>
+          {/* <button className="progress-card__button" onClick={()=>navigate('/player/championship-progress/playoffs/top-players')}>Artilheiros</button> */}
         </div>
         <div className="progress-card__display-area">
           {teamNumber >= 16 ? (

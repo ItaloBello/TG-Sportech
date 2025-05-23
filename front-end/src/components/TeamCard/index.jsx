@@ -6,9 +6,9 @@ import "./styles.css"
 const TeamCard = ({
   name,
   date,
-  src,
-  alt,
-  addPlayer,
+  src = '../../public/team-1-icon.png',
+  alt ='logo',
+  addPlayer = false,
 }) => {
   return (
     <div className="team-card">
@@ -21,7 +21,7 @@ const TeamCard = ({
         <div className="team-card__button-area">
           <CardButton label="Excluir" colorButton="#EC221F" />
           {addPlayer ? (<>
-            <CardButton label="Editar" colorButton="#14AE5C" link='/player/editteam'/>
+            <CardButton label="Editar" colorButton="#14AE5C" link='/player/edit-team'/>
             <button style={{border:'none', background:'transparent'}}>
               <img
                 className="button-area__image"
@@ -31,7 +31,7 @@ const TeamCard = ({
             </button>
                 </>
           ) : (
-            <><CardButton label="Visualizar" colorButton="#14AE5C" link='/player/viewteam'/></>
+            <><CardButton label="Visualizar" colorButton="#14AE5C" link='/player/view-team'/></>
           )}
         </div>
       </div>

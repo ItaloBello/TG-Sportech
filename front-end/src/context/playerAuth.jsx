@@ -10,8 +10,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [courts, setCourts] = useState([]);
   const [selectedChampionship, setSelectedChampionship] = useState({});
   const [playoffsMatches, setPlayoffsMatches] = useState([]);
-  const [champTablePoints, setChampTablePoints] = useState([])
-  const [topPlayers, setTopPlayers] = useState([])
+  const [champTablePoints, setChampTablePoints] = useState([]);
+  const [topPlayers, setTopPlayers] = useState([]);
+  const [myTeams, setMyTeams] = useState({});
 
   const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
@@ -19,6 +20,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [avaliableTimes, setAvaliableTimes] = useState([]);
   const [inProgressChampionship, setInProgressChampionship] = useState([]);
   const [avaliableChampionship, setAvaliableChampionship] = useState([]);
+  const [myAppointments, setMyAppointments] = useState([]);
 
   const navigate = useNavigate();
 
@@ -26,7 +28,6 @@ export const PlayerAuthContextProvider = ({ children }) => {
   useEffect(() => {
     const storedPlayer = localStorage.getItem("user");
     if (storedPlayer) setPlayer(JSON.parse(storedPlayer));
-
     const storedSelectedChampionship = localStorage.getItem("champ");
     if (storedSelectedChampionship)
       setSelectedChampionship(JSON.parse(storedSelectedChampionship));
@@ -91,8 +92,6 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-  //TODO aqui vai as requisições do back
-
   const handleGetCourt = async () => {
     const { data } = await api.get("/api/jogador/quadras");
     setCourts(data);
@@ -130,7 +129,6 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
-    //TODO requisição para pegar os horarios de uma quadra determinada
     const { data } = await api.get(
       `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
     );
@@ -138,18 +136,6 @@ export const PlayerAuthContextProvider = ({ children }) => {
     console.log(data);
 
     setAvaliableTimes(data.slots);
-    // if (
-    //   (selectedCourt == 1 && selectedDate != "24-05-2025") ||
-    //   selectedDate == "24-05-2025"
-    // )
-    //   setAvaliableTimes([
-    //     "14:00-15:00",
-    //     "15:00-16:00",
-    //     "16:00-17:00",
-    //     "17:00-18:00",
-    //   ]);
-    // else if (selectedCourt == 2 || selectedDate == "20-05-2025")
-    //   setAvaliableTimes(["18:00-19:00", "19:00-20:00", "20:00-21:00"]);
   };
 
   const handleCreateAppointment = (dataForm) => {
@@ -217,11 +203,18 @@ export const PlayerAuthContextProvider = ({ children }) => {
     localStorage.setItem("champ", JSON.stringify(champ));
   };
 
-  const handlePlayoffsGetChampMatches =async (champId) => {
-    
+  const handlePlayoffsGetChampMatches = async (champId) => {
+    //TODO requisição que retorna os jogos marcados no playoffs, caso ainda não tenha algum jogo pronto, retorne o tipo, id, e o resto como arrays vazios, exemplo abaixo
+    // {
+    //     id:16,
+    //     type: "final",
+    //     names: [],
+    //     points: [],
+    //     images: [],
+    //   }
     await setPlayoffsMatches([
       {
-        id:1,
+        id: 1,
         type: "oitavas",
         names: ["team1", "team2"],
         points: [1, 2],
@@ -231,7 +224,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:2,
+        id: 2,
         type: "oitavas",
         names: ["team3", "team4"],
         points: [4, 2],
@@ -241,7 +234,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:3,
+        id: 3,
         type: "oitavas",
         names: ["team5", "team6"],
         points: [1, 0],
@@ -251,7 +244,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:4,
+        id: 4,
         type: "oitavas",
         names: ["team7", "team8"],
         points: [1, 2],
@@ -261,7 +254,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:5,
+        id: 5,
         type: "oitavas",
         names: ["team9", "team10"],
         points: [0, 2],
@@ -271,17 +264,17 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:6,
+        id: 6,
         type: "oitavas",
         names: ["team11", "team12"],
-        points: [4,0],
+        points: [4, 0],
         images: [
           "../../../public/team-1-icon.png",
           "../../../public/team-1-icon.png",
         ],
       },
       {
-        id:7,
+        id: 7,
         type: "oitavas",
         names: ["team13", "team14"],
         points: [3, 2],
@@ -291,7 +284,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:8,
+        id: 8,
         type: "oitavas",
         names: ["team15", "team16"],
         points: [1, 2],
@@ -301,7 +294,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:9,
+        id: 9,
         type: "quartas",
         names: ["team2", "team3"],
         points: [5, 2],
@@ -311,7 +304,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:10,
+        id: 10,
         type: "quartas",
         names: ["team5", "team8"],
         points: [1, 0],
@@ -321,7 +314,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:11,
+        id: 11,
         type: "quartas",
         names: ["team10", "team11"],
         points: [0, 2],
@@ -331,7 +324,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:12,
+        id: 12,
         type: "quartas",
         names: ["team13", "team16"],
         points: [1, 3],
@@ -341,7 +334,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:13,
+        id: 13,
         type: "semi",
         names: ["team2", "team5"],
         points: [1, 0],
@@ -351,7 +344,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:14,
+        id: 14,
         type: "semi",
         names: ["team11", "team16"],
         points: [4, 0],
@@ -361,7 +354,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         ],
       },
       {
-        id:15,
+        id: 15,
         type: "final",
         names: ["team2", "team11"],
         points: [4, 0],
@@ -373,59 +366,95 @@ export const PlayerAuthContextProvider = ({ children }) => {
     ]);
   };
 
-  const handleGetChampPointsTable = async (champId) =>{
+  const handleGetChampPointsTable = async (champId) => {
+    //TODO retornar cada linha da tabela de pontos do campeonato de pontos corridos, ordenado pela posição
     await setChampTablePoints([
-    {
-      position:1,
-      name:'Fatec Amigos',
-      playedMatches:8,
-      victories:5,
-      draws: 2,
-      defeats:1,
-      goalDifference:9,
-      points:17
-    },
-    {
-      position:2,
-      name:'Sorocaba Team',
-      playedMatches:8,
-      victories:4,
-      draws: 2,
-      defeats:2,
-      goalDifference:5,
-      points:14
-    },
-    {
-      position:3,
-      name:'Amigos do Levi',
-      playedMatches:8,
-      victories:3,
-      draws: 2,
-      defeats:3,
-      goalDifference:2,
-      points:11
-    }
-  ])
-  }
+      {
+        position: 1,
+        name: "Fatec Amigos",
+        playedMatches: 8,
+        victories: 5,
+        draws: 2,
+        defeats: 1,
+        goalDifference: 9,
+        points: 17,
+      },
+      {
+        position: 2,
+        name: "Sorocaba Team",
+        playedMatches: 8,
+        victories: 4,
+        draws: 2,
+        defeats: 2,
+        goalDifference: 5,
+        points: 14,
+      },
+      {
+        position: 3,
+        name: "Amigos do Levi",
+        playedMatches: 8,
+        victories: 3,
+        draws: 2,
+        defeats: 3,
+        goalDifference: 2,
+        points: 11,
+      },
+    ]);
+  };
 
-  const handleGetTopPlayersChamp = async (champId)=>{
+  const handleGetTopPlayersChamp = async (champId) => {
+    //TODO requisição que retorna uma lista ordenada com os artilheiros e o numero de gols de um campeonato
     await setTopPlayers([
       {
-        name:'Jefão',
-        goals:8
+        name: "Jefão",
+        goals: 8,
       },
       {
-        name:'Levi',
-        goals:7
+        name: "Levi",
+        goals: 7,
       },
       {
-        name:'Dimas',
-        goals:6
-      }
-    ])
-  }
+        name: "Dimas",
+        goals: 6,
+      },
+    ]);
+  };
 
+  const handleGetMyAppointments = async (playerId) => {
+    //TODO requisição para pegar os agendamentos de determinado jogador
+    await setMyAppointments([
+      {
+        type: "Amistoso",
+        date: "07/04/2025",
+        adversary: "Vila Velha",
+        times: ["18:00-19:00"],
+        status: "Pagamento Pendente",
+      },
+      {
+        type: "Rachão",
+        date: "07/04/2025",
+        adversary: "",
+        times: ["18:00-19:00"],
+        status: "Pagamento Pendente",
+      },
+      {
+        type: "Rachão",
+        date: "07/04/2025",
+        adversary: "",
+        times: ["18:00-19:00", "19:00-20:00"],
+        status: "Jogado",
+      },
+    ]);
+  };
 
+  const handleGetMyTeams = async (playerId) => {
+    const { data } = await api.get(`/api/jogador/times/${playerId}`);
+    setMyTeams(data.times);
+    console.log(data.times)
+  };
+  const handleCreateTeam = async (formData) => {
+    await api.post(`/api/jogador/times`, formData);
+  };
   return (
     <PlayerAuthContext.Provider
       value={{
@@ -442,6 +471,8 @@ export const PlayerAuthContextProvider = ({ children }) => {
         playoffsMatches,
         champTablePoints,
         topPlayers,
+        myAppointments,
+        myTeams,
         handleLogin,
         handleLogOut,
         handleSingUp,
@@ -458,7 +489,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleCreateAppointment,
         handlePlayoffsGetChampMatches,
         handleGetChampPointsTable,
-        handleGetTopPlayersChamp
+        handleGetTopPlayersChamp,
+        handleGetMyAppointments,
+        handleCreateTeam,
+        handleGetMyTeams,
       }}
     >
       {children}

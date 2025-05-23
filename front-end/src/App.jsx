@@ -36,6 +36,8 @@ import ChampionshipProgressPlayoffs from "./pages/Player/ChampionshipProgressPla
 import ChampionshipProgressPoints from "./pages/Player/ChampionshipProgressPoints";
 import ChampionshipTopPlayersPlayoffs from "./pages/Player/ChampionshipTopPlayersPlayoffs";
 import ChampionshipTopPlayersPoints from "./pages/Player/ChampionshipTopPlayersPoints";
+import SchedulingTeam from "./pages/Player/SchedulingTeam";
+import MyMatches from "./pages/Player/MyMatches";
 
 
 const App = () => {
@@ -62,13 +64,15 @@ const App = () => {
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
               <Route path="/player/championship-progress/playoffs" element={<ChampionshipProgressPlayoffs />} />
-              <Route path="/player/championship-progress/playoffs/top-players" element={<ChampionshipTopPlayersPlayoffs />} />
+              {/* <Route path="/player/championship-progress/playoffs/top-players" element={<ChampionshipTopPlayersPlayoffs />} />
               <Route path="/player/championship-progress/points" element={<ChampionshipProgressPoints />} />
-              <Route path="/player/championship-progress/points/top-players" element={<ChampionshipTopPlayersPoints />} />
+              <Route path="/player/championship-progress/points/top-players" element={<ChampionshipTopPlayersPoints />} /> */}
+              <Route path="/player/my-matches" element={<MyMatches />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/choose-team" element={<ChooseTeam />} />
               <Route path="/player/scheduling" element={<SchedulingMenu />} />
               <Route path="/player/scheduling-simple" element={<SchedulingSimple />} />
+              <Route path="/player/scheduling-team" element={<SchedulingTeam />} />
               <Route path="/player/my-appointments" element={<MyAppointments />} />
 
               {/* Rotas de admin */}

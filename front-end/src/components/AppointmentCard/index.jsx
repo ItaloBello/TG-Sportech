@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-const ApoointmentCard = ({ type, adversary = null, date, times, status }) => {
+const AppointmentCard = ({ type, adversary = null, date, times, status }) => {
   return (
     <div className="appointment-card">
       <p className="appointment-card__text">Tipo de Jogo: {type}</p>
@@ -24,8 +24,9 @@ const ApoointmentCard = ({ type, adversary = null, date, times, status }) => {
           <span style={{ color: "#14AE5C" }}>{status}</span>
         )}
       </p>
+      {type=='Amistoso' && status.split(" ")[0] == "Confirmação"?<div><button>Aceitar</button><button>Recusar</button></div>:<></>}
     </div>
   );
 };
 
-export default ApoointmentCard;
+export default AppointmentCard;

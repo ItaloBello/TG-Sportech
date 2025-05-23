@@ -135,8 +135,10 @@ router.get("/times/:userId", async (req, res) => {
 });
 
 router.post("/times", async (req, res) => {
-  const { userId, nome, img, cor_primaria, cor_secundaria } = req.body;
-
+  const nome = req.body.name
+  const corPrimaria = req.body.primaryColor
+  const corSecundaria = req.body.secondaryColor
+  const userId = req.body.userId;
   async function generateUniqueInviteCode() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code;
@@ -145,19 +147,19 @@ router.post("/times", async (req, res) => {
         .fill()
         .map(() => characters[Math.floor(Math.random() * characters.length)])
         .join("");
-    } while (await Time.findOne({ where: { invite_code: code } }));
+    } while (await Time.findOne({ where: { inviteCode: code } }));
     return code;
   }
 
   try {
-    const invite_code = await generateUniqueInviteCode();
+    const inviteCode = await generateUniqueInviteCode();
     const newTime = await Time.create({
-      userId,
-      nome,
-      img,
-      cor_primaria,
-      cor_secundaria,
-      invite_code,
+      userId: userId,
+      name: nome,
+      img: "",
+      primaryColor: corPrimaria,
+      secondaryColor: corSecundaria,
+      inviteCode: inviteCode,
     });
     return res
       .status(201)
@@ -208,7 +210,7 @@ router.delete("/remover", async (req, res) => {
 
 router.put("/times/:id", async (req, res) => {
   const { id } = req.params;
-  const { nome, img, cor_primaria, cor_secundaria, generateNewInviteCode } =
+  const { nome, img, cor_primaria, cor_secundaria, invite_code} =
     req.body;
 
   const updatedTime = {
@@ -216,19 +218,8 @@ router.put("/times/:id", async (req, res) => {
     img,
     cor_primaria,
     cor_secundaria,
+    invite_code
   };
-
-  if (generateNewInviteCode) {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let invite_code;
-    do {
-      invite_code = Array(7)
-        .fill()
-        .map(() => characters[Math.floor(Math.random() * characters.length)])
-        .join("");
-    } while (await Time.findOne({ where: { invite_code } }));
-    updatedTime.invite_code = invite_code;
-  }
 
   try {
     await Time.update(updatedTime, { where: { id } });
