@@ -13,14 +13,17 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 // 	- Jogado // Quando já foi realizada a partida
 
 const MyAppointments = () => {
-  const { myAppointments, handleGetMyAppointments } = usePlayerAuth();
+  const { player, myAppointments, handleGetMyAppointments } = usePlayerAuth();
   useEffect(() => {
-    const getMyAppointments = () => {
-      handleGetMyAppointments();
-    };
-    getMyAppointments();
-    console.log(myAppointments);
-  });
+  const getMyAppointments = () => {
+    if (player?.id) {
+      console.log("ID do player:", player.id);
+      handleGetMyAppointments(player.id);
+    }
+  };
+  getMyAppointments();
+}, [player]);
+
   return (
     <div className="my-appointments">
       <Header />
