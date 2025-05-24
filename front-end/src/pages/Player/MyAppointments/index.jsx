@@ -20,7 +20,7 @@ const MyAppointments = () => {
     };
     getMyAppointments();
     console.log(myAppointments);
-  });
+  },[]);
   return (
     <div className="my-appointments">
       <Header />
@@ -32,6 +32,7 @@ const MyAppointments = () => {
             times={appointment.times}
             type={appointment.type}
             adversary={appointment.adversary}
+            court={appointment.court}
             key={index}
           />
         ))}

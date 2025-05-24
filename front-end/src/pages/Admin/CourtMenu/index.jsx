@@ -7,7 +7,7 @@ const CourtMenu = () => {
     <div className="court-menu">
       <Header />
       <MenuItem label="Adicionar Quadra" link='/admin/create-court'/>
-      <MenuItem label="Editar Quadra" link='/admin/create-court'/>
+      <MenuItem label="Editar Quadra" link='/admin/select-court'/>
       <MenuItem
         src="../../public/arrow-icon.png"
         alt="icone de voltar"

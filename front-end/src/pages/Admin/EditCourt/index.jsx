@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./styles.css";
 import Header from "../../../components/Header";
 import ComboBoxItem from "../../../components/ComboBoxItem";
 import InputItem from "../../../components/InputItem";
@@ -53,7 +52,7 @@ const schema = yup
   })
   .required();
 
-const CreateCourt = () => {
+const EditCourt = () => {
   const {admin, handleCreateCourt} = useAdminAuth()
   const {
     control,
@@ -270,10 +269,10 @@ const CreateCourt = () => {
           type="number"
         />
 
-        <FormButton label="Cadastrar" />
+        <FormButton label="Salvar e sair" />
       </form>
     </div>
   );
-};
+}
 
-export default CreateCourt;
+export default EditCourt

@@ -429,6 +429,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         adversary: "Vila Velha",
         times: ["18:00-19:00"],
         status: "Pagamento Pendente",
+        court:'Quadra Cabecinha'
       },
       {
         type: "Rachão",
@@ -436,6 +437,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         adversary: "",
         times: ["18:00-19:00"],
         status: "Pagamento Pendente",
+        court:'Quadra Cabecinha'
       },
       {
         type: "Rachão",
@@ -443,6 +445,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         adversary: "",
         times: ["18:00-19:00", "19:00-20:00"],
         status: "Jogado",
+        court:'Quadra Cabecinha'
       },
     ]);
   };

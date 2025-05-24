@@ -1,6 +1,15 @@
 import React from "react";
 import "./styles.css";
-const AppointmentCard = ({ type, adversary = null, date, times, status }) => {
+import { Link } from "react-router-dom";
+const AppointmentCard = ({
+  type,
+  adversary = null,
+  date,
+  times,
+  status,
+  court = '',
+  toEdit = false,
+}) => {
   return (
     <div className="appointment-card">
       <p className="appointment-card__text">Tipo de Jogo: {type}</p>
@@ -16,6 +25,7 @@ const AppointmentCard = ({ type, adversary = null, date, times, status }) => {
           <span>{time + "; "}</span>
         ))}
       </p>
+      <p className="appointment-card__text">Quadra:{court}</p>
       <p className="appointment-card__text">
         Status:{" "}
         {status.split(" ")[0] == "Pagamento" ? (
@@ -24,7 +34,15 @@ const AppointmentCard = ({ type, adversary = null, date, times, status }) => {
           <span style={{ color: "#14AE5C" }}>{status}</span>
         )}
       </p>
-      {type=='Amistoso' && status.split(" ")[0] == "Confirmação"?<div><button>Aceitar</button><button>Recusar</button></div>:<></>}
+      {type == "Amistoso" && status.split(" ")[0] == "Confirmação" ? (
+        <div>
+          <button>Aceitar</button>
+          <button>Recusar</button>
+        </div>
+      ) : (
+        <></>
+      )}
+      {toEdit ? <Link to='/admin/select-appointment/edit'>Editar</Link> : <></>}
     </div>
   );
 };

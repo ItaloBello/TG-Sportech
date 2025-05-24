@@ -7,8 +7,8 @@ const ChampionshipMenu = () => {
     <div className='championship-menu'>
         <Header/>
         <MenuItem label='Campeonatos em Andamento' link=''/>
-        <MenuItem label='Campeonatos não Iniciados'/>
-        <MenuItem label='Criar Campeonato' link='/admin/create-championship/menu'/>
+        <MenuItem label='Campeonatos não Iniciados' link='/admin/select-championship/not-started'/>
+        <MenuItem label='Criar Campeonato' link='/admin/create-championship/playoffs'/>
         <MenuItem
         src="../../public/arrow-icon.png"
         alt="icone de voltar"
