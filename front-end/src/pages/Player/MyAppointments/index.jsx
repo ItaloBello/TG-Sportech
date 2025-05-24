@@ -13,7 +13,7 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 // 	- Jogado // Quando já foi realizada a partida
 
 const MyAppointments = () => {
-  const { myAppointments, handleGetMyAppointments } = usePlayerAuth();
+  const { player, myAppointments, handleGetMyAppointments } = usePlayerAuth();
   useEffect(() => {
     const getMyAppointments = () => {
       handleGetMyAppointments();

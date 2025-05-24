@@ -421,33 +421,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   const handleGetMyAppointments = async (playerId) => {
-    //TODO requisição para pegar os agendamentos de determinado jogador
-    await setMyAppointments([
-      {
-        type: "Amistoso",
-        date: "07/04/2025",
-        adversary: "Vila Velha",
-        times: ["18:00-19:00"],
-        status: "Pagamento Pendente",
-        court:'Quadra Cabecinha'
-      },
-      {
-        type: "Rachão",
-        date: "07/04/2025",
-        adversary: "",
-        times: ["18:00-19:00"],
-        status: "Pagamento Pendente",
-        court:'Quadra Cabecinha'
-      },
-      {
-        type: "Rachão",
-        date: "07/04/2025",
-        adversary: "",
-        times: ["18:00-19:00", "19:00-20:00"],
-        status: "Jogado",
-        court:'Quadra Cabecinha'
-      },
-    ]);
+    const {data} = await api.get(`/api/jogador/agendamentos/${playerId}`) 
+    console.log(data)
+    setMyAppointments(data);
   };
 
   const handleGetMyTeams = async (playerId) => {
