@@ -8,6 +8,8 @@ import InputItem from "../../../components/InputItem";
 import ComboBoxItem from "../../../components/ComboBoxItem";
 import FormButton from "../../../components/FormButton";
 
+//TODO GERAR INTEGRAÇÂO
+
 const schema = yup
   .object({
     name: yup.string().required(),

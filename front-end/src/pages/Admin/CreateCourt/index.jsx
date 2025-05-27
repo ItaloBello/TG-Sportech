@@ -12,6 +12,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
+//OK
+
 const schema = yup
   .object({
     name: yup.string().required("Campo obrigatorio"),

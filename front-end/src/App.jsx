@@ -102,9 +102,9 @@ const App = () => {
               <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
               <Route path="/admin/create-championship/playoffs" element={<PlayoffsCreateChampionship/>}/>
               <Route path="admin/select-championship/not-started" element={<SelectNotStartedChamp/>}/>
-              <Route path="admin/select-championship/not-started/edit" element={<EditChamp/>}/>
-              <Route path="admin/select-championship/in-progress" element={<SelectInProgressChamp/>}/>
-              <Route path="admin/select-championship/in-progress/select-match" element={<SelectMatch/>}/>
+              <Route path="/admin/select-championship/not-started/edit" element={<EditChamp/>}/>
+              <Route path="/admin/select-championship/in-progress" element={<SelectInProgressChamp/>}/>
+              <Route path="/admin/select-championship/in-progress/select-match" element={<SelectMatch/>}/>
               <Route path="/admin/select-championship/in-progress/select-match/edit" element={<EditMatch/>}/>
 
               {/* <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/> 

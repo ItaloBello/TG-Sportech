@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputItem from "../../../components/InputItem";
 
-
+//TODO GERAR INTEGRAÇÂO
 const schema = yup
   .object({
     team1Points: yup.number(),

@@ -3,29 +3,32 @@ import Header from "../../../components/Header";
 import SelectChampCard from "../../../components/SelectChampCard";
 import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
+//TODO GERAR INTEGRAÇÂO
+
 const SelectInProgressChamp = () => {
-  const {  admin, inProgressChamp,handleGetInProgressChamp, } = useAdminAuth();
+  const { admin, inProgressChamp, handleGetInProgressChamp } = useAdminAuth();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const getChamp = async () => {
       try {
         await handleGetInProgressChamp(admin.id);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
-    getChamp()
+    getChamp();
     console.log(inProgressChamp);
   }, [admin?.id]);
 
-if(isLoading) return<></>
-
+  if (isLoading) return <></>;
 
   return (
     <div className="select-champ">
       <Header />
       <div className="select-champ__championships">
-        {Array(inProgressChamp.length).fill(' ').map((value,index)=><SelectChampCard title={inProgressChamp[index].name} isInProgress={true}/>)}
+        {inProgressChamp.map((champ, index) => (
+          <SelectChampCard title={champ.name} isInProgress={true} key={index}/>
+        ))}
       </div>
     </div>
   );

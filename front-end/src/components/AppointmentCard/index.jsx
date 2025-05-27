@@ -22,7 +22,7 @@ const AppointmentCard = ({
       <p className="appointment-card__text">
         Horario(s):
         {times.map((time, index) => (
-          <span>{time + "; "}</span>
+          <span key={index}>{time + "; "}</span>
         ))}
       </p>
       <p className="appointment-card__text">Quadra:{court}</p>

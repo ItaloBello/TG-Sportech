@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormButton from "../../../components/FormButton";
 
+//TODO GERAR INTEGRAÇÂO
+
 const schema = yup
   .object({
     playerSignal: yup.string(),

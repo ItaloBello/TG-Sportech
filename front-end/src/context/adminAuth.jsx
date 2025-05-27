@@ -10,6 +10,9 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [inProgressChamp, setInProgressChamp] = useState([]);
   const [selectedChamp, setSelectedChamp] = useState({});
   const [champMatches, setChampMatches] = useState([]);
+  const [myCourts, setMyCourts] = useState([]);
+  const [selectedCourt, setSelectedCourt] = useState([]);
+  const [appointments, setAppointments] = useState([]);
 
   const navigate = useNavigate();
 
@@ -122,6 +125,42 @@ export const AdminAuthContextProvider = ({ children }) => {
     ]);
   };
 
+  const handleGetMyCourts = async (adminId) => {
+    await setMyCourts([
+      {
+        id: 1,
+        name: "quadra cabecinha",
+      },
+      {
+        id: 2,
+        name: "quadra jubileu",
+      },
+    ]);
+  };
+
+  const handleGetAppointmens = (adminId) => {
+    setAppointments([
+      {
+        date: "01/01/2000",
+        status: "Pagamento Pendente",
+        times: ["19:00-20:00"],
+        type: "Rachão",
+        court: "quadra cabecinha",
+      },
+      {
+        date: "07/09/2020",
+        status: "Pagamento Pendente",
+        times: ["19:00-20:00",'20:00-21:00'],
+        type: "Rachão",
+        court: "quadra cabecinha",
+        adversary: 'Amigos do Levi'
+      },
+    ]);
+  };
+
+  const handleSetSelectedCourt = (courtId) => {
+    setSelectedCourt(courtId);
+  };
   return (
     <AdminAuthContext.Provider
       value={{
@@ -130,6 +169,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         inProgressChamp,
         selectedChamp,
         champMatches,
+        myCourts,
+        selectedCourt,
+        appointments,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -137,6 +179,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetNotStartedChamp,
         handleGetInProgressChamp,
         handleGetChampMatches,
+        handleGetMyCourts,
+        handleSetSelectedCourt,
+        handleGetAppointmens
       }}
     >
       {children}

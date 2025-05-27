@@ -8,6 +8,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { format } from "date-fns";
 import "./styles.css";
+
+//TODO GERAR INTEGRAÇÂO
+
 const schema = yup
   .object({
     name: yup.string().required(),
@@ -21,7 +24,6 @@ const schema = yup
   })
   .required();
 
-//TODO Adicionar descrição, Taxa de inscrição e premiação no cadastro de campeonato
 
 const CreateChampionship = () => {
   const {

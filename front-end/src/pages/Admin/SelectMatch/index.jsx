@@ -24,17 +24,16 @@ const SelectMatch = () => {
     <div className="select-match">
       <Header />
       <div className="select-match__list">
-        {Array(champMatches.length  )
-          .fill(" ")
-          .map((value, index) => (
-            <MatchCard
-              date={champMatches[index].date}
-              teams={champMatches[index].teams}
-              title={champMatches[index].title}
-              points={champMatches[index].points}
-              toEdit={true}
-            />
-          ))}
+        {champMatches.map((champ, index) => (
+          <MatchCard
+            date={champ.date}
+            teams={champ.teams}
+            title={champ.title}
+            points={champ.points}
+            toEdit={true}
+            key={index}
+          />
+        ))}
 
       </div>
     </div>
