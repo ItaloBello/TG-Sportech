@@ -29,7 +29,7 @@ const copyCode = async () => {
 };
 
 const CreateTeam = () => {
-  const { handleCreateTeam, player } = usePlayerAuth()
+  const { handleCreateTeam, player } = usePlayerAuth();
 
   const {
     control,
@@ -43,12 +43,11 @@ const CreateTeam = () => {
   const onSubmit = (formData) => {
     const payload = {
       ...formData,
-      userId:player.id
-    }
-    
-    
+      userId: player.id,
+    };
+
     handleCreateTeam(payload);
-  }
+  };
 
   return (
     <div className="create-team">
@@ -62,62 +61,57 @@ const CreateTeam = () => {
         <p className="create-team__image-label">Logo do Time</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        
-      <InputItem
-        label="Nome do Time"
-        placeholder="Time"
-        control={control}
-        errorMessage={errors?.name?.message}
-        name="name"
-        type="text"
-        />
-      <InputItem
-        label="Cor Primaria"
-        placeholder="Cor"
-        control={control}
-        errorMessage={errors?.primaryColor?.message}
-        name="primaryColor"
-        type="text"
-        />
-      <InputItem
-        label="Cor Secundaria"
-        placeholder="Cor"
-        control={control}
-        errorMessage={errors?.secondaryColor?.message}
-        name="secondaryColor"
-        type="text"
-        />
-      <div className="create-team__input-and-button">
         <InputItem
-          id="btnCopy"
-          placeholder={"Code"}
-          label={"Invite Code"}
+          label="Nome do Time"
+          placeholder="Time"
           control={control}
-          errorMessage={errors?.inviteCode?.message}
-          name="inviteCode"
+          errorMessage={errors?.name?.message}
+          name="name"
           type="text"
-          isDisabled={true}
         />
-        <ButtonItem
-          label={"Copiar"}
-          link={"/player/create-team"}
-          color={"#ffffff"}
-          onClick={copyCode}
+        <InputItem
+          label="Cor Primaria"
+          placeholder="Cor"
+          control={control}
+          errorMessage={errors?.primaryColor?.message}
+          name="primaryColor"
+          type="text"
+        />
+        <InputItem
+          label="Cor Secundaria"
+          placeholder="Cor"
+          control={control}
+          errorMessage={errors?.secondaryColor?.message}
+          name="secondaryColor"
+          type="text"
+        />
+        <div className="create-team__input-and-button">
+          <InputItem
+            id="btnCopy"
+            placeholder={"Code"}
+            label={"Invite Code"}
+            control={control}
+            errorMessage={errors?.inviteCode?.message}
+            name="inviteCode"
+            type="text"
+            isDisabled={true}
           />
-      </div>
-      <div className="create-team__button-area">
-        <ButtonItem
-          label={"Cancelar"}
-          link={"/player/team-menu"}
-          color={"#EC221F"}
+          <ButtonItem
+            label={"Copiar"}
+            link={"/player/create-team"}
+            color={"#ffffff"}
+            onClick={copyCode}
           />
-        <FormButton
-          label={"Salvar"}
-          
-          
+        </div>
+        <div className="create-team__button-area">
+          <ButtonItem
+            label={"Cancelar"}
+            link={"/player/team-menu"}
+            color={"#EC221F"}
           />
-      </div>
-          </form>
+          <FormButton label={"Salvar"} />
+        </div>
+      </form>
     </div>
   );
 };

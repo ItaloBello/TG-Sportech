@@ -133,15 +133,11 @@ const SchedulingSimple = () => {
         <ComboBoxItem
           control={control}
           name="court"
-          options={Array(courts.length)
-            .fill("")
-            .map((value, index) => (value = courts[index].name))} //aqui vai ter um map() para passar de um array de obj para um array de str com o nome da quadra
+          options={courts.map((court) => court.name)} //aqui vai ter um map() para passar de um array de obj para um array de str com o nome da quadra
           onChange={setSelectedCourt}
           label="Selecione a quadra"
           placeholder="Selecione"
-          values={Array(courts.length)
-            .fill("")
-            .map((value, index) => (value = courts[index].id))} //aqui vai ter um map() para passar de um array de obj para um array de str com o id da quadra
+          values={courts.map((court) => court.id)}
         />
         <Controller
           control={control}
