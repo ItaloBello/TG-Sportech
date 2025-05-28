@@ -6,7 +6,7 @@ import "./styles.css"
 const TeamCard = ({
   name,
   date,
-  src = '../../public/team-1-icon.png',
+  src,
   alt ='logo',
   addPlayer = false,
 }) => {

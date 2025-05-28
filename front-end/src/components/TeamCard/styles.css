@@ -32,3 +32,9 @@
 .button-area__image {
   width: 2.5rem;
 }
+
+img {
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+}

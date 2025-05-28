@@ -8,6 +8,7 @@ import * as yup from "yup";
 import FormButton from "../../../components/FormButton";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 
+
 //TODO Integrar
 
 const schema = yup
@@ -29,7 +30,8 @@ const copyCode = async () => {
 };
 
 const CreateTeam = () => {
-  const { handleCreateTeam, player } = usePlayerAuth()
+  const { handleCreateTeam, player } = usePlayerAuth();
+  const [file, setFile] = React.useState(null);
 
   const {
     control,
@@ -43,12 +45,11 @@ const CreateTeam = () => {
   const onSubmit = (formData) => {
     const payload = {
       ...formData,
-      userId:player.id
-    }
-    
-    
+      userId: player.id,
+      foto: file // inclui o arquivo se houver
+    };
     handleCreateTeam(payload);
-  }
+  };
 
   return (
     <div className="create-team">
@@ -62,7 +63,13 @@ const CreateTeam = () => {
         <p className="create-team__image-label">Logo do Time</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        
+      <label htmlFor="teamImage">Imagem do time (opcional):</label>
+      <input
+        type="file"
+        id="teamImage"
+        accept="image/*"
+        onChange={e => setFile(e.target.files[0])}
+      />
       <InputItem
         label="Nome do Time"
         placeholder="Time"
