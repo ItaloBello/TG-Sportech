@@ -16,6 +16,33 @@ const {
 } = require("../Utils/validarDocumento");
 const { message } = require("statuses");
 const { getDaySlots,getCadastrados } = require("../Utils/agendamentoUtils");
+const multer = require("multer");
+const path = require("path");
+
+// Configuração do Multer para upload de fotos
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '..', 'uploads'));
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+      const allowedTypes = /jpeg|jpg|png|gif/;
+      const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+      const mimetype = allowedTypes.test(file.mimetype);
+
+      if (extname && mimetype) {
+          return cb(null, true);
+      }
+      cb(new Error('Apenas imagens são permitidas!'));
+  }
+});
 
 router.post("/registro", async (req, res) => {
   let erros = [];
@@ -120,25 +147,43 @@ const user = await Usuario.findOne({where: {id}});
 
 router.get("/times/:userId", async (req, res) => {
   const userId = req.params.userId;
-  const jogadores = [];
+
   try {
     const times = await Time.findAll({ where: { userId: userId } });
-    for (const time of times) {
-      const jogador = await JogadorTime.findOne({ where: { timeId: time.id } });
-      jogadores.push(jogador);
-    }
-    times.jogadores = jogadores;
-    return res.status(200).json({ times });
+
+    const timesComJogadores = await Promise.all(
+      times.map(async (time) => {
+        const jogadores = await JogadorTime.findAll({ where: { timeId: time.id } });
+
+        // Converta o objeto Sequelize em um objeto puro
+        const plainTime = time.toJSON();
+
+        // Formata a data
+        const data = new Date(plainTime.data_criacao);
+        plainTime.data_criacao = data.toLocaleDateString("pt-BR");
+        console.log(plainTime)
+        // Adiciona o jogador
+        plainTime.jogadores = jogadores;
+
+        return plainTime;
+      })
+    );
+
+    return res.status(200).json({ times: timesComJogadores });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
 });
 
-router.post("/times", async (req, res) => {
-  const nome = req.body.name
-  const corPrimaria = req.body.primaryColor
-  const corSecundaria = req.body.secondaryColor
+
+router.post("/times", upload.single("foto"), async (req, res) => {
+  const nome = req.body.name;
+  const corPrimaria = req.body.primaryColor;
+  const corSecundaria = req.body.secondaryColor;
   const userId = req.body.userId;
+  const filename = req.file? req.file.filename : null;
+  console.log(req.body)
+  //const filepath = req.file.path;
   async function generateUniqueInviteCode() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code;
@@ -156,7 +201,7 @@ router.post("/times", async (req, res) => {
     const newTime = await Time.create({
       userId: userId,
       name: nome,
-      img: "",
+      img: filename? "http://localhost:8081/uploads/"+filename : "http://localhost:8081/uploads/defaultTeam.png",
       primaryColor: corPrimaria,
       secondaryColor: corSecundaria,
       inviteCode: inviteCode,
@@ -272,12 +317,11 @@ router.get("/quadras/horarios/:id",async (req,res) => {
   }});
   let slotsOcupados = [];
   for (let agendamento of agendamentos){
-    slotsOcupados.push(`${agendamento.horaInicio}-${agendamento.horaFim}`)
+    slotsOcupados.push(`${agendamento.horaInicio.slice(0,5)}-${agendamento.horaFim.slice(0,5)}`)
   }
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
   
   const slots = await getDaySlots(new Date(data), id, slotsOcupados);
-  
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 
@@ -286,7 +330,6 @@ router.get('/quadras/:id/dias-bloqueados', async (req, res) => {
   const horarios = await Horario.findAll({ where: { quadraId: id } });
 
   const cadastrados = getCadastrados(horarios)
-  console.log(cadastrados)
   const todosDias = [0,1,2,3,4,5,6];
   const naoCadastrados = todosDias.filter(dia => !cadastrados.includes(dia));
   return res.json({ diasBloqueados: naoCadastrados });
@@ -326,5 +369,22 @@ router.post("/agendar",async (req,res) => {
   }
   res.status(200).json({message:"Sucesso!"})
 })
+
+router.get("/agendamentos/:id",async (req,res) => {
+  const idJogador = req.params.id
+  let appointments = [];
+  try{
+    const agendamentos = await Agendamento.findAll({where: {idJogador}})
+  for (let agend of agendamentos){
+    const data = new Date(agend.data)
+    appointments.push({type: "Rachão", date: data.toLocaleDateString('pt-BR'), adversary: "", times: [agend.horaInicio.slice(0.5)+'-'+agend.horaFim.slice(0,5)], status: agend.pago? "Pago" : "Pagamento Pendente"})
+  }
+  //console.log(appointments)
+  res.status(200).json(appointments)
+  }catch(err){
+    console.log(err)
+    res.status(400).json({error: err})
+  }
+});
 
 module.exports = router;

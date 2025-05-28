@@ -10,6 +10,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const upload = require('./Helpers/upload'); //Rota para o Cloudnary
 const passport = require('passport');
+const path = require('path');
 require('./Config/auth')(passport);
 
 // Iniciar o servidor
@@ -33,6 +34,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+// Servir arquivos estáticos da pasta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware para mensagens de flash
 app.use((req, res, next) => {
