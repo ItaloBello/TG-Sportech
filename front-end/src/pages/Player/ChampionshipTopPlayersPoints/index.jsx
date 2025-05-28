@@ -5,6 +5,7 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 import { useNavigate } from "react-router-dom";
 
 //TODO Integrar com o back
+//TELA DESATIVADA 
 
 const ChampionshipTopPlayersPoints = () => {
   const navigate = useNavigate();

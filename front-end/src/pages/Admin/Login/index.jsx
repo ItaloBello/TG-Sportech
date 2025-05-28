@@ -9,6 +9,8 @@ import FormButton from "../../../components/FormButton";
 import { useAdminAuth } from "../../../hooks/useAdminAuth";
 import { Link } from "react-router-dom";
 
+//OK
+
 const schema = yup
   .object({
     name: yup.string().required("Campo obigatorio"),

@@ -2,13 +2,15 @@ import React from 'react'
 import Header from '../../../components/Header'
 import MenuItem from '../../../components/MenuItem'
 
+//OK
+
 const ChampionshipMenu = () => {
   return (
     <div className='championship-menu'>
         <Header/>
-        <MenuItem label='Campeonatos em Andamento' link=''/>
-        <MenuItem label='Campeonatos não Iniciados'/>
-        <MenuItem label='Criar Campeonato' link='/admin/create-championship/menu'/>
+        <MenuItem label='Campeonatos em Andamento' link='/admin/select-championship/in-progress'/>
+        <MenuItem label='Campeonatos não Iniciados' link='/admin/select-championship/not-started'/>
+        <MenuItem label='Criar Campeonato' link='/admin/create-championship/playoffs'/>
         <MenuItem
         src="../../public/arrow-icon.png"
         alt="icone de voltar"

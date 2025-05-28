@@ -9,6 +9,8 @@ import InputItem from "../../../components/InputItem";
 import FormButton from "../../../components/FormButton";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 
+//OK
+
 const schema = yup.object({
   name: yup.string().required("Campo obigatorio"),
   password: yup.string().required("Campo obrigatorio"),

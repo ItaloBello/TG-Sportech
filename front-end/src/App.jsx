@@ -38,6 +38,15 @@ import ChampionshipTopPlayersPlayoffs from "./pages/Player/ChampionshipTopPlayer
 import ChampionshipTopPlayersPoints from "./pages/Player/ChampionshipTopPlayersPoints";
 import SchedulingTeam from "./pages/Player/SchedulingTeam";
 import MyMatches from "./pages/Player/MyMatches";
+import SelectNotStartedChamp from "./pages/Admin/SelectNotStartedChamp";
+import SelectInProgressChamp from "./pages/Admin/SelectInProgressChamp";
+import EditChamp from "./pages/Admin/EditChamp";
+import SelectMatch from "./pages/Admin/SelectMatch";
+import EditMatch from "./pages/Admin/EditMatch";
+import SelectAppointment from "./pages/Admin/SelectAppointment";
+import EditAppointment from "./pages/Admin/EditAppointment";
+import SelectCourt from "./pages/Admin/SelectCourt";
+import EditCourt from "./pages/Admin/EditCourt";
 
 
 const App = () => {
@@ -64,9 +73,6 @@ const App = () => {
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />
               <Route path="/player/championship-progress/playoffs" element={<ChampionshipProgressPlayoffs />} />
-              {/* <Route path="/player/championship-progress/playoffs/top-players" element={<ChampionshipTopPlayersPlayoffs />} />
-              <Route path="/player/championship-progress/points" element={<ChampionshipProgressPoints />} />
-              <Route path="/player/championship-progress/points/top-players" element={<ChampionshipTopPlayersPoints />} /> */}
               <Route path="/player/my-matches" element={<MyMatches />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/choose-team" element={<ChooseTeam />} />
@@ -74,19 +80,35 @@ const App = () => {
               <Route path="/player/scheduling-simple" element={<SchedulingSimple />} />
               <Route path="/player/scheduling-team" element={<SchedulingTeam />} />
               <Route path="/player/my-appointments" element={<MyAppointments />} />
+              {/* <Route path="/player/championship-progress/playoffs/top-players" element={<ChampionshipTopPlayersPlayoffs />} />
+              <Route path="/player/championship-progress/points" element={<ChampionshipProgressPoints />} />
+              <Route path="/player/championship-progress/points/top-players" element={<ChampionshipTopPlayersPoints />} /> */}
 
               {/* Rotas de admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/singup" element={<AdminSingUp />} />
               <Route path="/admin/register-establishment" element={<RegisterEstab />} />
               <Route path="/admin/welcome" element={<Welcome/>}/>
-              <Route path="/admin/create-court" element={<CreateCourt/>}/>
+
               <Route path="/admin/menu" element={<AdminMenu/>}/>
+              <Route path="/admin/select-appointment" element={<SelectAppointment/>}/>
+              <Route path="/admin/select-appointment/edit" element={<EditAppointment/>}/>
+              
               <Route path="/admin/court-menu" element={<CourtMenu/>}/>
+              <Route path="/admin/create-court" element={<CreateCourt/>}/>
+              <Route path="/admin/select-court" element={<SelectCourt/>}/>
+              <Route path="/admin/select-court/edit" element={<EditCourt/>}/>
+
               <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
-              <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/>
               <Route path="/admin/create-championship/playoffs" element={<PlayoffsCreateChampionship/>}/>
-              <Route path="/admin/create-championship/points" element={<PointsCreateChampionship/>}/>
+              <Route path="admin/select-championship/not-started" element={<SelectNotStartedChamp/>}/>
+              <Route path="/admin/select-championship/not-started/edit" element={<EditChamp/>}/>
+              <Route path="/admin/select-championship/in-progress" element={<SelectInProgressChamp/>}/>
+              <Route path="/admin/select-championship/in-progress/select-match" element={<SelectMatch/>}/>
+              <Route path="/admin/select-championship/in-progress/select-match/edit" element={<EditMatch/>}/>
+
+              {/* <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/> 
+              <Route path="/admin/create-championship/points" element={<PointsCreateChampionship/>}/> */}
             </Routes>
           </AdminAuthContextProvider>
         </PlayerAuthContextProvider>

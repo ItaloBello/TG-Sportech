@@ -1,0 +1,6 @@
+.select-champ, .select-champ__championships,.select-match{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

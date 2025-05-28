@@ -15,15 +15,12 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 const MyAppointments = () => {
   const { player, myAppointments, handleGetMyAppointments } = usePlayerAuth();
   useEffect(() => {
-  const getMyAppointments = () => {
-    if (player?.id) {
-      console.log("ID do player:", player.id);
-      handleGetMyAppointments(player.id);
-    }
-  };
-  getMyAppointments();
-}, [player]);
-
+    const getMyAppointments = () => {
+      handleGetMyAppointments();
+    };
+    getMyAppointments();
+    console.log(myAppointments);
+  },[]);
   return (
     <div className="my-appointments">
       <Header />
@@ -35,6 +32,7 @@ const MyAppointments = () => {
             times={appointment.times}
             type={appointment.type}
             adversary={appointment.adversary}
+            court={appointment.court}
             key={index}
           />
         ))}

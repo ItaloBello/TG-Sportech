@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Header from "../../../components/Header";
-import InputItem from "../../../components/InputItem";
-import ComboBoxItem from "../../../components/ComboBoxItem";
-import FormButton from "../../../components/FormButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { format } from "date-fns";
-import "./styles.css";
+import InputItem from "../../../components/InputItem";
+import ComboBoxItem from "../../../components/ComboBoxItem";
+import FormButton from "../../../components/FormButton";
 
 //TODO GERAR INTEGRAÇÂO
 
@@ -24,8 +23,7 @@ const schema = yup
   })
   .required();
 
-
-const CreateChampionship = () => {
+const EditChamp = () => {
   const {
     control,
     handleSubmit,
@@ -133,10 +131,10 @@ const CreateChampionship = () => {
           <></>
         )}
 
-        <FormButton label="cadastrar" />
+        <FormButton label="Salvar e Sair" />
       </form>
     </div>
   );
 };
 
-export default CreateChampionship;
+export default EditChamp;

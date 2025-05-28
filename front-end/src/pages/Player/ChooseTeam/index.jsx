@@ -8,6 +8,8 @@ import * as yup from "yup";
 import Header from "../../../components/Header";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 
+
+//TODO INTEGRAR COM O BACK
 const schema = yup
   .object({
     name: yup.number(),
@@ -27,8 +29,7 @@ const ChooseTeam = () => {
     const getTeams = async () => {
       await handleGetTeamsByCaptain(player.id);
     };
-    getTeams()
-    
+    getTeams();
   }, [player.id]);
   const {
     control,
@@ -58,8 +59,8 @@ const ChooseTeam = () => {
             control={control}
             label="Time"
             placeholder="Escolha o time"
-            options={Array(teamsByCaptain.length).fill('a').map((team, index)=>teamsByCaptain[index].name)}
-            values={Array(teamsByCaptain.length).fill('').map((team, index)=>teamsByCaptain[index].id)}
+            options={teamsByCaptain.map((team) => team.name)}
+            values={teamsByCaptain.map((team) => team.id)}
             name="name"
             onChange={setSelectedTeam}
           />

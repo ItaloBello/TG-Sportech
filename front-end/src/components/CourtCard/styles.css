@@ -1,0 +1,20 @@
+.court-card{
+    display: flex;
+    flex-direction: row;
+    background-color: #2C2C2C;
+    color: #14AE5C;
+    width: 21.875rem;
+    padding: 1rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: .5rem;
+    margin: .5rem;
+}
+
+.court-card a{
+    color: #14AE5C;
+    border: 1px solid #14AE5C;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    border-radius: .5rem;
+}

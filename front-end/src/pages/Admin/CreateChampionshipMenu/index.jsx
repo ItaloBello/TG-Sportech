@@ -2,6 +2,8 @@ import React from 'react'
 import MenuItem from '../../../components/MenuItem'
 import Header from '../../../components/Header'
 
+//TELA OCULTADA
+
 const CreateChampionshipMenu = () => {
   return (
     <div className='create-championship-menu'>

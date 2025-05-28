@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./styles.css";
 import Header from "../../../components/Header";
 import ComboBoxItem from "../../../components/ComboBoxItem";
 import InputItem from "../../../components/InputItem";
@@ -12,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
-//OK
+//TODO GERAR INTEGRAÇÂO
 
 const schema = yup
   .object({
@@ -55,7 +54,7 @@ const schema = yup
   })
   .required();
 
-const CreateCourt = () => {
+const EditCourt = () => {
   const {admin, handleCreateCourt} = useAdminAuth()
   const {
     control,
@@ -272,10 +271,10 @@ const CreateCourt = () => {
           type="number"
         />
 
-        <FormButton label="Cadastrar" />
+        <FormButton label="Salvar e sair" />
       </form>
     </div>
   );
-};
+}
 
-export default CreateCourt;
+export default EditCourt

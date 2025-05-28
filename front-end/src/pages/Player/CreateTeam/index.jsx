@@ -86,45 +86,41 @@ const CreateTeam = () => {
         name="primaryColor"
         type="text"
         />
-      <InputItem
-        label="Cor Secundaria"
-        placeholder="Cor"
-        control={control}
-        errorMessage={errors?.secondaryColor?.message}
-        name="secondaryColor"
-        type="text"
-        />
-      <div className="create-team__input-and-button">
         <InputItem
-          id="btnCopy"
-          placeholder={"Code"}
-          label={"Invite Code"}
+          label="Cor Secundaria"
+          placeholder="Cor"
           control={control}
-          errorMessage={errors?.inviteCode?.message}
-          name="inviteCode"
+          errorMessage={errors?.secondaryColor?.message}
+          name="secondaryColor"
           type="text"
-          isDisabled={true}
         />
-        <ButtonItem
-          label={"Copiar"}
-          link={"/player/create-team"}
-          color={"#ffffff"}
-          onClick={copyCode}
+        <div className="create-team__input-and-button">
+          <InputItem
+            id="btnCopy"
+            placeholder={"Code"}
+            label={"Invite Code"}
+            control={control}
+            errorMessage={errors?.inviteCode?.message}
+            name="inviteCode"
+            type="text"
+            isDisabled={true}
           />
-      </div>
-      <div className="create-team__button-area">
-        <ButtonItem
-          label={"Cancelar"}
-          link={"/player/team-menu"}
-          color={"#EC221F"}
+          <ButtonItem
+            label={"Copiar"}
+            link={"/player/create-team"}
+            color={"#ffffff"}
+            onClick={copyCode}
           />
-        <FormButton
-          label={"Salvar"}
-          
-          
+        </div>
+        <div className="create-team__button-area">
+          <ButtonItem
+            label={"Cancelar"}
+            link={"/player/team-menu"}
+            color={"#EC221F"}
           />
-      </div>
-          </form>
+          <FormButton label={"Salvar"} />
+        </div>
+      </form>
     </div>
   );
 };
