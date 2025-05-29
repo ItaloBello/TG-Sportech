@@ -37,6 +37,7 @@ const SelectAppointment = () => {
             court={appointment.court}
             toEdit={true}
             key={index}
+            id={appointment.id}
           />
         ))}
       </div>

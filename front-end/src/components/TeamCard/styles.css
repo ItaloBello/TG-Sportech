@@ -33,7 +33,7 @@
   width: 2.5rem;
 }
 
-img {
+.team-card__image, .button-area__image{
   width: 100px;
   height: auto;
   border-radius: 50%;

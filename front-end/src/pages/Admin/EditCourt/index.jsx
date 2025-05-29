@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import ComboBoxItem from "../../../components/ComboBoxItem";
 import InputItem from "../../../components/InputItem";
@@ -55,7 +55,7 @@ const schema = yup
   .required();
 
 const EditCourt = () => {
-  const {admin, handleCreateCourt} = useAdminAuth()
+  const {admin, handleCreateCourt, selectedCourt} = useAdminAuth()
   const {
     control,
     handleSubmit,
@@ -64,6 +64,10 @@ const EditCourt = () => {
     resolver: yupResolver(schema),
     mode: "onBlur",
   });
+
+  useEffect(()=>{
+    console.log(selectedCourt)
+  },[])
 
   const [selectedValue, setSelectedValue] = useState();
 

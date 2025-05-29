@@ -13,6 +13,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [myCourts, setMyCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState({})
 
   const navigate = useNavigate();
 
@@ -155,7 +156,13 @@ export const AdminAuthContextProvider = ({ children }) => {
   };
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
+    //localStorage
   };
+
+  const handleSetSelectedAppointment = (appointmentId)=>{
+    setSelectedAppointment(appointmentId)
+    //localStorage
+  }
   return (
     <AdminAuthContext.Provider
       value={{
@@ -167,6 +174,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         myCourts,
         selectedCourt,
         appointments,
+        selectedAppointment,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -176,7 +184,8 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetChampMatches,
         handleGetMyCourts,
         handleSetSelectedCourt,
-        handleGetAppointmens
+        handleGetAppointmens,
+        handleSetSelectedAppointment
       }}
     >
       {children}
