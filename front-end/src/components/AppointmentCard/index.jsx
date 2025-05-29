@@ -1,6 +1,7 @@
 import React from "react";
 import "./styles.css";
 import { Link } from "react-router-dom";
+import { useAdminAuth } from "../../hooks/useAdminAuth";
 const AppointmentCard = ({
   type,
   adversary = null,
@@ -9,7 +10,10 @@ const AppointmentCard = ({
   status,
   court = '',
   toEdit = false,
+  id
 }) => {
+
+  const {handleSetSelectedAppointment} = useAdminAuth()
   return (
     <div className="appointment-card">
       <p className="appointment-card__text">Tipo de Jogo: {type}</p>
@@ -42,7 +46,7 @@ const AppointmentCard = ({
       ) : (
         <></>
       )}
-      {toEdit ? <Link to='/admin/select-appointment/edit'>Editar</Link> : <></>}
+      {toEdit ? <Link to='/admin/select-appointment/edit' onClick={()=>handleSetSelectedAppointment(id)}>Editar</Link> : <></>}
     </div>
   );
 };

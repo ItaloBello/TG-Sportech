@@ -13,6 +13,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [myCourts, setMyCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState({})
 
   const navigate = useNavigate();
 
@@ -146,6 +147,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         times: ["19:00-20:00"],
         type: "Rachão",
         court: "quadra cabecinha",
+        id:1
       },
       {
         date: "07/09/2020",
@@ -153,14 +155,21 @@ export const AdminAuthContextProvider = ({ children }) => {
         times: ["19:00-20:00",'20:00-21:00'],
         type: "Rachão",
         court: "quadra cabecinha",
-        adversary: 'Amigos do Levi'
+        adversary: 'Amigos do Levi',
+        id:2
       },
     ]);
   };
 
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
+    //localStorage
   };
+
+  const handleSetSelectedAppointment = (appointmentId)=>{
+    setSelectedAppointment(appointmentId)
+    //localStorage
+  }
   return (
     <AdminAuthContext.Provider
       value={{
@@ -172,6 +181,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         myCourts,
         selectedCourt,
         appointments,
+        selectedAppointment,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -181,7 +191,8 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetChampMatches,
         handleGetMyCourts,
         handleSetSelectedCourt,
-        handleGetAppointmens
+        handleGetAppointmens,
+        handleSetSelectedAppointment
       }}
     >
       {children}

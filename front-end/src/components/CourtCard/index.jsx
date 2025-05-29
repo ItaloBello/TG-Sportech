@@ -9,7 +9,7 @@ const CourtCard = ({ name, id }) => {
   return (
     <div className="court-card">
       <span>{name}</span>
-      <Link  onClick={()=>handleSetSelectedCourt(id)}>
+      <Link to={'/admin/select-court/edit'} onClick={()=>handleSetSelectedCourt(id)}>
         Editar
       </Link>
     </div>
