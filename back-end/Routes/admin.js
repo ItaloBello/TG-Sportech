@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const DonoQuadra = require('../Models/DonoQuadra');
 const Quadra = require('../Models/Quadra');
+const Agendamento = require('../Models/Agendamentos')
 const bcrypt = require('bcrypt');
 const { Op, where } = require('sequelize');
 const { validarCPF, validarCNPJ, validarEmail } = require('../Utils/validarDocumento');
@@ -180,16 +181,62 @@ router.post('/cadastrarEstabelecimento/:id', async (req, res) => {
 });
 
 router.get('/quadras/:id', async (req,res) => {
-    
+    let mapQuadras = [];
     try{ 
         const userId = req.params.id
-        const quadras = await Quadra.findAll({where: {usuarioId: userId}});
-        return res.json(quadras)
+        const quadras = await Quadra.findAll({where: {donoQuadraId: userId}});
+        for (let quadra of quadras){
+            mapQuadras.push({name: quadra.nome, id: quadra.id})
+        }
+        return res.json(mapQuadras)
     }
     catch(error){
         return res.json({message: error})
     }
 })
+
+router.get('/quadras/ids/:id', async (req,res) => {
+    let mapQuadras = [];
+    try{ 
+        const userId = req.params.id
+        const quadras = await Quadra.findAll({where: {donoQuadraId: userId}});
+        for (let quadra of quadras){
+            mapQuadras.push(quadra.id)
+        }
+        return res.json(mapQuadras)
+    }
+    catch(error){
+        return res.json({message: error})
+    }
+})
+
+router.get("/agendamentos", async (req, res) => {
+  const quadrasIds = req.query.quadras.split(',').map(Number);
+  let appointments = [];
+  try {
+    const agendamentos = await Agendamento.findAll({
+      where: {
+        idQuadra: {
+          [Op.in]: quadrasIds
+        }
+      }
+    });
+    for (let agend of agendamentos) {
+      const data = new Date(agend.data);
+      appointments.push({
+        type: "Rachão",
+        date: data.toLocaleDateString('pt-BR'),
+        adversary: "",
+        times: [`${agend.horaInicio.slice(0, 5)}-${agend.horaFim.slice(0, 5)}`],
+        status: agend.pago ? "Pago" : "Pagamento Pendente"
+      });
+    }
+    res.status(200).json(appointments);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: err });
+  }
+});
 
 router.get('/info/:id', async (req,res) => {
     

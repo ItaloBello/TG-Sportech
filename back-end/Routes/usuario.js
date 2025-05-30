@@ -370,21 +370,36 @@ router.post("/agendar",async (req,res) => {
   res.status(200).json({message:"Sucesso!"})
 })
 
-router.get("/agendamentos/:id",async (req,res) => {
-  const idJogador = req.params.id
-  let appointments = [];
-  try{
-    const agendamentos = await Agendamento.findAll({where: {idJogador}})
-  for (let agend of agendamentos){
-    const data = new Date(agend.data)
-    appointments.push({type: "Rachão", date: data.toLocaleDateString('pt-BR'), adversary: "", times: [agend.horaInicio.slice(0.5)+'-'+agend.horaFim.slice(0,5)], status: agend.pago? "Pago" : "Pagamento Pendente"})
-  }
-  //console.log(appointments)
-  res.status(200).json(appointments)
-  }catch(err){
-    console.log(err)
-    res.status(400).json({error: err})
+router.get("/agendamentos/:id", async (req, res) => {
+  const idJogador = req.params.id;
+  try {
+    const agendamentos = await Agendamento.findAll({ where: { idJogador } });
+    const appointments = agendamentos.map(agend => {
+      const data = new Date(agend.data);
+      return {
+        type: "Rachão",
+        date: data.toLocaleDateString('pt-BR'),
+        adversary: "",
+        times: [
+          agend.horaInicio.slice(0, 5) + '-' + agend.horaFim.slice(0, 5)
+        ],
+        status: agend.pago ? "Pago" : "Pagamento Pendente"
+      };
+    });
+    res.status(200).json(appointments);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: err });
   }
 });
+
+router.get("/times", async (req,res) => {
+  let mapTimes = [];
+  const times = await Time.findAll({where: {userId: req.user.id}})
+  for (let time of times){
+    mapTimes.push({name: time.name, id: time.id})
+  }
+  res.status(200).json(mapTimes)
+})
 
 module.exports = router;

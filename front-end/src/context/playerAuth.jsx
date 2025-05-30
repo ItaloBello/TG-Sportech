@@ -97,12 +97,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
     setCourts(data);
   };
 
-  const handleGetTeamsByCaptain = (playerId) => {
+  const handleGetTeamsByCaptain = async (playerId) => {
     //TODO Requisição para pegar todos os times que um certo jogador é capitao
-    setTeamsByCaptain([
-      { name: "Fatec FC", id: 1 },
-      { name: "Amigos do Levi", id: 2 },
-    ]);
+    const { data } = await api.get(`/api/jogador/times/${playerId}`);
+    setTeamsByCaptain(data);
   };
 
   const handleGetWeekDaysToFilter = async (selectedCourt) => {
@@ -432,7 +430,20 @@ export const PlayerAuthContextProvider = ({ children }) => {
     console.log(data.times)
   };
   const handleCreateTeam = async (formData) => {
-    await api.post(`/api/jogador/times`, formData);
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('primaryColor', formData.primaryColor);
+    data.append('secondaryColor', formData.secondaryColor);
+    data.append('userId', formData.userId);
+  
+    // Se o usuário escolheu uma imagem, adicione ao FormData
+    if (formData.foto) {
+      data.append('foto', formData.foto);
+    }
+  
+    await api.post(`/api/jogador/times`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
   };
   return (
     <PlayerAuthContext.Provider
