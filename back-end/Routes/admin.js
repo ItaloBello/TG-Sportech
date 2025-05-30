@@ -116,7 +116,7 @@ router.post('/cadastrarQuadra/:id', async (req, res) => {
         const wednesdayEnd = req.body.wednesdayEnd;
         const wednesdayHour = req.body.wednesdayHour;
         if (wednesdayEnd){
-            horarios.push({diaSemana: "quarta", horaFim: sundayEnd, horaInicio: sundayInitial, valorHora: sundayHour})
+            horarios.push({diaSemana: "quarta", horaFim: wednesdayEnd, horaInicio: wednesdayInitial, valorHora: wednesdayHour})
         }
         const thursdayInitial = req.body.thursdayInitial;
         const thursdayEnd = req.body.thursdayEnd;
