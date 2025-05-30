@@ -12,6 +12,7 @@
 }
 .match-card__text{
     margin: .5rem;
+    text-transform: uppercase;
 }
 
 .match-card__teams {

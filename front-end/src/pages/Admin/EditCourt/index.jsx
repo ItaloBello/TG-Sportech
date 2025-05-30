@@ -47,15 +47,11 @@ const schema = yup
     saturdayHour: yup.number("deve ser um número"),
     saturdayInitial: yup.string(),
     saturdayEnd: yup.string(),
-    holyday: yup.boolean(),
-    holydayHour: yup.number("deve ser um número"),
-    holydayInitial: yup.string(),
-    holydayEnd: yup.string(),
   })
   .required();
 
 const EditCourt = () => {
-  const {admin, handleCreateCourt, selectedCourt} = useAdminAuth()
+  const { admin, handleCreateCourt, selectedCourt } = useAdminAuth();
   const {
     control,
     handleSubmit,
@@ -65,15 +61,13 @@ const EditCourt = () => {
     mode: "onBlur",
   });
 
-  useEffect(()=>{
-    console.log(selectedCourt)
-  },[])
+  useEffect(() => {
+    console.log(selectedCourt);
+  }, []);
 
   const [selectedValue, setSelectedValue] = useState();
 
   const [selectedDays, setSelectedDays] = useState([]);
-
-  
 
   const handleChange = (label, isChecked) => {
     setSelectedDays((prev) => {
@@ -90,7 +84,7 @@ const EditCourt = () => {
       id: admin.id,
     };
     console.log(payload);
-    handleCreateCourt(payload)
+
   };
   return (
     <div className="create-court">
@@ -130,8 +124,12 @@ const EditCourt = () => {
           />
           <div className="create-court__table-inputs">
             <TableInputItem control={control} name="sundayHour" type="number" />
-            <TableInputItem control={control} name="sundayInitial" />
-            <TableInputItem control={control} name="sundayEnd" />
+            <TableInputItem
+              control={control}
+              name="sundayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="sundayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -143,8 +141,12 @@ const EditCourt = () => {
           />
           <div className="create-court__table-inputs">
             <TableInputItem control={control} name="mondayHour" type="number" />
-            <TableInputItem control={control} name="mondayInitial" />
-            <TableInputItem control={control} name="mondayEnd" />
+            <TableInputItem
+              control={control}
+              name="mondayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="mondayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -160,8 +162,12 @@ const EditCourt = () => {
               name="tuesdayHour"
               type="number"
             />
-            <TableInputItem control={control} name="tuesdayInitial" />
-            <TableInputItem control={control} name="tuesdayEnd" />
+            <TableInputItem
+              control={control}
+              name="tuesdayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="tuesdayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -177,8 +183,12 @@ const EditCourt = () => {
               name="wednesdayHour"
               type="number"
             />
-            <TableInputItem control={control} name="wednesdayInitial" />
-            <TableInputItem control={control} name="wednesdayEnd" />
+            <TableInputItem
+              control={control}
+              name="wednesdayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="wednesdayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -194,8 +204,12 @@ const EditCourt = () => {
               name="thursdayHour"
               type="number"
             />
-            <TableInputItem control={control} name="thursdayInitial" />
-            <TableInputItem control={control} name="thursdayEnd" />
+            <TableInputItem
+              control={control}
+              name="thursdayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="thursdayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -207,8 +221,12 @@ const EditCourt = () => {
           />
           <div className="create-court__table-inputs">
             <TableInputItem control={control} name="fridayHour" type="number" />
-            <TableInputItem control={control} name="fridayInitial" />
-            <TableInputItem control={control} name="fridayEnd" />
+            <TableInputItem
+              control={control}
+              name="fridayInitial"
+              type="time"
+            />
+            <TableInputItem control={control} name="fridayEnd" type="time" />
           </div>
         </div>
         <div className="create-court__table-row">
@@ -224,25 +242,12 @@ const EditCourt = () => {
               name="saturdayHour"
               type="number"
             />
-            <TableInputItem control={control} name="saturdayInitial" />
-            <TableInputItem control={control} name="saturdayEnd" />
-          </div>
-        </div>
-        <div className="create-court__table-row">
-          <CheckBoxItem
-            control={control}
-            label="Feriados"
-            name="holyday"
-            onChange={handleChange}
-          />
-          <div className="create-court__table-inputs">
             <TableInputItem
               control={control}
-              name="holydayHour"
-              type="number"
+              name="saturdayInitial"
+              type="time"
             />
-            <TableInputItem control={control} name="holydayInitial" />
-            <TableInputItem control={control} name="holydayEnd" />
+            <TableInputItem control={control} name="saturdayEnd" type="time" />
           </div>
         </div>
 
@@ -279,6 +284,6 @@ const EditCourt = () => {
       </form>
     </div>
   );
-}
+};
 
-export default EditCourt
+export default EditCourt;
