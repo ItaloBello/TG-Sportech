@@ -16,7 +16,7 @@ const PlayerMenu = () => {
   
   return (
     <div className="player-menu">
-      <Header />
+      <Header link={1}/>
       {/* TODO remover este p depois, é so para testar */}
       <p>Olá, {player?.name ? player.name : "sem nome "}</p>
       <MenuItem

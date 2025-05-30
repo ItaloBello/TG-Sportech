@@ -21,7 +21,7 @@ const ChampionshipProgressPlayoffs = () => {
   }, []);
   return (
     <div className="championship-in-progress">
-      <Header />
+      <Header link={1}/>
       <div className="progress-card">
         <div className="progress-card__title-area">
           <img

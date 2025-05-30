@@ -5,7 +5,7 @@ import MenuItem from "../../../components/MenuItem";
 const TeamMenu = () => {
   return (
     <div className="team-menu">
-      <Header />
+      <Header link={1}/>
       <MenuItem
         src="../../public/create-team-icon.png"
         alt="icone de criar time"

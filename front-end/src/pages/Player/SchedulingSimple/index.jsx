@@ -128,7 +128,7 @@ const SchedulingSimple = () => {
 
   return (
     <div className="scheduling-simple">
-      <Header />
+      <Header link={1}/>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ComboBoxItem
           control={control}

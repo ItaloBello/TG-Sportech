@@ -23,7 +23,7 @@ const MyAppointments = () => {
   },[]);
   return (
     <div className="my-appointments">
-      <Header />
+      <Header link={1}/>
       <div className="appointment-list">
         {myAppointments.map((appointment, index) => (
           <AppointmentCard

@@ -25,7 +25,7 @@ const PlayerChamp = () => {
       <div className="player-champ__title">
         <p>Campeonatos</p>
       </div>
-      <Header />
+      <Header link={1}/>
       <div className="player-champ__subtitle">
         <p>Em Andamento</p>
       </div>

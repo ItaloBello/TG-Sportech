@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import FormButton from "../../../components/FormButton";
+import Header from "../../../components/Header";
 
 //TODO integrar
 
@@ -29,6 +30,7 @@ const EditTeam = () => {
 
   return (
     <div className="edit-team">
+      <Header link={1}/>
       <div className="edit-team__header">
         <p>Editar Time</p>
         <img

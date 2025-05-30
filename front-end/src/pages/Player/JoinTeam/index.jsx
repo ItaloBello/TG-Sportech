@@ -24,7 +24,7 @@ const JoinTeam = () => {
   });
   return (
     <div className="join-team">
-      <Header />
+      <Header link={1}/>
       <p className="join-team__text">
         Insira o invite code do time que deseja entrar no campo abaixo.
       </p>

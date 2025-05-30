@@ -6,6 +6,7 @@ import FormButton from "../../../components/FormButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Header from "../../../components/Header";
 
 //ok
 
@@ -43,6 +44,7 @@ const PlayerProfile = () => {
 
   return (
     <div className="player-profile">
+      <Header link={1}/>
       <img
         className="player-profile__image"
         src="../../public/profile-placeholder-icon.png"

@@ -10,7 +10,7 @@ const SubscribeTeam = () => {
   
   return (
     <div className="subscribe-team">
-      <Header />
+      <Header link={1}/>
       <ChampDescription
         description={selectedChampionship.description}
         title={selectedChampionship.title}

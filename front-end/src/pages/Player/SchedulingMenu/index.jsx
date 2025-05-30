@@ -7,7 +7,8 @@ import MenuItem from '../../../components/MenuItem'
 const SchedulingMenu = () => {
   return (
     <div className='scheduling-menu'>
-        <Header/>
+
+        <Header link={1}/>
         <MenuItem label='Agendar Rachão' link='/player/scheduling-simple'/>
         <MenuItem label='Agendar Amistoso' link='/player/scheduling-team'/>
         <MenuItem label='Meus Agendamentos' link='/player/my-appointments'/>

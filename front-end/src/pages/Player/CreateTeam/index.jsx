@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormButton from "../../../components/FormButton";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
+import Header from "../../../components/Header";
 
 
 //TODO Integrar
@@ -55,6 +56,7 @@ const CreateTeam = () => {
 
   return (
     <div className="create-team">
+      <Header link={1}/>
       <div className="create-team__header">
         <p className="create-team__title">Criar Time</p>
         <img

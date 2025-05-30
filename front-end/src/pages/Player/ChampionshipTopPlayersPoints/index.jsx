@@ -22,7 +22,7 @@ const ChampionshipTopPlayersPoints = () => {
   }, []);
   return (
     <div className="championship-in-progress top-players">
-      <Header />
+      <Header link={1}/>
       <div className="progress-card">
         <div className="progress-card__title-area">
           <img

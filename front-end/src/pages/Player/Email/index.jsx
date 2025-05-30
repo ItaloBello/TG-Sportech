@@ -6,7 +6,7 @@ import ButtonItem from "../../../components/ButtonItem";
 const PlayerSms = () => {
   return (
     <div className="player-sms">
-      <Header />
+      <Header/>
       <div className="player-sms__text">
         <p>
           Pronto, você receberá um lembrete sobre sua senha por meio de um email,

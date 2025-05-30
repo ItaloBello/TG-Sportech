@@ -27,7 +27,7 @@ const ShowTeam = () => {
 
   return (
     <div className="show-team">
-      <Header />
+      <Header link={1}/>
       <div className="show-team__title">
         <p>Meus times:</p>
       </div>

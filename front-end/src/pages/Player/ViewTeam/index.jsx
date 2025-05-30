@@ -5,6 +5,7 @@ import "./styles.css";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import Header from "../../../components/Header";
 
 const schema = yup
   .object({
@@ -27,6 +28,7 @@ const ViewTeam = () => {
   return (
     // esta tela os inputs terão valores fixos e não serão alterados
     <div className="view-team">
+      <Header link={1}/>
       <div className="view-team__header">
         <p>Time</p>
         <img

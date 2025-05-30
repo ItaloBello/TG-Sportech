@@ -51,7 +51,7 @@ const ChooseTeam = () => {
 
   return (
     <div className="choose-team">
-      <Header />
+      <Header link={1}/>
       <div className="choose-team__area">
         <p>SELECIONE O TIME QUE IRÁ SE INSCREVER</p>
         <form onSubmit={handleSubmit(onSubmit)}>
