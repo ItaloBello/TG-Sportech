@@ -48,7 +48,9 @@ const CreateTeam = () => {
       userId: player.id,
       foto: file // inclui o arquivo se houver
     };
+    
     handleCreateTeam(payload);
+
   };
 
   return (
