@@ -8,7 +8,7 @@ import { useAdminAuth } from '../../../hooks/useAdminAuth'
 const AdminMenu = () => {
 
   const {handleLogOut, admin} = useAdminAuth()
-
+  
   return (
     <div className='admin-menu'>
         <Header/>

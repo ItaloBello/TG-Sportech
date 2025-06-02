@@ -47,6 +47,7 @@ import SelectAppointment from "./pages/Admin/SelectAppointment";
 import EditAppointment from "./pages/Admin/EditAppointment";
 import SelectCourt from "./pages/Admin/SelectCourt";
 import EditCourt from "./pages/Admin/EditCourt";
+import CreateMatches from "./pages/Admin/CreateMatches";
 
 
 const App = () => {
@@ -63,6 +64,7 @@ const App = () => {
               <Route path="/player/singup" element={<PlayerSingUp />} />
               <Route path="/player/recovery" element={<PlayerRecovery />} />
               <Route path="/player/recovery/email" element={<PlayerEmail />} />
+              
               <Route path="/player/menu" element={<PlayerMenu />} />
               <Route path="/player/profile/" element={<PlayerProfile />} />
               <Route path="/player/team-menu" element={<TeamMenu />} />
@@ -101,6 +103,7 @@ const App = () => {
 
               <Route path="/admin/championship-menu" element={<ChampionshipMenu/>}/>
               <Route path="/admin/create-championship/playoffs" element={<PlayoffsCreateChampionship/>}/>
+              <Route path="/admin/create-championship/playoffs/create-matches" element={<CreateMatches/>}/>
               <Route path="admin/select-championship/not-started" element={<SelectNotStartedChamp/>}/>
               <Route path="/admin/select-championship/not-started/edit" element={<EditChamp/>}/>
               <Route path="/admin/select-championship/in-progress" element={<SelectInProgressChamp/>}/>

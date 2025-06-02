@@ -6,7 +6,7 @@
     height: 100svh;
 }
 
-.main p{
+.main__p{
   font-size: small;
   font-weight: 500;
 }

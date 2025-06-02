@@ -3,6 +3,7 @@ import ButtonItem from "../../components/ButtonItem";
 import Header from "../../components/Header";
 import "./styles.css";
 const Home = () => {
+ 
   return (
     <div className="main-page">
       <Header />

@@ -5,8 +5,18 @@ import { useNavigate } from "react-router-dom";
 const Header = ({ link = 0 }) => {
   const navigate = useNavigate();
   let goTo = "/";
-  if (link == 1) goTo = "/player/menu";
-  if (link == 2) goTo = "/admin/menu";
+  if (window.location.href.split("/")[3] &&
+      window.location.href.split("/")[4] != "login" &&
+      window.location.href.split("/")[4] != "singup" &&
+      window.location.href.split("/")[4] != "recovery" &&
+      window.location.href.split("/")[4] != "register-establishment"&&
+      window.location.href.split("/")[4] != "welcome"
+    )
+    if (
+      window.location.href.split("/")[3] == "player" 
+    )
+      goTo = "/player/menu";
+    else goTo = "/admin/menu";
   return (
     <div className="header">
       <img
@@ -15,6 +25,13 @@ const Header = ({ link = 0 }) => {
         className="header__img"
         onClick={() => navigate(goTo)}
       />
+      {window.location.href.split("/")[3] ? (
+        <p className="header__p">
+          {window.location.href.split("/")[3].toUpperCase()}
+        </p>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -41,7 +41,7 @@ const AdminSingUp = () => {
   return (
     <div className="main">
       <Header />
-      <p>Dados Pessoais</p>
+      <p className="main__p">Dados Pessoais</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputItem
           label="Nome do Usuário"

@@ -1,6 +1,18 @@
 
 /* header */
 .header__img {
-    margin: 1rem;
+    margin: 1rem 1rem 0;
+
     width: 8.125rem;
   }
+.header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__p {
+  font-weight: 700;
+  font-size: .8rem;
+}

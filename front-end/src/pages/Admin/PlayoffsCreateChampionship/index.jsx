@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { format } from "date-fns";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 //TODO GERAR INTEGRAÇÂO
 
@@ -36,6 +37,7 @@ const CreateChampionship = () => {
   });
 
   const [teamsNumber, setTeamsNumber] = useState();
+  const navigate = useNavigate()
 
   const onSubmit = (dataForm) => {
     const payload = {
@@ -44,6 +46,7 @@ const CreateChampionship = () => {
       teamsNumber: teamsNumber,
     };
     console.log(payload);
+    if(confirm('deseja criar este campeonato?')) navigate('/admin/create-championship/playoffs/create-matches')
   };
 
   return (
