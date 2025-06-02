@@ -6,13 +6,14 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 import TeamCard from "../../../components/TeamCard";
 
 const ShowTeam = () => {
-  const { handleGetMyTeams, player, myTeams } = usePlayerAuth();
+  const { handleGetMyTeams, handleGetMyTeamSubscriptions,player, myTeams, mySubscriptions } = usePlayerAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getMyTeams = async () => {
       try {
         await handleGetMyTeams(player.id);
+        await handleGetMyTeamSubscriptions(player.id);
       } finally {
         setIsLoading(false);
       }
@@ -39,14 +40,28 @@ const ShowTeam = () => {
           date={team.data_criacao}
           key={index}
           src={team.img && team.img !== '' ? team.img : undefined}
+          inviteCode={team.inviteCode}
         />
-        <p>----------------------</p>
+        <p>----------------------</p> 
         </>
       ))}
 
       <div className="show-team__title">
         <p>Times que participo:</p>
       </div>
+      {mySubscriptions.map((team, index) => (
+        <>
+        <TeamCard
+          addPlayer={false}
+          name={team.name}
+          date={team.data_criacao}
+          key={index}
+          src={team.img && team.img !== '' ? team.img : undefined}
+          inviteCode={team.inviteCode}
+        />
+        <p>----------------------</p> 
+        </>
+      ))}
       <CardList
         items={1}
         names={["Fatec FC"]}

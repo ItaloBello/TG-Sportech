@@ -32,9 +32,9 @@ export const PlayerSingUp = () => {
   const { handleSingUp } = usePlayerAuth();
 
   //funçao de POST
-  const onSubmit = (formData) => {
+  const onSubmit =  (formData) => {
     handleSingUp(formData);
-    console.log("OK");
+    console.log(formData);
   };
 
   return (
