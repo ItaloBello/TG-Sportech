@@ -13,6 +13,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [champTablePoints, setChampTablePoints] = useState([]);
   const [topPlayers, setTopPlayers] = useState([]);
   const [myTeams, setMyTeams] = useState({});
+  const [mySubscriptions, setMySubscriptions] = useState({});
 
   const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
@@ -58,10 +59,10 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   //função de sing up
-  const handleSingUp = (formData) => {
+  const handleSingUp = async (formData) => {
     if (formData.password === formData.confirmPassword) {
-      api.post("/api/jogador/registro", formData);
-      //api.post(`/players`,formData)
+      const {data} = await api.post("/api/jogador/registro", formData);
+      console.log(data)
       navigate("/player/login");
     } else alert("As senhas estao diferentes");
   };
@@ -429,6 +430,11 @@ export const PlayerAuthContextProvider = ({ children }) => {
     setMyTeams(data.times);
     console.log(data.times)
   };
+  const handleGetMyTeamSubscriptions = async (playerId) => {
+    const { data } = await api.get(`/api/jogador/times/subscription/${playerId}`);
+    setMySubscriptions(data.times);
+    console.log(data.times)
+  };
   const handleCreateTeam = async (formData) => {
     const data = new FormData();
     data.append('name', formData.name);
@@ -445,6 +451,13 @@ export const PlayerAuthContextProvider = ({ children }) => {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
   };
+
+  const handleJoinTeam = async (formData) => {
+    const {data} = await api.post(`/api/jogador/entrar/${formData.userId}`,{inviteCode: formData.inviteCode});
+    alert(data)
+    console.log(data)
+  }
+
   return (
     <PlayerAuthContext.Provider
       value={{
@@ -463,6 +476,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         topPlayers,
         myAppointments,
         myTeams,
+        mySubscriptions,
         handleLogin,
         handleLogOut,
         handleSingUp,
@@ -482,7 +496,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleGetTopPlayersChamp,
         handleGetMyAppointments,
         handleCreateTeam,
+        handleJoinTeam,
         handleGetMyTeams,
+        handleGetMyTeamSubscriptions
       }}
     >
       {children}

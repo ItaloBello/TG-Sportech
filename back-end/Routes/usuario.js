@@ -46,7 +46,7 @@ const upload = multer({
 
 router.post("/registro", async (req, res) => {
   let erros = [];
-
+  console.log('cadastrando')
   if (!req.body.name) erros.push("Nome inválido!");
   if (
     !req.body.email ||
@@ -80,6 +80,7 @@ router.post("/registro", async (req, res) => {
     erros.push("CNPJ inválido!");
 
   if (erros.length > 0) {
+    console.log(erros)
     return res.status(400).json({ errors: erros });
   }
 
@@ -89,6 +90,7 @@ router.post("/registro", async (req, res) => {
     });
 
     if (usuarioExistente) {
+      console.log("cpf ou email")
       return res
         .status(400)
         .json({ error: "Usuário já cadastrado com este email ou CPF!" });
@@ -103,9 +105,10 @@ router.post("/registro", async (req, res) => {
       cellphone: req.body.cellphone,
       password: hash,
     });
-
+    
     res.status(201).json({ message: "Usuário registrado com sucesso!" });
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ error: err.message });
   }
 });
@@ -161,7 +164,6 @@ router.get("/times/:userId", async (req, res) => {
         // Formata a data
         const data = new Date(plainTime.data_criacao);
         plainTime.data_criacao = data.toLocaleDateString("pt-BR");
-        console.log(plainTime)
         // Adiciona o jogador
         plainTime.jogadores = jogadores;
 
@@ -175,6 +177,38 @@ router.get("/times/:userId", async (req, res) => {
   }
 });
 
+router.get("/times/subscription/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    let idsTime = [];
+    const jogadores = await JogadorTime.findAll({where: {jogadorId: userId}})
+    for (let jg of jogadores){
+      idsTime.push(jg.timeId)
+    }
+    const times = await Time.findAll({ where: { id: {[Op.in]: idsTime}} });
+    const timesQueParticipo = await Promise.all(
+      times.map(async (time) => {
+        const jogadores = await JogadorTime.findAll({ where: { timeId: time.id } });
+
+        // Converta o objeto Sequelize em um objeto puro
+        const plainTime = time.toJSON();
+
+        // Formata a data
+        const data = new Date(plainTime.data_criacao);
+        plainTime.data_criacao = data.toLocaleDateString("pt-BR");
+        // Adiciona o jogador
+        plainTime.jogadores = jogadores;
+
+        return plainTime;
+      })
+    );
+
+    return res.status(200).json({ times: timesQueParticipo });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
 
 router.post("/times", upload.single("foto"), async (req, res) => {
   const nome = req.body.name;
@@ -182,7 +216,6 @@ router.post("/times", upload.single("foto"), async (req, res) => {
   const corSecundaria = req.body.secondaryColor;
   const userId = req.body.userId;
   const filename = req.file? req.file.filename : null;
-  console.log(req.body)
   //const filepath = req.file.path;
   async function generateUniqueInviteCode() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -214,20 +247,16 @@ router.post("/times", upload.single("foto"), async (req, res) => {
   }
 });
 
-router.post("/entrar", async (req, res) => {
-  const { timeId } = req.body;
-  const { jogadorId } = req.user;
-  const { invite_code } = req.body;
+router.post("/entrar/:id", async (req, res) => {
+  const jogadorId = req.params.id;
+  const invite_code = req.body.inviteCode;
   try {
-    const time = await Time.findOne({ where: { id } });
+    const time = await Time.findOne({ where: { inviteCode: invite_code } });
     if (!time) {
       return res.status(404).json({ error: "Time não encontrado." });
     }
-    if (time.invite_code !== invite_code) {
-      return res.status(401).json({ error: "Código de convite inválido." });
-    }
     const jogador = await JogadorTime.create({
-      timeId: timeId,
+      timeId: time.id,
       jogadorId: jogadorId,
     });
     return res.status(200).json({ message: "Entrada no time autorizada." });

@@ -8,6 +8,7 @@ const { Op, where } = require('sequelize');
 const { validarCPF, validarCNPJ, validarEmail } = require('../Utils/validarDocumento');
 const Horario = require("../Models/Horarios");
 const Estabelecimento = require("../Models/Estabelecimento");
+const Campeonato = require("../Models/Campeonato")
 const { message } = require("statuses");
 
 
@@ -304,6 +305,47 @@ router.delete('/excluirQuadra/:id', async (req, res) => {
         return res.status(500).json({ message: "Erro ao deletar a quadra.", error: error.message });
     }
 });
+
+router.put('/agendamentos/pagamento/confirmar/:id', async (req,res) => {
+    try{
+        const id = req.params.id;
+        const agendamento = Agendamento.findOne({where: {id}});
+        if (!agendamento){
+            res.status(404).json({error: "Agendamento não encontrado"});
+        }else{
+            agendamento.pago = true;
+            await Agendamento.update(agendamento,{where: {id}});
+            res.status(200).json({message: "Pagamento confirmado"});
+        }
+    }catch(err){
+        res.status(400).json({error: err.message});
+    }
+})
+
+router.post('/campeonato/:id', async (req, res) => {
+    try{
+        const id = req.params.id;
+        const nome = req.body.name;
+        const dataInicio = req.body.initialDate;
+        const numTimes = req.body.teamsNumber;
+        const descricao = req.body.description;
+        const registro = req.body.registration;
+        const premiacao = req.body.premiation;
+        const campeonato = {
+            nome: nome,
+            data_inicio: dataInicio,
+            registro: registro,
+            descricao: descricao,
+            num_times: numTimes,
+            premiacao: premiacao,
+            usuarioId: id,
+        }
+        await Campeonato.create(campeonato);
+        res.status(200).json({message: "Campeonato criado com sucesso!"})
+    }catch(err){
+        res.status(400).json({error: err.message})
+    }
+})
 
 //exportando o modulo
 module.exports = router

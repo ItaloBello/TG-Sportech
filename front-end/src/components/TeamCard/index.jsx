@@ -8,7 +8,8 @@ const TeamCard = ({
   date,
   src,
   alt ='logo',
-  addPlayer = false,
+  inviteCode,
+  addPlayer,
 }) => {
   return (
     <div className="team-card">
@@ -17,6 +18,7 @@ const TeamCard = ({
         <div className="team-card__text-area">
           <p className="team-card__team-name">Nome do time: {name}</p>
           <p className="team-card__creation-date">Data de Fundação: {date}</p>
+          <p className="team-card__team-name">código: {inviteCode}</p>
         </div>
         <div className="team-card__button-area">
           <CardButton label="Excluir" colorButton="#EC221F" />
