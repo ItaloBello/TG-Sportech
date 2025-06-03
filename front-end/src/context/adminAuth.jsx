@@ -14,6 +14,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState({})
+  const [teamNumber, setTeamNumber] = useState(0)
 
   const navigate = useNavigate();
 
@@ -163,6 +164,20 @@ export const AdminAuthContextProvider = ({ children }) => {
     setSelectedAppointment(appointmentId)
     //localStorage
   }
+
+  const handleGetTeamNumber = (champId) =>{
+    setTeamNumber(16)
+  }
+
+  const handleSetSelectedChamp = (champId)=>{
+    //TODO retornar os dados do campeonato 
+    // const {data} = getChamp(champId)
+    setSelectedChamp({
+      id:1
+    })
+    localStorage.setItem('championship',JSON.stringify(selectedChamp))
+  }
+
   return (
     <AdminAuthContext.Provider
       value={{
@@ -175,6 +190,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         selectedCourt,
         appointments,
         selectedAppointment,
+        teamNumber,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -185,7 +201,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetMyCourts,
         handleSetSelectedCourt,
         handleGetAppointmens,
-        handleSetSelectedAppointment
+        handleSetSelectedAppointment,
+        handleGetTeamNumber,
+        handleSetSelectedChamp
       }}
     >
       {children}
