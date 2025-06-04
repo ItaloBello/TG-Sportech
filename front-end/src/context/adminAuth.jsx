@@ -13,7 +13,11 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [myCourts, setMyCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [selectedAppointment, setSelectedAppointment] = useState({})
+  const [selectedAppointment, setSelectedAppointment] = useState(() => {
+    const saved = localStorage.getItem('selectedAppointment');
+    return saved ? JSON.parse(saved) : undefined;
+  });
+  const [selectedType, setSelectedType] = useState({})
   const [teamNumber, setTeamNumber] = useState(0)
 
   const navigate = useNavigate();
@@ -136,12 +140,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleGetAppointmens = async (adminId) => {
     try {
       const res = await api.get(`/api/admin/quadras/ids/${adminId}`);
-      console.log('Quadras response:', res);
-      console.log('res.data:', res.data);
       const courts = Array.isArray(res.data) ? res.data : [];
-      console.log('Courts:', courts);
-      console.log('AdminId:', adminId);
-  
       if (courts.length === 0) {
         setAppointments([]);
         console.log('No courts found for admin or backend returned error:', res.data);
@@ -160,14 +159,22 @@ export const AdminAuthContextProvider = ({ children }) => {
     //localStorage
   };
 
-  const handleSetSelectedAppointment = (appointmentId)=>{
-    setSelectedAppointment(appointmentId)
-    //localStorage
+  const handleSetSelectedAppointment = (appointment) => {
+    setSelectedAppointment(appointment);
+    localStorage.setItem('selectedAppointment', JSON.stringify(appointment));
+  }
+
+  const handleSelectedType = async (appointmentId) => {
+    const { data } = await api.get(`/api/admin/agendamentos/type/${appointmentId}`);
+    setSelectedType(data.type);
+    return data;
   }
 
   const handleGetTeamNumber = (champId) =>{
     setTeamNumber(16)
   }
+
+
 
   const handleSetSelectedChamp = (champId)=>{
     //TODO retornar os dados do campeonato 
@@ -190,6 +197,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         selectedCourt,
         appointments,
         selectedAppointment,
+        selectedType,
         teamNumber,
         handleLogin,
         handleSingUp,
@@ -203,7 +211,8 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
-        handleSetSelectedChamp
+        handleSetSelectedChamp,
+        handleSelectedType,
       }}
     >
       {children}

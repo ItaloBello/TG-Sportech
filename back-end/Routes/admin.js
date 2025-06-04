@@ -224,12 +224,15 @@ router.get("/agendamentos", async (req, res) => {
     });
     for (let agend of agendamentos) {
       const data = new Date(agend.data);
+      const quadra = await Quadra.findOne({where: {id: agend.idQuadra}})
       appointments.push({
-        type: "Rachão",
+        type: "rachão",
         date: data.toLocaleDateString('pt-BR'),
         adversary: "",
         times: [`${agend.horaInicio.slice(0, 5)}-${agend.horaFim.slice(0, 5)}`],
-        status: agend.pago ? "Pago" : "Pagamento Pendente"
+        status: agend.pago ? "Pago" : "Pagamento Pendente",
+        court: quadra.nome,
+        id: agend.id
       });
     }
     res.status(200).json(appointments);
@@ -237,6 +240,18 @@ router.get("/agendamentos", async (req, res) => {
     console.log(err);
     res.status(400).json({ error: err });
   }
+});
+
+router.get("/agendamentos/type/:id", async (req, res) => {
+    const id = req.params.id;
+    if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ message: "ID inválido" });
+    }
+    const agendamento = await Agendamento.findOne({ where: { id } });
+    if (!agendamento) {
+        return res.status(404).json({ message: "Agendamento não encontrado" });
+    }
+    return res.status(200).json({ type: agendamento.tipo, message: "Sucesso!" });
 });
 
 router.get('/info/:id', async (req,res) => {

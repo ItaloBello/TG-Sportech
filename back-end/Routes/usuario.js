@@ -394,6 +394,7 @@ router.post("/agendar",async (req,res) => {
     horaInicio: hor.split('-')[0],
     horaFim: hor.split('-')[1],
     data: data.toISOString().slice(0,10),
+    tipo: "rachão"
   })
   }
   res.status(200).json({message:"Sucesso!"})
@@ -402,11 +403,11 @@ router.post("/agendar",async (req,res) => {
 router.get("/agendamentos/:id", async (req, res) => {
   const idJogador = req.params.id;
   try {
-    const agendamentos = await Agendamento.findAll({ where: { idJogador } });
+    const agendamentos = await Agendamento.findAll({ where: { idJogador: idJogador? idJogador: 0 } });
     const appointments = agendamentos.map(agend => {
       const data = new Date(agend.data);
       return {
-        type: "Rachão",
+        type: "rachão",
         date: data.toLocaleDateString('pt-BR'),
         adversary: "",
         times: [
