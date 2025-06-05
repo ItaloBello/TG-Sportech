@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-
+import { notifySuccess, notifyError } from '../utils/notify';
 export const AdminAuthContext = createContext({});
 
 export const AdminAuthContextProvider = ({ children }) => {
@@ -11,6 +11,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [selectedChamp, setSelectedChamp] = useState({});
   const [champMatches, setChampMatches] = useState([]);
   const [myCourts, setMyCourts] = useState([]);
+  const [court, setCourt] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(() => {
@@ -37,14 +38,14 @@ export const AdminAuthContextProvider = ({ children }) => {
       if (data.id) {
         setAdmin(data);
         localStorage.setItem("user", JSON.stringify(data));
-        console.log(localStorage.getItem("user"));
+  
         navigate("/admin/menu");
       } else {
-        alert("ERRO: email ou senha incorretos");
+        notifyError("ERRO: email ou senha incorretos");
       }
     } catch (error) {
-      alert(error.response.data.error);
-      console.log(error.response.data.error);
+      notifyError(error.response?.data?.error || 'Erro ao realizar login.');
+  
     }
   };
 
@@ -52,7 +53,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleSingUp = async (formData) => {
     if (formData.password === formData.confirmPassword) {
       const response = await api.post(`/api/admin/registro`, formData);
-      console.log(response.status);
+  
       if (response.status == 201) {
         const payload = {
           ...formData,
@@ -60,9 +61,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         };
         handleLogin(payload);
         navigate("/admin/menu");
-      } else console.log(response);
+      } else notifyError('Erro ao cadastrar.');
     } else {
-      alert("ERRO: senhas incompativeis");
+      notifyError("ERRO: senhas incompativeis");
     }
   };
 
@@ -76,7 +77,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   //TODO: adaptar esta função para o endpoint de adm
   const handleGetNewInfos = async () => {
     const { data } = await api.get(`api/jogador/info/${player.id}`);
-    console.log(data);
+  
     if (data.id) {
       setPlayer(data);
       localStorage.setItem("user", JSON.stringify(data));
@@ -132,9 +133,12 @@ export const AdminAuthContextProvider = ({ children }) => {
   };
 
   const handleGetMyCourts = async (adminId) => {
-    const { data } = await api.get(`/api/admin/quadras/${adminId}`);
-    setMyCourts(data);
-    console.log(data)
+    try {
+      const { data } = await api.get(`/api/admin/quadras/${adminId}`);
+      setMyCourts(data);
+    } catch (error) {
+      notifyError('Erro ao buscar quadras.');
+    }
   };
 
   const handleGetAppointmens = async (adminId) => {
@@ -143,15 +147,15 @@ export const AdminAuthContextProvider = ({ children }) => {
       const courts = Array.isArray(res.data) ? res.data : [];
       if (courts.length === 0) {
         setAppointments([]);
-        console.log('No courts found for admin or backend returned error:', res.data);
+        notifyError('Nenhuma quadra encontrada para o admin ou erro no backend.');
         return;
       }
 
       const appointmentsRes = await api.get(`/api/admin/agendamentos?quadras=${courts.join(',')}`);
       setAppointments(appointmentsRes.data);
-      console.log('Appointments:', appointmentsRes.data);
+  
     } catch (error) {
-      console.error('Error in handleGetAppointmens:', error);
+      notifyError('Erro ao buscar agendamentos.');
     }
   };
   const handleSetSelectedCourt = (courtId) => {
@@ -165,16 +169,39 @@ export const AdminAuthContextProvider = ({ children }) => {
   }
 
   const handleSelectedType = async (appointmentId) => {
-    const { data } = await api.get(`/api/admin/agendamentos/type/${appointmentId}`);
-    setSelectedType(data.type);
-    return data;
+    try {
+      const { data } = await api.get(`/api/admin/agendamentos/type/${appointmentId}`);
+      setSelectedType(data.type);
+      return data;
+    } catch (error) {
+      notifyError('Erro ao buscar tipo de agendamento.');
+    }
   }
 
   const handleGetTeamNumber = (champId) =>{
     setTeamNumber(16)
   }
 
+  const handleGetCourt = async (courtId) => {
+    try {
+      const {data} = await api.get(`/api/admin/quadra/${courtId}`)
+      setCourt(data)
+    } catch (error) {
+      notifyError('Erro ao buscar quadra.');
+    }
+  }
 
+  const handleEditCourt = async (formData) => {
+    try {
+      const {data} = await api.put(`/api/admin/atualizarQuadra/${formData.id}`, formData)  
+      notifySuccess(data.message || 'Quadra atualizada com sucesso!');
+      setTimeout(() => {
+        navigate('/admin/select-court')
+      }, 3000);
+    } catch (error) {
+      notifyError(error.response?.data?.error || 'Ocorreu um erro ao atualizar a quadra.');
+    }
+  }
 
   const handleSetSelectedChamp = (champId)=>{
     //TODO retornar os dados do campeonato 
@@ -194,6 +221,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         selectedChamp,
         champMatches,
         myCourts,
+        court,
         selectedCourt,
         appointments,
         selectedAppointment,
@@ -207,12 +235,14 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetInProgressChamp,
         handleGetChampMatches,
         handleGetMyCourts,
+        handleGetCourt,
         handleSetSelectedCourt,
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
         handleSetSelectedChamp,
         handleSelectedType,
+        handleEditCourt,
       }}
     >
       {children}

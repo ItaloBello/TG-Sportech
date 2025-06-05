@@ -51,23 +51,37 @@ const schema = yup
   .required();
 
 const EditCourt = () => {
-  const { admin, handleCreateCourt, selectedCourt } = useAdminAuth();
+  const { admin, handleGetCourt, handleEditCourt, selectedCourt, court } = useAdminAuth();
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur",
   });
 
+  const [selectedValue, setSelectedValue] = useState();
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  // Buscar quadra ao montar
   useEffect(() => {
-    console.log(selectedCourt);
+    handleGetCourt(selectedCourt);
   }, []);
 
-  const [selectedValue, setSelectedValue] = useState();
+  // Popular formulário quando os dados da quadra chegarem
+  useEffect(() => {
+    if (court && court.quadra) {
+      setValue("name", court.quadra.nome || "");
+      setValue("typeCourt", court.quadra.tipo || "");
+      setValue("timeDivision", court.quadra.meioSlot ? "30 Minutos" : "1 hora");
+      setValue("percent", (court.quadra.porcSinal || 0) * 100);
 
-  const [selectedDays, setSelectedDays] = useState([]);
+      setSelectedValue(court.quadra.tipo || "");
+
+    }
+  }, [court, setValue]);
 
   const handleChange = (label, isChecked) => {
     setSelectedDays((prev) => {
@@ -81,10 +95,10 @@ const EditCourt = () => {
       ...formData,
       typeCourt: selectedValue,
       weekDays: selectedDays,
-      id: admin.id,
+      id: court.quadra.id,
     };
     console.log(payload);
-
+    handleEditCourt(payload)
   };
   return (
     <div className="create-court">
@@ -95,7 +109,7 @@ const EditCourt = () => {
           errorMessage={errors?.name?.message}
           name="name"
           label="Nome da Quadra"
-          placeholder="nome da quadra"
+          placeholder={court.nome}
         />
         <ComboBoxItem
           control={control}

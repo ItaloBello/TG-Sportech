@@ -67,11 +67,20 @@ router.post("/registro", async (req, res) => {
 
         res.status(201).json({ message: "Usuário registrado com sucesso!" , redirect: '/admin/menu'});
     } catch (err) {
-        res.status(500).json({ error: err });
+        console.log(err)
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: err.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 });
 
 router.get("/login", async (req, res) => {
+    try{
     const usuario = req.query.name
     const senha = req.query.password
     const usuarioExistente = await DonoQuadra.findOne({where: {email: usuario}})
@@ -85,6 +94,17 @@ router.get("/login", async (req, res) => {
         return
     }
     res.status(201).json({message: "Login realizado com sucesso.", id: usuarioExistente.id, name: usuarioExistente.name}) //TODO retornar todos os dados do admin
+}catch(error){
+    console.log(error)
+    if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json({
+            error: error.errors.map(e => e.message).join(', ')
+        });
+    }
+    return res.status(500).json({
+        error: 'Erro interno ao atualizar a quadra.'
+    });
+}
 });
 
 router.post('/cadastrarQuadra/:id', async (req, res) => {
@@ -146,7 +166,15 @@ router.post('/cadastrarQuadra/:id', async (req, res) => {
         return res.json({message: "Quadra cadastrada com sucesso!"})
     }
     catch(error){
-        return res.json({message: error})
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 });
 
@@ -177,7 +205,15 @@ router.post('/cadastrarEstabelecimento/:id', async (req, res) => {
         return res.json({message: "Estabelecimento cadastrado com sucesso!"})
     }
     catch(error){
-        return res.json({message: error})
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 });
 
@@ -237,9 +273,16 @@ router.get("/agendamentos", async (req, res) => {
     }
     res.status(200).json(appointments);
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ error: err });
-  }
+    console.log(err)
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: err.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.get("/agendamentos/type/:id", async (req, res) => {
@@ -262,7 +305,15 @@ router.get('/info/:id', async (req,res) => {
         return res.json(user)
     }
     catch(error){
-        return res.json({message: error})
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 })
 
@@ -271,37 +322,92 @@ router.get('/quadra/:id', async (req,res) => {
     try{ 
         const quadraId = req.params.id
         const quadra = await Quadra.findOne({where: {id: quadraId}});
-        return res.json(quadra)
+        const horarios = await Horario.findAll({where: {quadraId: quadraId}})
+        return res.json({quadra, horarios})
     }
     catch(error){
-        return res.json({message: error})
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 })
 
 router.put('/atualizarQuadra/:id', async (req, res) => {
-    try {
+    try{
         const id = req.params.id;
-        const { nome, tipo, usuarioId } = req.body;
-
+        let horarios = [];
+        const nome = req.body.name;
+        const tipo = req.body.typeCourt;
+        const meioSlot = req.body.timeDivision != "1 hora";
+        const porcSinal = req.body.percent / 100;
+        const sundayInitial = req.body.sundayInitial
+        const sundayEnd = req.body.sundayEnd
+        const sundayHour = req.body.sundayHour
+        if (sundayEnd){
+            horarios.push({diaSemana: "domingo", horaFim: sundayEnd, horaInicio: sundayInitial, valorHora: sundayHour})
+        }
+        const mondayInitial = req.body.mondayInitial;
+        const mondayEnd = req.body.mondayEnd;
+        const mondayHour = req.body.mondayHour;
+        if (mondayEnd){
+            horarios.push({diaSemana: "segunda", horaFim: mondayEnd, horaInicio: mondayInitial, valorHora: mondayHour})
+        }
+        const tuesdayInitial = req.body.tuesdayInitial;
+        const tuesdayEnd = req.body.tuesdayEnd;
+        const tuesdayHour = req.body.tuesdayHour;
+        if (tuesdayEnd){
+            horarios.push({diaSemana: "terça", horaFim: tuesdayEnd, horaInicio: tuesdayInitial, valorHora: tuesdayHour})
+        }
+        const wednesdayInitial = req.body.wednesdayInitial;
+        const wednesdayEnd = req.body.wednesdayEnd;
+        const wednesdayHour = req.body.wednesdayHour;
+        if (wednesdayEnd){
+            horarios.push({diaSemana: "quarta", horaFim: wednesdayEnd, horaInicio: wednesdayInitial, valorHora: wednesdayHour})
+        }
+        const thursdayInitial = req.body.thursdayInitial;
+        const thursdayEnd = req.body.thursdayEnd;
+        const thursdayHour = req.body.thursdayHour;
+        if (thursdayEnd){
+            horarios.push({diaSemana: "quinta", horaFim: thursdayEnd, horaInicio: thursdayInitial, valorHora: thursdayHour})
+        }
+        const fridayInitial = req.body.fridayInitial;
+        const fridayEnd = req.body.fridayEnd;
+        const fridayHour = req.body.fridayHour;
+        if (fridayEnd){
+            horarios.push({diaSemana: "sexta", horaFim: fridayEnd, horaInicio: fridayInitial, valorHora: fridayHour})
+        }
         const quadra = {
             nome: nome,
             tipo: tipo,
-            usuarioId: usuarioId
-        };
-
-        const [updated] = await Quadra.update(quadra, { where: { id: id } });
-
-        if (updated) {
-            return res.json({ message: "Quadra editada com sucesso!" });
-        } else {
-            return res.status(404).json({ message: "Quadra não encontrada para o ID especificado." });
+            meioSlot: meioSlot,
+            porcSinal: porcSinal,
         }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Erro ao atualizar quadra: " + error.message });
+        await Horario.destroy({where:{quadraId: id}})
+        await Quadra.update(quadra,{where:{id: id}});
+        for (let hor of horarios){
+            hor.quadraId = id
+            await Horario.create(hor);
+        }
+        return res.json({message: "Quadra atualizada com sucesso!"})
+    }
+    catch(error){
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 });
-
 
 router.delete('/excluirQuadra/:id', async (req, res) => {
     try {
@@ -316,8 +422,15 @@ router.delete('/excluirQuadra/:id', async (req, res) => {
 
         return res.json({ message: "Quadra deletada com sucesso!" });
     } catch (error) {
-        console.error(error); // Log do erro para depuração
-        return res.status(500).json({ message: "Erro ao deletar a quadra.", error: error.message });
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 });
 
@@ -333,7 +446,15 @@ router.put('/agendamentos/pagamento/confirmar/:id', async (req,res) => {
             res.status(200).json({message: "Pagamento confirmado"});
         }
     }catch(err){
-        res.status(400).json({error: err.message});
+        console.log(err)
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: err.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 })
 
@@ -358,7 +479,15 @@ router.post('/campeonato/:id', async (req, res) => {
         await Campeonato.create(campeonato);
         res.status(200).json({message: "Campeonato criado com sucesso!"})
     }catch(err){
-        res.status(400).json({error: err.message})
+        console.log(err)
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: err.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
     }
 })
 

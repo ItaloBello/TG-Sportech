@@ -10,6 +10,7 @@ const TeamCard = ({
   alt ='logo',
   inviteCode,
   addPlayer,
+  onDelete,
 }) => {
   return (
     <div className="team-card">
@@ -21,7 +22,7 @@ const TeamCard = ({
           <p className="team-card__team-name">código: {inviteCode}</p>
         </div>
         <div className="team-card__button-area">
-          <CardButton label="Excluir" colorButton="#EC221F" />
+          <CardButton label="Excluir" colorButton="#EC221F" onClick={onDelete} />
           {addPlayer ? (<>
             <CardButton label="Editar" colorButton="#14AE5C" link='/player/edit-team'/>
             <button style={{border:'none', background:'transparent'}}>

@@ -15,12 +15,14 @@ import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 const MyAppointments = () => {
   const { player, myAppointments, handleGetMyAppointments } = usePlayerAuth();
   useEffect(() => {
-    const getMyAppointments = () => {
-      handleGetMyAppointments();
-    };
-    getMyAppointments();
-    console.log(myAppointments);
-  },[]);
+    if (!player || !player.id) {
+      console.log('Aguardando player carregar...', player);
+      return;
+    }
+    console.log('Buscando agendamentos para o player:', player.id);
+    handleGetMyAppointments();
+    // Não logar myAppointments aqui, pois ele só atualiza depois
+  }, [player]);
   return (
     <div className="my-appointments">
       <Header link={1}/>

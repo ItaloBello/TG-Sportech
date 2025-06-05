@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { notifySuccess, notifyError } from '../../../utils/notify';
 import './styles.css'
 import Header from "../../../components/Header";
 import ComboBoxItem from "../../../components/ComboBoxItem";
@@ -88,15 +89,15 @@ const EditAppointment = () => {
           });
           const result = await response.json();
           if (response.ok) {
-            alert('Pagamento confirmado com sucesso!');
+            notifySuccess('Pagamento confirmado com sucesso!');
           } else {
-            alert(result.error || 'Erro ao confirmar pagamento.');
+            notifyError(result.error || 'Erro ao confirmar pagamento.');
           }
         } catch (err) {
-          alert('Erro ao conectar ao servidor.');
+          notifyError('Erro ao conectar ao servidor.');
         }
       } else {
-        alert('ID do agendamento não encontrado.');
+        notifyError('ID do agendamento não encontrado.');
       }
     }
   };

@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
+import { notifySuccess, notifyError } from '../utils/notify';
 
 export const PlayerAuthContext = createContext({});
 
@@ -46,15 +47,15 @@ export const PlayerAuthContextProvider = ({ children }) => {
       if (data.id) {
         setPlayer(data);
         localStorage.setItem("user", JSON.stringify(data));
-        console.log(localStorage.getItem("user"));
+    
         navigate("/player/menu");
       } else {
-        alert("email ou senha incorretos");
+        notifyError("email ou senha incorretos");
       }
     } catch (error) {
-      alert(error.response.data.error);
-      console.log(error.response.data.error);
-      setError(error.response.data.error);
+      notifyError(error.response?.data?.error || 'Erro ao realizar login.');
+  
+      setError(error.response?.data?.error || 'Erro ao realizar login.');
     }
   };
 
@@ -64,7 +65,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
       const {data} = await api.post("/api/jogador/registro", formData);
       console.log(data)
       navigate("/player/login");
-    } else alert("As senhas estao diferentes");
+    } else notifyError("As senhas estao diferentes");
   };
   //função de logout
   const handleLogOut = () => {
@@ -80,17 +81,14 @@ export const PlayerAuthContextProvider = ({ children }) => {
     if (dataform.cellphone == null) dataform.cellphone = player.cellphone;
     if (dataform.cpf == null) dataform.cpf = player.cpf;
     api.put(`/api/jogador/edit/${player.id}`, dataform);
-    alert("Dados alterados com sucesso");
+    notifySuccess("Dados alterados com sucesso");
     navigate("player/menu");
   };
 
   const handleGetNewInfos = async () => {
     const { data } = await api.get(`api/jogador/info/${player.id}`);
-    console.log(data);
-    if (data.id) {
-      setPlayer(data);
-      localStorage.setItem("user", JSON.stringify(data));
-    }
+    setPlayer(data);
+    localStorage.setItem("user", JSON.stringify(data));
   };
 
   const handleGetCourt = async () => {
@@ -116,15 +114,11 @@ export const PlayerAuthContextProvider = ({ children }) => {
     const { data } = await api.get(
       `/api/jogador/quadras/${selectedCourt}/datas-indisponiveis/?inicio=${minDate}&fim=${maxDate}`
     );
-    console.log(data);
     const newDate = data.datasIndisponiveis.map((date, index) => {
       return new Date(date);
     });
 
     setDisabledDates(newDate);
-    console.log(
-      `court:${selectedCourt}, minDate:${minDate}, maxDate:${maxDate}`
-    );
   };
 
   const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
@@ -132,13 +126,29 @@ export const PlayerAuthContextProvider = ({ children }) => {
       `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
     );
 
-    console.log(data);
-
     setAvaliableTimes(data.slots);
   };
 
-  const handleCreateAppointment = (dataForm) => {
-    api.post("/api/jogador/agendar", dataForm);
+  const handleCreateAppointment = async (dataForm) => {
+    try {
+      // Garante que o id do jogador está presente
+      const payload = {
+        ...dataForm,
+        playerId: dataForm.playerId || player.id
+      };
+      if (!payload.playerId) {
+        notifyError('Erro: ID do jogador não encontrado. Faça login novamente.');
+        return;
+      }
+      const response = await api.post("/api/jogador/agendar", payload);
+      notifySuccess('Agendamento realizado com sucesso!');
+      setTimeout(() => {
+        navigate('player/scheduling')
+      }, 3000)
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Erro ao criar agendamento.';
+      notifyError(msg);
+    }
   };
 
   const handleGetInProgressChampionship = (playerId) => {
@@ -419,23 +429,28 @@ export const PlayerAuthContextProvider = ({ children }) => {
     ]);
   };
 
-  const handleGetMyAppointments = async (playerId) => {
-    const {data} = await api.get(`/api/jogador/agendamentos/${playerId}`) 
-    console.log(data)
+  const handleGetMyAppointments = async () => {
+    // Garante que player existe e tem id
+    if (!player || !player.id) {
+      setMyAppointments([]);
+      return;
+    }
+    const {data} = await api.get(`/api/jogador/agendamentos/${player.id}`);
     setMyAppointments(data);
+    console.log(data)
   };
+
 
   const handleGetMyTeams = async (playerId) => {
     const { data } = await api.get(`/api/jogador/times/${playerId}`);
     setMyTeams(data.times);
-    console.log(data.times)
   };
   const handleGetMyTeamSubscriptions = async (playerId) => {
     const { data } = await api.get(`/api/jogador/times/subscription/${playerId}`);
     setMySubscriptions(data.times);
-    console.log(data.times)
   };
   const handleCreateTeam = async (formData) => {
+    try {
     const data = new FormData();
     data.append('name', formData.name);
     data.append('primaryColor', formData.primaryColor);
@@ -447,15 +462,20 @@ export const PlayerAuthContextProvider = ({ children }) => {
       data.append('foto', formData.foto);
     }
   
-    await api.post(`/api/jogador/times`, data, {
+    const {response} = await api.post(`/api/jogador/times`, data, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
+    if (response.status === 200) {
+      notifySuccess("Time criado com sucesso!")
+    }
+  }catch{
+    notifyError("Erro ao criar time")
+    }
   };
 
   const handleJoinTeam = async (formData) => {
     const {data} = await api.post(`/api/jogador/entrar/${formData.userId}`,{inviteCode: formData.inviteCode});
-    alert(data)
-    console.log(data)
+    notifySuccess(data)
   }
 
   return (

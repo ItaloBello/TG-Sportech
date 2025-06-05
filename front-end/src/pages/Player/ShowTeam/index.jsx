@@ -4,8 +4,19 @@ import CardList from "../../../components/CardList";
 import "./styles.css";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 import TeamCard from "../../../components/TeamCard";
+import { notifySuccess, notifyError } from "../../../utils/notify";
+import api from "../../../services/api";
 
 const ShowTeam = () => {
+  const handleDeleteTeam = async (teamId) => {
+    try {
+      await api.delete(`/api/jogador/times/${teamId}`);
+      notifySuccess("Time deletado com sucesso!");
+      handleGetMyTeams(player.id);
+    } catch (error) {
+      notifyError("Erro ao deletar time.");
+    }
+  };
   const { handleGetMyTeams, handleGetMyTeamSubscriptions,player, myTeams, mySubscriptions } = usePlayerAuth();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,6 +52,7 @@ const ShowTeam = () => {
           key={index}
           src={team.img && team.img !== '' ? team.img : undefined}
           inviteCode={team.inviteCode}
+          onDelete={() => handleDeleteTeam(team.id)}
         />
         <p>----------------------</p> 
         </>
