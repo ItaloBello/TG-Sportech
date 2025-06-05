@@ -23,6 +23,8 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [inProgressChampionship, setInProgressChampionship] = useState([]);
   const [avaliableChampionship, setAvaliableChampionship] = useState([]);
   const [myAppointments, setMyAppointments] = useState([]);
+  const [amistososPendentes, setAmistososPendentes] = useState([]);
+  const [amistososTime, setAmistososTime] = useState([]);
 
   const navigate = useNavigate();
 
@@ -151,65 +153,183 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-  const handleGetInProgressChampionship = (playerId) => {
-    //TODO Requisição para pegar os campeonatos em andamento que determinado jogador está participando
-    setInProgressChampionship([
-      {
-        id: 1,
-        initialDate: "01/02/2025",
-        finalDate: "15/04/2025",
-        subscribedTeam: "Fatec FC",
-        image: "../../public/copa-fatec-icon.png",
-        title: "COPA FATEC",
-        altImage: "Logo COPA FATEC",
-      },
-      {
-        id: 2,
-        initialDate: "07/05/2025",
-        finalDate: "15/08/2025",
-        subscribedTeam: "Fatec FC",
-        image: "../../public/copa-fatec-icon.png",
-        title: "COPA PINHEIROS",
-        altImage: "Logo COPA PINHEIROS",
-      },
-    ]);
+  const handleGetInProgressChampionship = async (playerId) => {
+    try {
+      // Buscar os times do jogador
+      const teamsResponse = await api.get(`/api/jogador/times`);
+      const teams = teamsResponse.data;
+      
+      if (!teams || teams.length === 0) {
+        setInProgressChampionship([]);
+        return;
+      }
+      
+      // Para cada time, buscar os campeonatos em que está inscrito
+      const inscricoes = [];
+      
+      for (const team of teams) {
+        const response = await api.get(`/api/campeonato/time/${team.id}`);
+        if (response.data && response.data.length > 0) {
+          // Filtrar apenas campeonatos em andamento
+          const emAndamento = response.data.filter(inscricao => 
+            inscricao.Campeonato && inscricao.Campeonato.status === 'em andamento'
+          );
+          
+          inscricoes.push(...emAndamento);
+        }
+      }
+      
+      // Formatar os dados para o formato esperado pelo frontend
+      const formattedChampionships = inscricoes.map(inscricao => ({
+        id: inscricao.Campeonato.id,
+        initialDate: new Date(inscricao.Campeonato.data_inicio).toLocaleDateString('pt-BR'),
+        finalDate: '', // Não temos data de fim no modelo atual
+        subscribedTeam: inscricao.Time ? inscricao.Time.name : '',
+        image: "../../public/copa-fatec-icon.png", // Imagem padrão
+        title: inscricao.Campeonato.nome,
+        altImage: `Logo ${inscricao.Campeonato.nome}`,
+      }));
+      
+      setInProgressChampionship(formattedChampionships);
+    } catch (error) {
+      console.error('Erro ao buscar campeonatos em andamento:', error);
+      setInProgressChampionship([]);
+    }
   };
 
-  const handleGetAvaliableChampionship = (playerId) => {
-    //TODO Requisição para pegar os campeonatos que não foram iniciados e que o jogador não esta participando
-    setAvaliableChampionship([
-      {
-        id: 3,
-        initialDate: "01/02/2025",
-        finalDate: "15/04/2025",
-        premiation: "R$ 400,00",
-        image: "../../public/copa-zn-icon.png",
-        title: "COPA ZONA NORTE",
-        altImage: "Logo COPA ZONA NORTE",
-        registration: "R$40,00",
-        description:
-          "A Copa Zona Norte será um competição realizada em nossa quadra Amigos da Bola, " +
-          "localizada na Av. Ipanema, 800. Os jogos do meio de semana serão realizados de noite já durante o fim de semana " +
-          "serão na parte da manhã. Traga a família para acompanhar os jogos e desfrutar de nosso espaço!",
-      },
-      {
-        id: 4,
-        initialDate: "01/09/2025",
-        finalDate: "15/10/2025",
-        premiation: "R$ 900,00",
-        image: "../../public/copa-zn-icon.png",
-        title: "COPA ZONA LESTE",
-        altImage: "Logo COPA ZONA LESTE",
-        description:
-          "A Copa Zona Leste será um competição realizada em nossa quadra Amigos da Bola, " +
-          "localizada na Av. Ipanema, 800. Os jogos do meio de semana serão realizados de noite já durante o fim de semana " +
-          "serão na parte da manhã. Traga a família para acompanhar os jogos e desfrutar de nosso espaço!",
-      },
-    ]);
+  const handleGetAvaliableChampionship = async (playerId) => {
+    try {
+      // Buscar todos os campeonatos disponíveis para inscrição
+      const response = await api.get('/api/campeonato/disponiveis');
+      const campeonatosDisponiveis = response.data;
+      
+      if (!campeonatosDisponiveis || campeonatosDisponiveis.length === 0) {
+        setAvaliableChampionship([]);
+        return;
+      }
+      
+      // Buscar os times do jogador
+      const teamsResponse = await api.get(`/api/jogador/times`);
+      const teams = teamsResponse.data;
+      
+      // Para cada time, buscar os campeonatos em que já está inscrito para filtrar
+      const inscricoesExistentes = new Set();
+      
+      if (teams && teams.length > 0) {
+        for (const team of teams) {
+          const inscricoesResponse = await api.get(`/api/campeonato/time/${team.id}`);
+          if (inscricoesResponse.data && inscricoesResponse.data.length > 0) {
+            inscricoesResponse.data.forEach(inscricao => {
+              inscricoesExistentes.add(inscricao.campeonatoId);
+            });
+          }
+        }
+      }
+      
+      // Filtrar apenas campeonatos em que o jogador não está inscrito
+      const campeonatosNaoInscritos = campeonatosDisponiveis.filter(
+        campeonato => !inscricoesExistentes.has(campeonato.id)
+      );
+      
+      // Formatar os dados para o formato esperado pelo frontend
+      const formattedChampionships = campeonatosNaoInscritos.map(campeonato => ({
+        id: campeonato.id,
+        initialDate: new Date(campeonato.data_inicio).toLocaleDateString('pt-BR'),
+        finalDate: '', // Não temos data de fim no modelo atual
+        premiation: `R$ ${Number(campeonato.premiacao).toFixed(2)}`,
+        image: "../../public/copa-zn-icon.png", // Imagem padrão
+        title: campeonato.nome,
+        altImage: `Logo ${campeonato.nome}`,
+        registration: `R$ ${Number(campeonato.registro).toFixed(2)}`,
+        description: campeonato.descricao,
+      }));
+      
+      setAvaliableChampionship(formattedChampionships);
+    } catch (error) {
+      console.error('Erro ao buscar campeonatos disponíveis:', error);
+      setAvaliableChampionship([]);
+    }
   };
   const handleSetSelectedChamp = (champ) => {
     setSelectedChampionship(champ);
     localStorage.setItem("champ", JSON.stringify(champ));
+  };
+
+  // Função para inscrever um time em um campeonato
+  const handleSubscribeTeamToChampionship = async (timeId, campeonatoId) => {
+    try {
+      const response = await api.post('/api/campeonato/inscrever', {
+        timeId,
+        campeonatoId
+      });
+      
+      // Atualizar as listas de campeonatos após a inscrição
+      handleGetAvaliableChampionship();
+      handleGetInProgressChampionship();
+      
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error('Erro ao inscrever time no campeonato:', error);
+      return { 
+        success: false, 
+        message: error.response?.data?.error || 'Erro ao inscrever time no campeonato' 
+      };
+    }
+  };
+    
+  // Buscar amistosos pendentes para um time
+  const handleGetPendingAmistosos = async (timeId) => {
+    try {
+      const response = await api.get(`/api/amistoso/pendentes/${timeId}`);
+      setAmistososPendentes(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar amistosos pendentes:', error);
+      return [];
+    }
+  };
+  
+  // Buscar todos os amistosos de um time
+  const handleGetTeamAmistosos = async (timeId) => {
+    try {
+      const response = await api.get(`/api/amistoso/time/${timeId}`);
+      setAmistososTime(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar amistosos do time:', error);
+      return [];
+    }
+  };
+  
+  // Criar um desafio de amistoso
+  const handleCreateAmistoso = async (data) => {
+    try {
+      const response = await api.post('/api/amistoso/desafiar', data);
+      handleGetTeamAmistosos(data.timeDesafianteId);
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error('Erro ao criar desafio de amistoso:', error);
+      return { 
+        success: false, 
+        message: error.response?.data?.error || 'Erro ao criar desafio de amistoso' 
+      };
+    }
+  };
+  
+  // Responder a um desafio de amistoso
+  const handleRespondAmistoso = async (amistosoId, resposta) => {
+    try {
+      const response = await api.put(`/api/amistoso/${amistosoId}/responder`, { resposta });
+      handleGetPendingAmistosos();
+      handleGetTeamAmistosos();
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error('Erro ao responder desafio de amistoso:', error);
+      return { 
+        success: false, 
+        message: error.response?.data?.error || 'Erro ao responder ao desafio' 
+      };
+    }
   };
 
   const handlePlayoffsGetChampMatches = async (champId) => {
@@ -538,39 +658,51 @@ export const PlayerAuthContextProvider = ({ children }) => {
         avaliableChampionship,
         selectedChampionship,
         teamsByCaptain,
-        playoffsMatches,
-        champTablePoints,
-        topPlayers,
         myAppointments,
         myTeams,
         mySubscriptions,
         selectedTeam,
         teamPlayers,
         isTeamOwner,
+        amistososPendentes,
+        amistososTime,
+        playoffsMatches,
+        champTablePoints,
+        topPlayers,
+        // Funções de autenticação
         handleLogin,
-        handleLogOut,
         handleSingUp,
+        handleLogOut,
         handleEdit,
         handleGetNewInfos,
+        // Funções de times
         handleGetCourt,
-        handleGetWeekDaysToFilter,
-        handleGetDisabledDates,
-        handleGetAvaliableTimes,
+        handleGetTeamsByCaptain,
+        handleGetTeamDetails,
+        handleCreateTeam,
+        handleJoinTeam,
+        handleRemovePlayerFromTeam,
+        handleGetMyAppointments,
+        handleGetMyTeams,
+        handleGetMyTeamSubscriptions,
+        // Funções de campeonatos
         handleGetInProgressChampionship,
         handleGetAvaliableChampionship,
         handleSetSelectedChamp,
-        handleGetTeamsByCaptain,
-        handleCreateAppointment,
         handlePlayoffsGetChampMatches,
         handleGetChampPointsTable,
         handleGetTopPlayersChamp,
-        handleGetMyAppointments,
-        handleCreateTeam,
-        handleJoinTeam,
-        handleGetMyTeams,
-        handleGetMyTeamSubscriptions,
-        handleGetTeamDetails,
-        handleRemovePlayerFromTeam
+        handleSubscribeTeamToChampionship,
+        // Funções de amistosos
+        handleGetPendingAmistosos,
+        handleGetTeamAmistosos,
+        handleCreateAmistoso,
+        handleRespondAmistoso,
+        // Funções de agendamento
+        handleGetWeekDaysToFilter,
+        handleGetDisabledDates,
+        handleGetAvaliableTimes,
+        handleCreateAppointment
       }}
     >
       {children}

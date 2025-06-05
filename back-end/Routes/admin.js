@@ -467,16 +467,19 @@ router.post('/campeonato/:id', async (req, res) => {
         const descricao = req.body.description;
         const registro = req.body.registration;
         const premiacao = req.body.premiation;
-        const campeonato = {
+        const quadraId = req.body.quadraId; // Added to receive the ID of the specific court
+
+        const campeonatoData = {
             nome: nome,
             data_inicio: dataInicio,
             registro: registro,
             descricao: descricao,
             num_times: numTimes,
             premiacao: premiacao,
-            usuarioId: id,
-        }
-        await Campeonato.create(campeonato);
+            DonoQuadraId: id, // Corrected: Links to the DonoQuadra (owner account)
+            donoQuadraId: quadraId // Added: Links to the specific Quadra (court)
+        };
+        await Campeonato.create(campeonatoData);
         res.status(200).json({message: "Campeonato criado com sucesso!"})
     }catch(err){
         console.log(err)

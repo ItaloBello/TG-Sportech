@@ -48,4 +48,4 @@ const Campeonato = sequelize.define('campeonato',{
 Campeonato.belongsTo(DonoQuadra);
 DonoQuadra.hasMany(Campeonato);
 
-module.exports = Quadra;
+module.exports = Campeonato;

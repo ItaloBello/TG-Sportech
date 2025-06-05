@@ -507,7 +507,11 @@ router.get("/agendamentos/:id", async (req, res) => {
 
 router.get("/times", async (req,res) => {
   let mapTimes = [];
-  const times = await Time.findAll({where: {userId: req.user.id}})
+  const userId = req.query.userId; // Usar userId como parâmetro de consulta
+  if (!userId) {
+    return res.status(400).json({ error: "ID do usuário não fornecido" });
+  }
+  const times = await Time.findAll({where: {userId: userId}})
   for (let time of times){
     mapTimes.push({name: time.name, id: time.id})
   }

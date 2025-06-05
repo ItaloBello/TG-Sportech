@@ -1,0 +1,423 @@
+.friendlies-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.friendlies-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.friendlies-header h1 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+}
+
+.create-button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-button:hover {
+  background-color: #0d62c9;
+}
+
+/* Mensagem de sem times */
+.no-teams-message {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.no-teams-message p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.create-team-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-team-button:hover {
+  background-color: #388e3c;
+}
+
+/* Seletor de time */
+.team-selector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.team-selector label {
+  font-size: 1rem;
+  color: #555;
+}
+
+.team-selector select {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+/* Formulário de criação */
+.create-form-container {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.create-form-container h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.friendly-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.cancel-button {
+  background-color: #f1f3f4;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+  background-color: #e8eaed;
+}
+
+.submit-button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0d62c9;
+}
+
+.submit-button:disabled {
+  background-color: #a0c3ff;
+  cursor: not-allowed;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.tabs button.active {
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.tabs button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #1a73e8;
+}
+
+/* Lista de amistosos */
+.friendly-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.friendly-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.status-pending {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status-badge.status-accepted {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.status-rejected {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-badge.status-finished {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.teams-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.teams-info .team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.teams-info .team strong {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.teams-info .team span {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.teams-info .vs {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #999;
+  margin: 0 15px;
+}
+
+.friendly-details {
+  margin-bottom: 15px;
+}
+
+.friendly-details p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.response-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.accept-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1;
+}
+
+.accept-button:hover {
+  background-color: #388e3c;
+}
+
+.reject-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1;
+}
+
+.reject-button:hover {
+  background-color: #d32f2f;
+}
+
+.result {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.result-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score strong {
+  font-size: 1.2rem;
+  color: #1a73e8;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .friendlies-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .team-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+  }
+  
+  .friendly-cards {
+    grid-template-columns: 1fr;
+  }
+}

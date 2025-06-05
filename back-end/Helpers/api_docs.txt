@@ -38,3 +38,7 @@ cadastro de estabelecimento -> localhost:8081/api/admin/cadastrarEstabelecimento
     "hora_fim": "19:00",
     "donoQuadraId": 1
 }
+
+Esse meu tcc só falta 2 coisas pra terminar: Adicionar Campeonato (básicamente o dono da quadra precisa definir um número de times de no máximo 16 e cadastrar no máximo 15 jogos e cadastrar o resultados dos jogos, e os times que forem vencendo serão sorteados aleatoriamente para se enfrentar e o finalista ganha uma premiação, também tem uma lista de artilheiros, mas antes do campeonato começar todos os times tem que se inscrever nele). Tem também o amistoso, que é parecido com um rachão, mas dois times devem se enfrentar em uma data, hora e quadra, o time desafiante envia uma notificação para o desafiado que aceita ou não pagar pela taxa do amistoso, e então o dono da quadra confirma o pagamento, e o amistoso acontece. Esses dois úlimos desafios parecem bem difíceis e eu só tenho 10 diaz para entregar. Acha que pode me ajudar? e se sim, qual seria a estratégia? Acho que vc já percebeu que tentei iniciar isso no código né?
+
+
