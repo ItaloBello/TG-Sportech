@@ -451,32 +451,79 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
   const handleCreateTeam = async (formData) => {
     try {
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('primaryColor', formData.primaryColor);
-    data.append('secondaryColor', formData.secondaryColor);
-    data.append('userId', formData.userId);
-  
-    // Se o usuário escolheu uma imagem, adicione ao FormData
-    if (formData.foto) {
-      data.append('foto', formData.foto);
-    }
-  
-    const {response} = await api.post(`/api/jogador/times`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    if (response.status === 200) {
-      notifySuccess("Time criado com sucesso!")
-    }
-  }catch{
-    notifyError("Erro ao criar time")
+      const dataPayload = new FormData();
+      dataPayload.append('name', formData.name);
+      dataPayload.append('primaryColor', formData.primaryColor);
+      dataPayload.append('secondaryColor', formData.secondaryColor);
+      dataPayload.append('userId', formData.userId);
+    
+      // Se o usuário escolheu uma imagem, adicione ao FormData
+      if (formData.foto) {
+        dataPayload.append('foto', formData.foto);
+      }
+    
+      const response = await api.post(`/api/jogador/times`, dataPayload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      console.log('Resposta da API ao criar time:', response);
+
+      if (response.status === 201) {
+        notifySuccess("Time criado com sucesso!");
+        setTimeout(() => {
+          navigate("/player/team-menu")
+        }, 3000)
+      } else {
+        notifyError(response.data?.error || `Falha ao criar time (Status: ${response.status})`);
+      }
+    } catch (error) {
+      console.error('Erro ao criar time:', error);
+      notifyError(error.response?.data?.error || error.message || "Erro desconhecido ao criar o time.");
     }
   };
 
   const handleJoinTeam = async (formData) => {
+    try{
     const {data} = await api.post(`/api/jogador/entrar/${formData.userId}`,{inviteCode: formData.inviteCode});
-    notifySuccess(data)
+    notifySuccess(data.message)
+    setTimeout(() => {
+      navigate("/player/team-menu")
+    }, 3000)
+  }catch(error){
+    notifyError(error.response?.data?.error || error.message || "Erro desconhecido ao entrar no time.")
   }
+  }
+
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [teamPlayers, setTeamPlayers] = useState([]);
+  const [isTeamOwner, setIsTeamOwner] = useState(false);
+
+  const handleGetTeamDetails = async (teamId) => {
+    try {
+      const { data } = await api.get(`/api/jogador/time/${teamId}?userId=${player.id}`);
+      setSelectedTeam(data.time);
+      setTeamPlayers(data.jogadores);
+      setIsTeamOwner(data.isOwner);
+      return data;
+    } catch (error) {
+      console.error('Erro ao buscar detalhes do time:', error);
+      notifyError(error.response?.data?.error || 'Erro ao carregar detalhes do time');
+      return null;
+    }
+  };
+
+  const handleRemovePlayerFromTeam = async (teamId, playerId) => {
+    try {
+      await api.delete('/api/jogador/remover', { 
+        data: { timeId: teamId, jogadorId: playerId } 
+      });
+      notifySuccess('Jogador removido do time com sucesso!');
+      // Atualiza a lista de jogadores
+      handleGetTeamDetails(teamId);
+    } catch (error) {
+      notifyError(error.response?.data?.error || 'Erro ao remover jogador do time');
+    }
+  };
 
   return (
     <PlayerAuthContext.Provider
@@ -497,6 +544,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         myAppointments,
         myTeams,
         mySubscriptions,
+        selectedTeam,
+        teamPlayers,
+        isTeamOwner,
         handleLogin,
         handleLogOut,
         handleSingUp,
@@ -518,7 +568,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleCreateTeam,
         handleJoinTeam,
         handleGetMyTeams,
-        handleGetMyTeamSubscriptions
+        handleGetMyTeamSubscriptions,
+        handleGetTeamDetails,
+        handleRemovePlayerFromTeam
       }}
     >
       {children}

@@ -11,6 +11,7 @@ const TeamCard = ({
   inviteCode,
   addPlayer,
   onDelete,
+  id, // Adicionando id como prop
 }) => {
   return (
     <div className="team-card">
@@ -22,9 +23,14 @@ const TeamCard = ({
           <p className="team-card__team-name">código: {inviteCode}</p>
         </div>
         <div className="team-card__button-area">
-          <CardButton label="Excluir" colorButton="#EC221F" onClick={onDelete} />
+          <CardButton label="Excluir" colorButton="#EC221F" onClick={() => {
+  console.log('Excluir clicado para time:', name);
+  if (window.confirm('Tem certeza que deseja excluir este time? Essa ação não pode ser desfeita.')) {
+    onDelete && onDelete();
+  }
+}} />
           {addPlayer ? (<>
-            <CardButton label="Editar" colorButton="#14AE5C" link='/player/edit-team'/>
+            <CardButton label="Editar" colorButton="#14AE5C" link={`/player/edit-team/${id}`}/>
             <button style={{border:'none', background:'transparent'}}>
               <img
                 className="button-area__image"
@@ -34,7 +40,7 @@ const TeamCard = ({
             </button>
                 </>
           ) : (
-            <><CardButton label="Visualizar" colorButton="#14AE5C" link='/player/view-team'/></>
+            <><CardButton label="Visualizar" colorButton="#14AE5C" link={`/player/view-team/${id}`}/></>
           )}
         </div>
       </div>

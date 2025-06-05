@@ -5,7 +5,7 @@ import "./styles.css";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
 import TeamCard from "../../../components/TeamCard";
 import { notifySuccess, notifyError } from "../../../utils/notify";
-import api from "../../../services/api";
+import { api } from "../../../services/api";
 
 const ShowTeam = () => {
   const handleDeleteTeam = async (teamId) => {
@@ -44,46 +44,36 @@ const ShowTeam = () => {
         <p>Meus times:</p>
       </div>
       {myTeams.map((team, index) => (
-        <>
-        <TeamCard
-          addPlayer={true}
-          name={team.name}
-          date={team.data_criacao}
-          key={index}
-          src={team.img && team.img !== '' ? team.img : undefined}
-          inviteCode={team.inviteCode}
-          onDelete={() => handleDeleteTeam(team.id)}
-        />
-        <p>----------------------</p> 
-        </>
+        <React.Fragment key={`team-${team.id || index}`}>
+          <TeamCard
+            addPlayer={true}
+            name={team.name}
+            date={team.data_criacao}
+            id={team.id}
+            src={team.img && team.img !== '' ? team.img : undefined}
+            inviteCode={team.inviteCode}
+            onDelete={() => handleDeleteTeam(team.id)}
+          />
+          <p>----------------------</p> 
+        </React.Fragment>
       ))}
 
       <div className="show-team__title">
         <p>Times que participo:</p>
       </div>
       {mySubscriptions.map((team, index) => (
-        <>
-        <TeamCard
-          addPlayer={false}
-          name={team.name}
-          date={team.data_criacao}
-          key={index}
-          src={team.img && team.img !== '' ? team.img : undefined}
-          inviteCode={team.inviteCode}
-        />
-        <p>----------------------</p> 
-        </>
+        <React.Fragment key={`subscription-${team.id || index}`}>
+          <TeamCard
+            addPlayer={false}
+            name={team.name}
+            date={team.data_criacao}
+            id={team.id}
+            src={team.img && team.img !== '' ? team.img : undefined}
+            inviteCode={team.inviteCode}
+          />
+          <p>----------------------</p> 
+        </React.Fragment>
       ))}
-      <CardList
-        items={1}
-        names={["Fatec FC"]}
-        dates={["25/01/2025"]}
-        buttonColorsArray={["#EC221F", "#14AE5C"]}
-        buttonLabelsArray={["Excluir", "Editar"]}
-        srcArray={["../../public/team-1-icon.png"]}
-        altArray={["imagem do time 1"]}
-        addPlayerType={0}
-      />
     </div>
   );
 };

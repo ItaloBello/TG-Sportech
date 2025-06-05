@@ -309,8 +309,8 @@ router.post("/entrar/:id", async (req, res) => {
 });
 
 router.delete("/remover", async (req, res) => {
-  const { timeId } = req.body;
-  const { jogadorId } = req.user;
+  const timeId = req.body.timeId;
+  const jogadorId = req.body.jogadorId;
   try {
     const jogador = await JogadorTime.findOne({ where: { timeId, jogadorId } });
     if (!jogador) {
@@ -335,19 +335,18 @@ router.delete("/remover", async (req, res) => {
 
 router.put("/times/:id", async (req, res) => {
   const { id } = req.params;
-  const { nome, img, cor_primaria, cor_secundaria, invite_code} =
+  const { nome, cor_primaria, cor_secundaria} =
     req.body;
 
   const updatedTime = {
-    nome,
-    img,
-    cor_primaria,
-    cor_secundaria,
-    invite_code
+    name: nome,
+    primaryColor: cor_primaria,
+    secondaryColor: cor_secundaria,
   };
 
   try {
-    await Time.update(updatedTime, { where: { id } });
+    const result = await Time.update(updatedTime, { where: { id } });
+    console.log(result);
     return res.status(200).json({ message: "Time atualizado com sucesso!" });
   } catch (error) {
     console.log(error)
@@ -514,6 +513,51 @@ router.get("/times", async (req,res) => {
   }
   res.status(200).json(mapTimes)
 })
+
+router.get("/time/:id", async (req, res) => {
+  const id = req.params.id;
+  const userId = req.query.userId; // ID do usuário que está solicitando
+  
+  try {
+    // Busca o time
+    const time = await Time.findOne({ where: { id: id } });
+    if (!time) {
+      return res.status(404).json({ error: "Time não encontrado." });
+    }
+    
+    // Busca os jogadores do time
+    const jogadoresTime = await JogadorTime.findAll({
+      where: { timeId: id }
+    });
+    
+    // Busca os dados dos jogadores separadamente
+    const jogadoresIds = jogadoresTime.map(jt => jt.jogadorId);
+    const jogadoresData = await Usuario.findAll({
+      where: { id: { [Op.in]: jogadoresIds } },
+      attributes: ['id', 'name', 'email', 'cellphone']
+    });
+    
+    // Formata os dados dos jogadores
+    const jogadores = jogadoresData.map(jogador => ({
+      id: jogador.id,
+      name: jogador.name,
+      email: jogador.email,
+      cellphone: jogador.cellphone
+    }));
+    
+    // Verifica se o usuário solicitante é o dono do time
+    const isOwner = time.userId === parseInt(userId);
+    
+    res.status(200).json({
+      time,
+      jogadores,
+      isOwner
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Erro ao buscar time." });
+  }
+});
 
 router.delete("/times/:id", async (req,res) => {
   const id = req.params.id;

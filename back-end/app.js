@@ -6,6 +6,8 @@ const sequelize = require('./database');
 const adminRoute = require('./Routes/admin');
 const userRoute = require('./Routes/usuario');
 const cors = require('cors'); // Novo módulo para CORS
+// Importar associações entre modelos
+const associations = require('./Models/associations');
 const session = require('express-session');
 const flash = require('connect-flash');
 const upload = require('./Helpers/upload'); //Rota para o Cloudnary
