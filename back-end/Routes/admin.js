@@ -476,8 +476,7 @@ router.post('/campeonato/:id', async (req, res) => {
             descricao: descricao,
             num_times: numTimes,
             premiacao: premiacao,
-            DonoQuadraId: id, // Corrected: Links to the DonoQuadra (owner account)
-            donoQuadraId: quadraId // Added: Links to the specific Quadra (court)
+            donoQuadraId: id, // Corrected: Links to the DonoQuadra (owner account)
         };
         await Campeonato.create(campeonatoData);
         res.status(200).json({message: "Campeonato criado com sucesso!"})
@@ -489,7 +488,7 @@ router.post('/campeonato/:id', async (req, res) => {
             });
         }
         return res.status(500).json({
-            error: 'Erro interno ao atualizar a quadra.'
+            error: err.errors.map(e => e.message).join(', ')
         });
     }
 })

@@ -1,17 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../services/api';
+import { AdminAuthContext } from '../../../context/adminAuth';
 import { notifySuccess, notifyError } from '../../../utils/notify';
 import './styles.css';
+import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
 export default function ChampionshipManagement() {
   const navigate = useNavigate();
-  
+  const { admin } = useAdminAuth();
+
   const [loading, setLoading] = useState(true);
   const [championships, setChampionships] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  
+  const [courts, setCourts] = useState([]);
+  const [selectedCourt, setSelectedCourt] = useState('');
+
   // Estados para o formulário de criação
   const [formData, setFormData] = useState({
     nome: '',
@@ -22,15 +27,34 @@ export default function ChampionshipManagement() {
     max_times: 16,
     status: 'inscricoes'
   });
-  
+
+  // Buscar quadras do admin ao carregar
+  // Buscar quadras do admin ao carregar
   useEffect(() => {
-    loadChampionships();
-  }, []);
-  
-  const loadChampionships = async () => {
+    if (admin && admin.id) {
+      api.get(`/api/admin/quadras/${admin.id}`)
+        .then(res => setCourts(res.data))
+        .catch(() => notifyError("Erro ao buscar quadras"));
+    }
+  }, [admin]);
+
+  // Buscar campeonatos só quando quadra estiver selecionada
+  useEffect(() => {
+    if (selectedCourt) {
+      loadChampionships(selectedCourt);
+    }
+  }, [selectedCourt]);
+
+  // Carrega campeonatos da quadra selecionada
+  const loadChampionships = async (courtId) => {
     setLoading(true);
     try {
-      const response = await api.get('/api/campeonato/dono');
+      if (!courtId) {
+        setChampionships([]);
+        setLoading(false);
+        return;
+      }
+      const response = await api.get(`/api/campeonato/quadra/${courtId}`);
       setChampionships(response.data);
     } catch (error) {
       console.error("Erro ao carregar campeonatos:", error);
@@ -50,26 +74,40 @@ export default function ChampionshipManagement() {
   
   const handleCreateChampionship = async (e) => {
     e.preventDefault();
-    
+
     try {
       setLoading(true);
-      
+
       // Validações básicas
       if (!formData.nome || !formData.data_inicio) {
         notifyError("Nome e data de início são obrigatórios");
         return;
       }
-      
+      if (!selectedCourt) {
+        notifyError("Selecione uma quadra para criar o campeonato.");
+        return;
+      }
+
       // Converter valores monetários para números
       const dataToSend = {
-        ...formData,
-        premiacao: parseFloat(formData.premiacao) || 0,
-        registro: parseFloat(formData.registro) || 0,
-        max_times: parseInt(formData.max_times) || 16
+        name: formData.nome,
+        initialDate: formData.data_inicio,
+        premiation: parseFloat(formData.premiacao) || 0,
+        registration: parseFloat(formData.registro) || 0,
+        teamsNumber: parseInt(formData.max_times) || 16,
+        description: formData.descricao,
+        status: formData.status,
+        quadraId: selectedCourt
       };
-      
-      const response = await api.post('/api/campeonato', dataToSend);
-      
+      console.log('Enviando para backend:', dataToSend);
+
+      if (!admin || !admin.id) {
+        notifyError("Usuário não autenticado. Faça login novamente.");
+        setLoading(false);
+        return;
+      }
+      const response = await api.post(`/api/admin/campeonato/${admin.id}`, dataToSend);
+
       notifySuccess("Campeonato criado com sucesso!");
       setShowCreateForm(false);
       setFormData({
@@ -81,9 +119,9 @@ export default function ChampionshipManagement() {
         max_times: 16,
         status: 'inscricoes'
       });
-      
+
       // Recarregar a lista de campeonatos
-      loadChampionships();
+      loadChampionships(selectedCourt);
     } catch (error) {
       console.error("Erro ao criar campeonato:", error);
       notifyError(error.response?.data?.error || "Erro ao criar campeonato");
@@ -91,6 +129,7 @@ export default function ChampionshipManagement() {
       setLoading(false);
     }
   };
+
   
   const handleViewChampionship = (championshipId) => {
     navigate(`/court-owner/championship/${championshipId}`);
@@ -140,7 +179,23 @@ export default function ChampionshipManagement() {
           {showCreateForm ? 'Cancelar' : 'Criar Novo Campeonato'}
         </button>
       </header>
-      
+
+      {/* Select de quadras */}
+      <div style={{ margin: '20px 0' }}>
+        <label htmlFor="court-select"><strong>Selecione a quadra:</strong></label>
+        <select
+          id="court-select"
+          value={selectedCourt}
+          onChange={e => setSelectedCourt(e.target.value)}
+          style={{ marginLeft: 10 }}
+        >
+          <option value="">Selecione...</option>
+          {courts.map(court => (
+            <option key={court.id} value={court.id}>{court.name}</option>
+          ))}
+        </select>
+      </div>
+
       {showCreateForm && (
         <div className="create-form-container">
           <h2>Criar Novo Campeonato</h2>
