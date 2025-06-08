@@ -5,7 +5,12 @@ const app = express();
 const sequelize = require('./database');
 const adminRoute = require('./Routes/admin');
 const userRoute = require('./Routes/usuario');
+const campeonatoRoute = require('./Routes/campeonato');
+const amistosoRoute = require('./Routes/amistoso');
 const cors = require('cors'); // Novo módulo para CORS
+// Importar associações entre modelos
+const associations = require('./Models/associations');
+const campeonatoAssociations = require('./Models/campeonatoAssociations');
 const session = require('express-session');
 const flash = require('connect-flash');
 const upload = require('./Helpers/upload'); //Rota para o Cloudnary
@@ -63,8 +68,11 @@ sequelize.authenticate()
 // Rotas da API
 app.use('/api/admin', adminRoute);
 app.use('/api/jogador', userRoute);
+app.use('/api/campeonato', campeonatoRoute);
+app.use('/api/amistoso', amistosoRoute);
 
 // Rota inicial
+
 app.get('/', (req, res) => {
     res.json({ message: "Bem-vindo ao backend da sportech" });
 });

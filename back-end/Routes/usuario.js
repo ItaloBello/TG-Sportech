@@ -107,13 +107,21 @@ router.post("/registro", async (req, res) => {
     });
     
     res.status(201).json({ message: "Usuário registrado com sucesso!" });
-  } catch (err) {
-    console.log(err.message)
-    res.status(500).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+            if (error.name === 'SequelizeValidationError') {
+                return res.status(400).json({
+                    error: error.errors.map(e => e.message).join(', ')
+                });
+            }
+            return res.status(500).json({
+                error: 'Erro interno ao atualizar a quadra.'
+            });
+        }
 });
 
 router.get("/login", async (req, res) => {
+    try{
   const usuario = req.query.name;
   const senha = req.query.password;
   const usuarioExistente = await Usuario.findOne({ where: { email: usuario } });
@@ -129,6 +137,17 @@ router.get("/login", async (req, res) => {
   res
     .status(200)
     .json({ message: "Login realizado com sucesso.", id: usuarioExistente.id, name:usuarioExistente.name, email:usuarioExistente.email, cpf: usuarioExistente.cpf, cellphone:usuarioExistente.cellphone });
+    }catch(error){
+        console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.get("/info/:id", async (req, res) => {
@@ -205,9 +224,17 @@ router.get("/times/subscription/:userId", async (req, res) => {
     );
 
     return res.status(200).json({ times: timesQueParticipo });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+            if (error.name === 'SequelizeValidationError') {
+                return res.status(400).json({
+                    error: error.errors.map(e => e.message).join(', ')
+                });
+            }
+            return res.status(500).json({
+                error: 'Erro interno ao atualizar a quadra.'
+            });
+        }
 });
 
 router.post("/times", upload.single("foto"), async (req, res) => {
@@ -242,9 +269,17 @@ router.post("/times", upload.single("foto"), async (req, res) => {
     return res
       .status(201)
       .json({ message: "Time criado com sucesso!", time: newTime });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.post("/entrar/:id", async (req, res) => {
@@ -260,14 +295,22 @@ router.post("/entrar/:id", async (req, res) => {
       jogadorId: jogadorId,
     });
     return res.status(200).json({ message: "Entrada no time autorizada." });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.delete("/remover", async (req, res) => {
-  const { timeId } = req.body;
-  const { jogadorId } = req.user;
+  const timeId = req.body.timeId;
+  const jogadorId = req.body.jogadorId;
   try {
     const jogador = await JogadorTime.findOne({ where: { timeId, jogadorId } });
     if (!jogador) {
@@ -277,30 +320,45 @@ router.delete("/remover", async (req, res) => {
     return res
       .status(200)
       .json({ message: "Jogador removido do time com sucesso." });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.put("/times/:id", async (req, res) => {
   const { id } = req.params;
-  const { nome, img, cor_primaria, cor_secundaria, invite_code} =
+  const { nome, cor_primaria, cor_secundaria} =
     req.body;
 
   const updatedTime = {
-    nome,
-    img,
-    cor_primaria,
-    cor_secundaria,
-    invite_code
+    name: nome,
+    primaryColor: cor_primaria,
+    secondaryColor: cor_secundaria,
   };
 
   try {
-    await Time.update(updatedTime, { where: { id } });
+    const result = await Time.update(updatedTime, { where: { id } });
+    console.log(result);
     return res.status(200).json({ message: "Time atualizado com sucesso!" });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  } catch (error) {
+    console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.put("/edit/:id", async (req, res) => {
@@ -320,9 +378,17 @@ router.put("/edit/:id", async (req, res) => {
   try {
     await Usuario.update(updatedUser, { where: { id: id } });
     return res.status(200).json({ message: "Usuário atualizado com sucesso!" });
-  } catch (err) {
-    return res.status(400).json({ error: err });
-  }
+  } catch (error) {
+    console.log(error)
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                error: error.errors.map(e => e.message).join(', ')
+            });
+        }
+        return res.status(500).json({
+            error: 'Erro interno ao atualizar a quadra.'
+        });
+    }
 });
 
 router.get("/quadras", async (req,res) =>{
@@ -383,6 +449,7 @@ router.get('/quadras/:id/datas-indisponiveis', async (req, res) => {
 });
 
 router.post("/agendar",async (req,res) => {
+  try{
   const idJogador = req.body.playerId;
   const idQuadra = req.body.court;
   const horarios = req.body.times;
@@ -394,27 +461,43 @@ router.post("/agendar",async (req,res) => {
     horaInicio: hor.split('-')[0],
     horaFim: hor.split('-')[1],
     data: data.toISOString().slice(0,10),
+    tipo: "rachão"
   })
   }
   res.status(200).json({message:"Sucesso!"})
+  }catch(error){
+    console.log(error)
+    if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json({
+            error: error.errors.map(e => e.message).join(', ')
+        });
+    }
+    return res.status(500).json({
+        error: 'Erro interno ao atualizar a quadra.'
+    });
+}
 })
 
 router.get("/agendamentos/:id", async (req, res) => {
   const idJogador = req.params.id;
   try {
-    const agendamentos = await Agendamento.findAll({ where: { idJogador } });
-    const appointments = agendamentos.map(agend => {
+    let appointments =  [];
+    const agendamentos = await Agendamento.findAll({ where: { idJogador: idJogador? idJogador: 0 } });
+    for(agend of agendamentos){
       const data = new Date(agend.data);
-      return {
-        type: "Rachão",
+      const quadra = await Quadra.findOne({where: {id: agend.idQuadra}});
+      appointments.push({
+        type: "rachão",
         date: data.toLocaleDateString('pt-BR'),
         adversary: "",
         times: [
           agend.horaInicio.slice(0, 5) + '-' + agend.horaFim.slice(0, 5)
         ],
-        status: agend.pago ? "Pago" : "Pagamento Pendente"
-      };
-    });
+        status: agend.pago ? "Pago" : "Pagamento Pendente",
+        court: quadra.nome,
+        id: agend.id,
+      });
+    }
     res.status(200).json(appointments);
   } catch (err) {
     console.log(err);
@@ -424,11 +507,74 @@ router.get("/agendamentos/:id", async (req, res) => {
 
 router.get("/times", async (req,res) => {
   let mapTimes = [];
-  const times = await Time.findAll({where: {userId: req.user.id}})
+  const userId = req.query.userId; // Usar userId como parâmetro de consulta
+  if (!userId) {
+    return res.status(400).json({ error: "ID do usuário não fornecido" });
+  }
+  const times = await Time.findAll({where: {userId: userId}})
   for (let time of times){
     mapTimes.push({name: time.name, id: time.id})
   }
   res.status(200).json(mapTimes)
 })
+
+router.get("/time/:id", async (req, res) => {
+  const id = req.params.id;
+  const userId = req.query.userId; // ID do usuário que está solicitando
+  
+  try {
+    // Busca o time
+    const time = await Time.findOne({ where: { id: id } });
+    if (!time) {
+      return res.status(404).json({ error: "Time não encontrado." });
+    }
+    
+    // Busca os jogadores do time
+    const jogadoresTime = await JogadorTime.findAll({
+      where: { timeId: id }
+    });
+    
+    // Busca os dados dos jogadores separadamente
+    const jogadoresIds = jogadoresTime.map(jt => jt.jogadorId);
+    const jogadoresData = await Usuario.findAll({
+      where: { id: { [Op.in]: jogadoresIds } },
+      attributes: ['id', 'name', 'email', 'cellphone']
+    });
+    
+    // Formata os dados dos jogadores
+    const jogadores = jogadoresData.map(jogador => ({
+      id: jogador.id,
+      name: jogador.name,
+      email: jogador.email,
+      cellphone: jogador.cellphone
+    }));
+    
+    // Verifica se o usuário solicitante é o dono do time
+    const isOwner = time.userId === parseInt(userId);
+    
+    res.status(200).json({
+      time,
+      jogadores,
+      isOwner
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Erro ao buscar time." });
+  }
+});
+
+router.delete("/times/:id", async (req,res) => {
+  const id = req.params.id;
+  try {
+    // Remove todos os jogadores associados a esse time
+    await JogadorTime.destroy({ where: { timeId: id } });
+    // Agora remove o time
+    await Time.destroy({ where: { id: id } });
+    res.status(200).json({ message: "Time e jogadores deletados com sucesso!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Erro ao deletar time e jogadores." });
+  }
+});
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-
+import { notifySuccess, notifyError } from '../utils/notify';
 export const AdminAuthContext = createContext({});
 
 export const AdminAuthContextProvider = ({ children }) => {
@@ -11,11 +11,15 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [selectedChamp, setSelectedChamp] = useState({});
   const [champMatches, setChampMatches] = useState([]);
   const [myCourts, setMyCourts] = useState([]);
+  const [court, setCourt] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [selectedAppointment, setSelectedAppointment] = useState({});
-  const [teamNumber, setTeamNumber] = useState(0);
-  const [avaliableTimes, setAvaliableTimes] = useState([]);
+  const [selectedAppointment, setSelectedAppointment] = useState(() => {
+    const saved = localStorage.getItem('selectedAppointment');
+    return saved ? JSON.parse(saved) : undefined;
+  });
+  const [selectedType, setSelectedType] = useState({})
+  const [teamNumber, setTeamNumber] = useState(0)
 
   const navigate = useNavigate();
 
@@ -34,14 +38,14 @@ export const AdminAuthContextProvider = ({ children }) => {
       if (data.id) {
         setAdmin(data);
         localStorage.setItem("user", JSON.stringify(data));
-        console.log(localStorage.getItem("user"));
+  
         navigate("/admin/menu");
       } else {
-        alert("ERRO: email ou senha incorretos");
+        notifyError("ERRO: email ou senha incorretos");
       }
     } catch (error) {
-      alert(error.response.data.error);
-      console.log(error.response.data.error);
+      notifyError(error.response?.data?.error || 'Erro ao realizar login.');
+  
     }
   };
 
@@ -49,7 +53,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleSingUp = async (formData) => {
     if (formData.password === formData.confirmPassword) {
       const response = await api.post(`/api/admin/registro`, formData);
-      console.log(response.status);
+  
       if (response.status == 201) {
         const payload = {
           ...formData,
@@ -57,9 +61,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         };
         handleLogin(payload);
         navigate("/admin/menu");
-      } else console.log(response);
+      } else notifyError('Erro ao cadastrar.');
     } else {
-      alert("ERRO: senhas incompativeis");
+      notifyError("ERRO: senhas incompativeis");
     }
   };
 
@@ -73,7 +77,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   //TODO: adaptar esta função para o endpoint de adm
   const handleGetNewInfos = async () => {
     const { data } = await api.get(`api/jogador/info/${player.id}`);
-    console.log(data);
+  
     if (data.id) {
       setPlayer(data);
       localStorage.setItem("user", JSON.stringify(data));
@@ -131,24 +135,21 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleGetMyCourts = async (adminId) => {
     const { data } = await api.get(`/api/admin/quadras/${adminId}`);
     setMyCourts(data);
-    console.log(data);
+    console.log(data)
   };
 
   const handleGetAppointmens = async (adminId) => {
     try {
       const res = await api.get(`/api/admin/quadras/ids/${adminId}`);
-      console.log("Quadras response:", res);
-      console.log("res.data:", res.data);
+      console.log('Quadras response:', res);
+      console.log('res.data:', res.data);
       const courts = Array.isArray(res.data) ? res.data : [];
-      console.log("Courts:", courts);
-      console.log("AdminId:", adminId);
-
+      console.log('Courts:', courts);
+      console.log('AdminId:', adminId);
+  
       if (courts.length === 0) {
         setAppointments([]);
-        console.log(
-          "No courts found for admin or backend returned error:",
-          res.data
-        );
+        console.log('No courts found for admin or backend returned error:', res.data);
         return;
       }
 
@@ -156,9 +157,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         `/api/admin/agendamentos?quadras=${courts.join(",")}`
       );
       setAppointments(appointmentsRes.data);
-      console.log("Appointments:", appointmentsRes.data);
+      console.log('Appointments:', appointmentsRes.data);
     } catch (error) {
-      console.error("Error in handleGetAppointmens:", error);
+      console.error('Error in handleGetAppointmens:', error);
     }
   };
 
@@ -175,14 +176,14 @@ export const AdminAuthContextProvider = ({ children }) => {
     //localStorage
   };
 
-  const handleSetSelectedAppointment = (appointmentId) => {
-    setSelectedAppointment(appointmentId);
+  const handleSetSelectedAppointment = (appointmentId)=>{
+    setSelectedAppointment(appointmentId)
     //localStorage
-  };
+  }
 
-  const handleGetTeamNumber = (champId) => {
-    setTeamNumber(16);
-  };
+  const handleGetTeamNumber = (champId) =>{
+    setTeamNumber(16)
+  }
 
   const handleSetSelectedChamp = (champId) => {
     //TODO retornar os dados do campeonato
@@ -202,9 +203,11 @@ export const AdminAuthContextProvider = ({ children }) => {
         selectedChamp,
         champMatches,
         myCourts,
+        court,
         selectedCourt,
         appointments,
         selectedAppointment,
+        selectedType,
         teamNumber,
         avaliableTimes,
         handleLogin,
@@ -215,12 +218,12 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetInProgressChamp,
         handleGetChampMatches,
         handleGetMyCourts,
+        handleGetCourt,
         handleSetSelectedCourt,
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
-        handleSetSelectedChamp,
-        handleGetAvaliableTimes,
+        handleSetSelectedChamp
       }}
     >
       {children}

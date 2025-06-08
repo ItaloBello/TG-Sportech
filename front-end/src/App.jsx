@@ -73,6 +73,9 @@ const App = () => {
               <Route path="/player/create-team" element={<CreateTeam />} />
               <Route path="/player/join-team" element={<JoinTeam />} />
               <Route path="/player/show-team" element={<ShowTeam />} />
+              <Route path="/player/edit-team/:teamId" element={<EditTeam />} />
+              <Route path="/player/view-team/:teamId" element={<ViewTeam />} />
+              {/* Mantendo rotas antigas para compatibilidade */}
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<PlayerChamp />} />

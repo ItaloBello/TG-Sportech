@@ -31,6 +31,10 @@ const Agendamento = sequelize.define('agendamentos',{
     pago: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
+    },
+    tipo: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, {
     timestamps: true 
