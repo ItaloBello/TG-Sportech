@@ -20,7 +20,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   });
   const [selectedType, setSelectedType] = useState({})
   const [teamNumber, setTeamNumber] = useState(0)
-
+  const[avaliableTimes, setAvaliableTimes] = useState()
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -170,6 +170,8 @@ export const AdminAuthContextProvider = ({ children }) => {
     console.log(data);
     setAvaliableTimes(data.slots);
   };
+
+  const handleGetCourt = async ()=>{}
 
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
