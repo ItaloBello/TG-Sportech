@@ -15,12 +15,13 @@ const schema = yup
   })
   .required();
 const FreeSchedules = () => {
-  const { admin, handleGetMyCourts, myCourts, handleGetAvaliableTimes } = useAdminAuth();
+  const { admin, handleGetMyCourts, myCourts, handleGetAvaliableTimes } =
+    useAdminAuth();
   const [selectedCourt, setSelectedCourt] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [myCourtsName, setMyCourtsName] = useState([]);
   const [myCourtsId, setMyCourtsId] = useState([]);
-
+  const [times, setHorarios] = useState([]);
   const {
     control,
     handleSubmit,
@@ -59,6 +60,8 @@ const FreeSchedules = () => {
     console.log(payload);
 
     // handleGetAvaliableTimes(payload.court,payload.date)
+
+    setHorarios(["19:00-20:00", "20:00-21:00"]);
   };
 
   if (isLoading) return <></>;
@@ -73,7 +76,7 @@ const FreeSchedules = () => {
           label="selecione a quadra"
           options={myCourtsName}
           onChange={setSelectedCourt}
-          values={myCourtsId} 
+          values={myCourtsId}
         />
         <InputItem
           control={control}
@@ -81,9 +84,24 @@ const FreeSchedules = () => {
           type="date"
           label="selcione o dia"
         />
-        <FormButton label="pesquisar"/>
+        <FormButton label="pesquisar" />
       </form>
-    
+      {times.length ? (
+        <>
+          {times[0] != "" ? (
+            <>
+              <p>Horarios Disponíveis:</p>
+              {times.map((time) => (
+                <p>- {time}</p>
+              ))}
+            </>
+          ) : (
+            <p>Sem horarios disponíveis</p>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
