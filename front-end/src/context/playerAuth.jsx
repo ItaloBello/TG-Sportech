@@ -431,9 +431,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
     console.log(data.times)
   };
   const handleGetMyTeamSubscriptions = async (playerId) => {
-    const { data } = await api.get(`/api/jogador/times/subscription/${playerId}`);
-    setMySubscriptions(data.times);
-    console.log(data.times)
+    const { data } =handleGetAvaliableTimes
   };
   const handleCreateTeam = async (formData) => {
     const data = new FormData();

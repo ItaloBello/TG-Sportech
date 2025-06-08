@@ -13,8 +13,9 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [myCourts, setMyCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [selectedAppointment, setSelectedAppointment] = useState({})
-  const [teamNumber, setTeamNumber] = useState(0)
+  const [selectedAppointment, setSelectedAppointment] = useState({});
+  const [teamNumber, setTeamNumber] = useState(0);
+  const [avaliableTimes, setAvaliableTimes] = useState([]);
 
   const navigate = useNavigate();
 
@@ -130,53 +131,67 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleGetMyCourts = async (adminId) => {
     const { data } = await api.get(`/api/admin/quadras/${adminId}`);
     setMyCourts(data);
-    console.log(data)
+    console.log(data);
   };
 
   const handleGetAppointmens = async (adminId) => {
     try {
       const res = await api.get(`/api/admin/quadras/ids/${adminId}`);
-      console.log('Quadras response:', res);
-      console.log('res.data:', res.data);
+      console.log("Quadras response:", res);
+      console.log("res.data:", res.data);
       const courts = Array.isArray(res.data) ? res.data : [];
-      console.log('Courts:', courts);
-      console.log('AdminId:', adminId);
-  
+      console.log("Courts:", courts);
+      console.log("AdminId:", adminId);
+
       if (courts.length === 0) {
         setAppointments([]);
-        console.log('No courts found for admin or backend returned error:', res.data);
+        console.log(
+          "No courts found for admin or backend returned error:",
+          res.data
+        );
         return;
       }
 
-      const appointmentsRes = await api.get(`/api/admin/agendamentos?quadras=${courts.join(',')}`);
+      const appointmentsRes = await api.get(
+        `/api/admin/agendamentos?quadras=${courts.join(",")}`
+      );
       setAppointments(appointmentsRes.data);
-      console.log('Appointments:', appointmentsRes.data);
+      console.log("Appointments:", appointmentsRes.data);
     } catch (error) {
-      console.error('Error in handleGetAppointmens:', error);
+      console.error("Error in handleGetAppointmens:", error);
     }
   };
+
+  const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
+    const { data } = await api.get(
+      `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
+    );
+    console.log(data);
+    setAvaliableTimes(data.slots);
+  };
+
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
     //localStorage
   };
 
-  const handleSetSelectedAppointment = (appointmentId)=>{
-    setSelectedAppointment(appointmentId)
+  const handleSetSelectedAppointment = (appointmentId) => {
+    setSelectedAppointment(appointmentId);
     //localStorage
-  }
+  };
 
-  const handleGetTeamNumber = (champId) =>{
-    setTeamNumber(16)
-  }
+  const handleGetTeamNumber = (champId) => {
+    setTeamNumber(16);
+  };
 
-  const handleSetSelectedChamp = (champId)=>{
-    //TODO retornar os dados do campeonato 
+  const handleSetSelectedChamp = (champId) => {
+    //TODO retornar os dados do campeonato
     // const {data} = getChamp(champId)
     setSelectedChamp({
-      id:1
-    })
-    localStorage.setItem('championship',JSON.stringify(selectedChamp))
-  }
+      id: 1,
+    });
+    localStorage.setItem("championship", JSON.stringify(selectedChamp));
+  };
 
   return (
     <AdminAuthContext.Provider
@@ -191,6 +206,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         appointments,
         selectedAppointment,
         teamNumber,
+        avaliableTimes,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -203,7 +219,8 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
-        handleSetSelectedChamp
+        handleSetSelectedChamp,
+        handleGetAvaliableTimes,
       }}
     >
       {children}
