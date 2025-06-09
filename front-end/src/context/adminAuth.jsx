@@ -20,7 +20,7 @@ export const AdminAuthContextProvider = ({ children }) => {
   });
   const [selectedType, setSelectedType] = useState({})
   const [teamNumber, setTeamNumber] = useState(0)
-
+  const[avaliableTimes, setAvaliableTimes] = useState()
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -133,84 +133,68 @@ export const AdminAuthContextProvider = ({ children }) => {
   };
 
   const handleGetMyCourts = async (adminId) => {
-    try {
-      const { data } = await api.get(`/api/admin/quadras/${adminId}`);
-      setMyCourts(data);
-    } catch (error) {
-      notifyError('Erro ao buscar quadras.');
-    }
+    const { data } = await api.get(`/api/admin/quadras/${adminId}`);
+    setMyCourts(data);
+    console.log(data)
   };
 
   const handleGetAppointmens = async (adminId) => {
     try {
       const res = await api.get(`/api/admin/quadras/ids/${adminId}`);
+      console.log('Quadras response:', res);
+      console.log('res.data:', res.data);
       const courts = Array.isArray(res.data) ? res.data : [];
+      console.log('Courts:', courts);
+      console.log('AdminId:', adminId);
+  
       if (courts.length === 0) {
         setAppointments([]);
-        notifyError('Nenhuma quadra encontrada para o admin ou erro no backend.');
+        console.log('No courts found for admin or backend returned error:', res.data);
         return;
       }
 
-      const appointmentsRes = await api.get(`/api/admin/agendamentos?quadras=${courts.join(',')}`);
+      const appointmentsRes = await api.get(
+        `/api/admin/agendamentos?quadras=${courts.join(",")}`
+      );
       setAppointments(appointmentsRes.data);
-  
+      console.log('Appointments:', appointmentsRes.data);
     } catch (error) {
-      notifyError('Erro ao buscar agendamentos.');
+      console.error('Error in handleGetAppointmens:', error);
     }
   };
+
+  const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
+    const { data } = await api.get(
+      `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
+    );
+    console.log(data);
+    setAvaliableTimes(data.slots);
+  };
+
+  const handleGetCourt = async ()=>{}
+
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
     //localStorage
   };
 
-  const handleSetSelectedAppointment = (appointment) => {
-    setSelectedAppointment(appointment);
-    localStorage.setItem('selectedAppointment', JSON.stringify(appointment));
-  }
-
-  const handleSelectedType = async (appointmentId) => {
-    try {
-      const { data } = await api.get(`/api/admin/agendamentos/type/${appointmentId}`);
-      setSelectedType(data.type);
-      return data;
-    } catch (error) {
-      notifyError('Erro ao buscar tipo de agendamento.');
-    }
+  const handleSetSelectedAppointment = (appointmentId)=>{
+    setSelectedAppointment(appointmentId)
+    //localStorage
   }
 
   const handleGetTeamNumber = (champId) =>{
     setTeamNumber(16)
   }
 
-  const handleGetCourt = async (courtId) => {
-    try {
-      const {data} = await api.get(`/api/admin/quadra/${courtId}`)
-      setCourt(data)
-    } catch (error) {
-      notifyError('Erro ao buscar quadra.');
-    }
-  }
-
-  const handleEditCourt = async (formData) => {
-    try {
-      const {data} = await api.put(`/api/admin/atualizarQuadra/${formData.id}`, formData)  
-      notifySuccess(data.message || 'Quadra atualizada com sucesso!');
-      setTimeout(() => {
-        navigate('/admin/select-court')
-      }, 3000);
-    } catch (error) {
-      notifyError(error.response?.data?.error || 'Ocorreu um erro ao atualizar a quadra.');
-    }
-  }
-
-  const handleSetSelectedChamp = (champId)=>{
-    //TODO retornar os dados do campeonato 
+  const handleSetSelectedChamp = (champId) => {
+    //TODO retornar os dados do campeonato
     // const {data} = getChamp(champId)
     setSelectedChamp({
-      id:1
-    })
-    localStorage.setItem('championship',JSON.stringify(selectedChamp))
-  }
+      id: 1,
+    });
+    localStorage.setItem("championship", JSON.stringify(selectedChamp));
+  };
 
   return (
     <AdminAuthContext.Provider
@@ -227,6 +211,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         selectedAppointment,
         selectedType,
         teamNumber,
+        avaliableTimes,
         handleLogin,
         handleSingUp,
         handleLogOut,
@@ -240,9 +225,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
-        handleSetSelectedChamp,
-        handleSelectedType,
-        handleEditCourt,
+        handleSetSelectedChamp
       }}
     >
       {children}

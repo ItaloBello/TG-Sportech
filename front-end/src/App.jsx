@@ -48,6 +48,8 @@ import EditAppointment from "./pages/Admin/EditAppointment";
 import SelectCourt from "./pages/Admin/SelectCourt";
 import EditCourt from "./pages/Admin/EditCourt";
 import CreateMatches from "./pages/Admin/CreateMatches";
+import AppointmentMenu from "./pages/Admin/AppointmentMenu";
+import FreeSchedules from "./pages/Admin/FreeSchedules";
 
 
 const App = () => {
@@ -96,6 +98,9 @@ const App = () => {
               <Route path="/admin/welcome" element={<Welcome/>}/>
 
               <Route path="/admin/menu" element={<AdminMenu/>}/>
+
+              <Route path="/admin/appointment-menu" element={<AppointmentMenu/>}/>
+              <Route path="/admin/free-schedules" element={<FreeSchedules/>}/>
               <Route path="/admin/select-appointment" element={<SelectAppointment/>}/>
               <Route path="/admin/select-appointment/edit" element={<EditAppointment/>}/>
               
