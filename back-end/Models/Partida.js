@@ -38,7 +38,7 @@ const Partida = sequelize.define('partida', {
     },
     quadraId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'quadras',
             key: 'id'
@@ -46,11 +46,11 @@ const Partida = sequelize.define('partida', {
     },
     data: {
         type: Sequelize.DATEONLY,
-        allowNull: false
+        allowNull: true
     },
     hora: {
         type: Sequelize.TIME,
-        allowNull: false
+        allowNull: true
     },
     golsTimeA: {
         type: Sequelize.INTEGER,

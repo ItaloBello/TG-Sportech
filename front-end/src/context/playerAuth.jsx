@@ -9,19 +9,20 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const [player, setPlayer] = useState({});
   const [error, setError] = useState(null);
   const [courts, setCourts] = useState([]);
-  const [selectedChampionship, setSelectedChampionship] = useState({});
+  const [selectedChampionship, setSelectedChampionship] = useState(null);
   const [playoffsMatches, setPlayoffsMatches] = useState([]);
+  const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [champTablePoints, setChampTablePoints] = useState([]);
   const [topPlayers, setTopPlayers] = useState([]);
   const [myTeams, setMyTeams] = useState({});
   const [mySubscriptions, setMySubscriptions] = useState({});
 
-  const [teamsByCaptain, setTeamsByCaptain] = useState([]);
   const [weekDaysToFilter, setWeekDaysToFilter] = useState([]);
   const [disabledDates, setDisabledDates] = useState([]);
   const [avaliableTimes, setAvaliableTimes] = useState([]);
   const [inProgressChampionship, setInProgressChampionship] = useState([]);
   const [avaliableChampionship, setAvaliableChampionship] = useState([]);
+  const [finishedChampionships, setFinishedChampionships] = useState([]);
   const [myAppointments, setMyAppointments] = useState([]);
   const [amistososPendentes, setAmistososPendentes] = useState([]);
   const [amistososTime, setAmistososTime] = useState([]);
@@ -153,41 +154,51 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-  const handleGetInProgressChampionship = async (playerId) => {
+  const handleGetFinishedChampionships = async () => {
     try {
-      // Buscar os times do jogador
-      const teamsResponse = await api.get(`/api/jogador/times`);
-      const teams = teamsResponse.data;
-      
-      if (!teams || teams.length === 0) {
-        setInProgressChampionship([]);
-        return;
-      }
-      
-      // Para cada time, buscar os campeonatos em que está inscrito
-      const inscricoes = [];
-      
-      for (const team of teams) {
-        const response = await api.get(`/api/campeonato/time/${team.id}`);
-        if (response.data && response.data.length > 0) {
-          // Filtrar apenas campeonatos em andamento
-          const emAndamento = response.data.filter(inscricao => 
-            inscricao.Campeonato && inscricao.Campeonato.status === 'em andamento'
-          );
-          
-          inscricoes.push(...emAndamento);
-        }
-      }
+      // Buscar todos os campeonatos concluídos
+      const response = await api.get('/api/campeonato/status/concluidos');
+      const campeonatos = response.data;
       
       // Formatar os dados para o formato esperado pelo frontend
-      const formattedChampionships = inscricoes.map(inscricao => ({
-        id: inscricao.Campeonato.id,
-        initialDate: new Date(inscricao.Campeonato.data_inicio).toLocaleDateString('pt-BR'),
+      const formattedChampionships = campeonatos.map(campeonato => ({
+        id: campeonato.id,
+        initialDate: new Date(campeonato.initialDate).toLocaleDateString('pt-BR'),
         finalDate: '', // Não temos data de fim no modelo atual
-        subscribedTeam: inscricao.Time ? inscricao.Time.name : '',
-        image: "../../public/copa-fatec-icon.png", // Imagem padrão
-        title: inscricao.Campeonato.nome,
-        altImage: `Logo ${inscricao.Campeonato.nome}`,
+        image: campeonato.image || "/default-campeonato.png",
+        title: campeonato.title,
+        altImage: `Logo ${campeonato.title}`,
+        status: campeonato.status,
+        description: campeonato.description,
+        court: campeonato.court,
+        premiation: campeonato.premiation
+      }));
+      
+      setFinishedChampionships(formattedChampionships);
+    } catch (error) {
+      console.error('Erro ao buscar campeonatos concluídos:', error);
+      setFinishedChampionships([]);
+    }
+  };
+
+  const handleGetInProgressChampionship = async () => {
+    try {
+      // Buscar todos os campeonatos em andamento
+      const response = await api.get('/api/campeonato/status/em-andamento');
+      const campeonatos = response.data;
+      
+      // Formatar os dados para o formato esperado pelo frontend
+      const formattedChampionships = campeonatos.map(campeonato => ({
+        id: campeonato.id,
+        initialDate: new Date(campeonato.initialDate).toLocaleDateString('pt-BR'),
+        finalDate: '', // Não temos data de fim no modelo atual
+        subscribedTeam: '', // Será preenchido depois
+        image: campeonato.image || "/default-campeonato.png",
+        title: campeonato.title,
+        altImage: `Logo ${campeonato.title}`,
+        status: campeonato.status,
+        description: campeonato.description,
+        court: campeonato.court
       }));
       
       setInProgressChampionship(formattedChampionships);
@@ -202,49 +213,16 @@ export const PlayerAuthContextProvider = ({ children }) => {
       // Buscar todos os campeonatos disponíveis para inscrição
       const response = await api.get('/api/campeonato/disponiveis');
       const campeonatosDisponiveis = response.data;
+      console.log('LOG: campeonatosDisponiveis BRUTO da API:', campeonatosDisponiveis);
       
       if (!campeonatosDisponiveis || campeonatosDisponiveis.length === 0) {
         setAvaliableChampionship([]);
         return;
       }
       
-      // Buscar os times do jogador
-      const teamsResponse = await api.get(`/api/jogador/times`);
-      const teams = teamsResponse.data;
-      
-      // Para cada time, buscar os campeonatos em que já está inscrito para filtrar
-      const inscricoesExistentes = new Set();
-      
-      if (teams && teams.length > 0) {
-        for (const team of teams) {
-          const inscricoesResponse = await api.get(`/api/campeonato/time/${team.id}`);
-          if (inscricoesResponse.data && inscricoesResponse.data.length > 0) {
-            inscricoesResponse.data.forEach(inscricao => {
-              inscricoesExistentes.add(inscricao.campeonatoId);
-            });
-          }
-        }
-      }
-      
-      // Filtrar apenas campeonatos em que o jogador não está inscrito
-      const campeonatosNaoInscritos = campeonatosDisponiveis.filter(
-        campeonato => !inscricoesExistentes.has(campeonato.id)
-      );
-      
-      // Formatar os dados para o formato esperado pelo frontend
-      const formattedChampionships = campeonatosNaoInscritos.map(campeonato => ({
-        id: campeonato.id,
-        initialDate: new Date(campeonato.data_inicio).toLocaleDateString('pt-BR'),
-        finalDate: '', // Não temos data de fim no modelo atual
-        premiation: `R$ ${Number(campeonato.premiacao).toFixed(2)}`,
-        image: "../../public/copa-zn-icon.png", // Imagem padrão
-        title: campeonato.nome,
-        altImage: `Logo ${campeonato.nome}`,
-        registration: `R$ ${Number(campeonato.registro).toFixed(2)}`,
-        description: campeonato.descricao,
-      }));
-      
-      setAvaliableChampionship(formattedChampionships);
+      // Usar diretamente todos os campeonatos disponíveis, sem filtrar por inscrições existentes
+      setAvaliableChampionship(campeonatosDisponiveis);
+      console.log('CONTEXTO: Campeonatos disponíveis definidos:', campeonatosDisponiveis);
     } catch (error) {
       console.error('Erro ao buscar campeonatos disponíveis:', error);
       setAvaliableChampionship([]);
@@ -253,6 +231,54 @@ export const PlayerAuthContextProvider = ({ children }) => {
   const handleSetSelectedChamp = (champ) => {
     setSelectedChampionship(champ);
     localStorage.setItem("champ", JSON.stringify(champ));
+  };
+
+  const handlePlayoffsGetChampMatches = async (campeonatoId) => {
+    try {
+      // Primeiro, tentar buscar as partidas existentes
+      const response = await api.get(`/api/campeonato/${campeonatoId}/partidas`);
+      
+      if (response.data && response.data.length > 0) {
+        // Se já existem partidas, formatar e retornar
+        const matches = response.data.map(partida => ({
+          id: partida.id,
+          type: getPhaseType(partida.fase),
+          names: [partida.timeA?.nome || 'TBD', partida.timeB?.nome || 'TBD'],
+          points: [partida.golsTimeA || 0, partida.golsTimeB || 0],
+          images: ['/images/team-logo.png', '/images/team-logo.png']
+        }));
+        setPlayoffsMatches(matches);
+        return matches;
+      } else {
+        // Se não existem partidas, gerar as chaves
+        const gerarResponse = await api.post(`/api/campeonato/${campeonatoId}/gerar-chaves`);
+        
+        if (gerarResponse.data && gerarResponse.data.partidas) {
+          const matches = gerarResponse.data.partidas.map(partida => ({
+            id: partida.id,
+            type: getPhaseType(partida.fase),
+            names: [partida.timeA || 'TBD', partida.timeB || 'TBD'],
+            points: [0, 0],
+            images: ['/images/team-logo.png', '/images/team-logo.png']
+          }));
+          setPlayoffsMatches(matches);
+          return matches;
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao gerar chaves:', error);
+      throw error;
+    }
+  };
+
+  const getPhaseType = (fase) => {
+    switch (fase) {
+      case 1: return 'oitavas';
+      case 2: return 'quartas';
+      case 3: return 'semi';
+      case 4: return 'final';
+      default: return 'oitavas';
+    }
   };
 
   // Função para inscrever um time em um campeonato
@@ -656,6 +682,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         avaliableTimes,
         inProgressChampionship,
         avaliableChampionship,
+        finishedChampionships,
         selectedChampionship,
         teamsByCaptain,
         myAppointments,
@@ -688,6 +715,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
         // Funções de campeonatos
         handleGetInProgressChampionship,
         handleGetAvaliableChampionship,
+        handleGetFinishedChampionships,
         handleSetSelectedChamp,
         handlePlayoffsGetChampMatches,
         handleGetChampPointsTable,

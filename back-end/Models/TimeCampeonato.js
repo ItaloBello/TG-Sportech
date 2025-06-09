@@ -44,4 +44,8 @@ const TimeCampeonato = sequelize.define('time_campeonato', {
 Time.belongsToMany(Campeonato, { through: TimeCampeonato });
 Campeonato.belongsToMany(Time, { through: TimeCampeonato });
 
+// Associações diretas para permitir include correto
+TimeCampeonato.belongsTo(Campeonato, { foreignKey: 'campeonatoId' });
+TimeCampeonato.belongsTo(Time, { foreignKey: 'timeId' });
+
 module.exports = TimeCampeonato;
