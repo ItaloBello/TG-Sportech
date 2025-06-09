@@ -8,12 +8,12 @@ const AppointmentCard = ({
   date,
   times,
   status,
-  court = '',
+  court = "",
   toEdit = false,
-  id
+  id,
+  dell,
 }) => {
-
-  const {handleSetSelectedAppointment} = useAdminAuth()
+  const { handleSetSelectedAppointment } = useAdminAuth();
   return (
     <div className="appointment-card">
       <p className="appointment-card__text">Tipo de Jogo: {type}</p>
@@ -46,7 +46,19 @@ const AppointmentCard = ({
       ) : (
         <></>
       )}
-      {toEdit ? <Link to='/admin/select-appointment/edit' onClick={()=>handleSetSelectedAppointment(id)}>Editar</Link> : <></>}
+      {toEdit ? (
+        <div className="appointment-card__button-area">
+          <Link
+            to="/admin/select-appointment/edit"
+            onClick={() => handleSetSelectedAppointment(id)}
+          >
+            Editar
+          </Link>
+          <button className="appointment-card__delete-button" onClick={dell}>Excluir</button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

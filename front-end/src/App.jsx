@@ -102,8 +102,8 @@ const App = () => {
 
               <Route path="/admin/appointment-menu" element={<AppointmentMenu/>}/>
               <Route path="/admin/free-schedules" element={<FreeSchedules/>}/>
-              <Route path="/admin/select-appointment" element={<SelectAppointment/>}/>
               <Route path="/admin/create-appointment" element={<CreateAppointment/>}/>
+              <Route path="/admin/select-appointment" element={<SelectAppointment/>}/>
               <Route path="/admin/select-appointment/edit" element={<EditAppointment/>}/>
               
               <Route path="/admin/court-menu" element={<CourtMenu/>}/>
