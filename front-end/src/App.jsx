@@ -12,7 +12,7 @@ import PlayerProfile from "./pages/Player/Profile";
 import ShowTeam from "./pages/Player/ShowTeam";
 import EditTeam from "./pages/Player/EditTeam";
 import ViewTeam from "./pages/Player/ViewTeam";
-import PlayerChamp from "./pages/Player/ChampionshipMenu";
+import Championships from "./pages/Player/Championships";
 import SubscribeTeam from "./pages/Player/SubscribeTeam";
 import { PlayerAuthContextProvider } from "./context/playerAuth";
 import { AdminAuthContextProvider } from "./context/adminAuth";
@@ -76,7 +76,7 @@ const App = () => {
               {/* Mantendo rotas antigas para compatibilidade */}
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
-              <Route path="/player/championship" element={<PlayerChamp />} />
+              <Route path="/player/championship" element={<Championships />} />
               <Route path="/player/championship-progress/playoffs" element={<ChampionshipProgressPlayoffs />} />
               <Route path="/player/my-matches" element={<MyMatches />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />

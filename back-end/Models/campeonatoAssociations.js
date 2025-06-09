@@ -14,6 +14,12 @@ const Amistoso = require('./Amistoso');
 Time.belongsToMany(Campeonato, { through: TimeCampeonato });
 Campeonato.belongsToMany(Time, { through: TimeCampeonato });
 
+// Associações diretas com TimeCampeonato
+Campeonato.hasMany(TimeCampeonato);
+TimeCampeonato.belongsTo(Campeonato);
+Time.hasMany(TimeCampeonato);
+TimeCampeonato.belongsTo(Time);
+
 // Associação entre Campeonato e Quadra
 Campeonato.belongsTo(Quadra, { foreignKey: 'donoQuadraId', as: 'quadra' });
 Quadra.hasMany(Campeonato, { foreignKey: 'donoQuadraId', as: 'campeonatos' });

@@ -340,8 +340,12 @@ export default function ChampionshipManagement() {
                     <div className="card-header">
                       <h3>{championship.nome}</h3>
                       <span className={`status-badge ${championship.status}`}>
-                        {championship.status === 'inscricoes' ? 'Em Inscrições' : 
-                         championship.status === 'em andamento' ? 'Em Andamento' : 'Finalizado'}
+                        {championship.status === 'inscricoes' || championship.status === 'não iniciado'
+  ? 'Em Inscrições'
+  : championship.status === 'em andamento'
+  ? 'Em Andamento'
+  : 'Finalizado'
+}
                       </span>
                     </div>
                     

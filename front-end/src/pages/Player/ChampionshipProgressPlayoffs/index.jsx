@@ -14,11 +14,16 @@ const ChampionshipProgressPlayoffs = () => {
 
   useEffect(() => {
     const getMatches = async () => {
-      await handlePlayoffsGetChampMatches(1);
+      if (selectedChampionship?.id) {
+        try {
+          await handlePlayoffsGetChampMatches(selectedChampionship.id);
+        } catch (error) {
+          console.error('Erro ao buscar partidas:', error);
+        }
+      }
     };
     getMatches();
-    console.log(playoffsMatches);
-  }, []);
+  }, [selectedChampionship]);
   return (
     <div className="championship-in-progress">
       <Header link={1}/>

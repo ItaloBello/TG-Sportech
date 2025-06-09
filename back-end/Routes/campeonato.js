@@ -21,13 +21,14 @@ const isDonoQuadra = (req, res, next) => {
 const isDonoTime = async (req, res, next) => {
     try {
         const timeId = req.params.timeId || req.body.timeId;
+        const playerId = req.user?.id || req.body.playerId; // pega do token ou do corpo
         const time = await Time.findByPk(timeId);
         
         if (!time) {
             return res.status(404).json({ error: 'Time não encontrado' });
         }
         
-        if (req.user && time.userId === req.user.id) {
+        if (playerId && time.userId === Number(playerId)) {
             return next();
         }
         
@@ -68,8 +69,21 @@ router.get('/disponiveis', async (req, res) => {
             },
             include: [{ model: Quadra, as: 'quadra' }]
         });
-        
-        return res.status(200).json(campeonatos);
+        // Mapeia para o formato esperado pelo front-end
+        const campeonatosFormatados = campeonatos.map(c => ({
+            id: c.id,
+            title: c.nome,
+            initialDate: c.data_inicio,
+            premiation: c.premiacao,
+            registration: c.registro,
+            image: c.image || '/default-campeonato.png',
+            status: c.status,
+            num_teams: c.num_times,
+            description: c.descricao,
+            court: c.quadra || null,
+            ...c.toJSON()
+        }));
+        return res.status(200).json(campeonatosFormatados);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Erro ao buscar campeonatos disponíveis' });
@@ -190,6 +204,9 @@ router.post('/:id/partidas', isDonoQuadra, async (req, res) => {
             fase,
             status: 'agendado'
         });
+        
+        // Após criar a partida, tenta atualizar o status do campeonato
+        await atualizarStatusCampeonato(id);
         
         return res.status(201).json({
             message: 'Partida criada com sucesso',
@@ -343,22 +360,33 @@ router.post('/:id/gerar-chaveamento', isDonoQuadra, async (req, res) => {
 // Listar campeonatos em que um time está inscrito
 router.get('/time/:timeId', async (req, res) => {
     try {
-        const { timeId } = req.params;
-        
-        const inscricoes = await TimeCampeonato.findAll({
-            where: { timeId },
-            include: [{ model: Campeonato }]
-        });
-        
-        return res.status(200).json(inscricoes);
+      const { timeId } = req.params;
+      const inscricoes = await TimeCampeonato.findAll({
+        where: { timeId },
+        include: [
+          { model: Campeonato },
+          { model: Time }
+        ]
+      });
+      res.json(inscricoes);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Erro ao buscar campeonatos do time' });
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao buscar inscrições do time' });
     }
-});
+  });
+
+// Função utilitária para atualizar status do campeonato
+async function atualizarStatusCampeonato(campeonatoId) {
+    const campeonato = await Campeonato.findByPk(campeonatoId);
+    if (!campeonato) return;
+    const numInscritos = await TimeCampeonato.count({ where: { campeonatoId } });
+    if (numInscritos >= campeonato.num_times && campeonato.status === 'não iniciado') {
+        await campeonato.update({ status: 'em andamento' });
+    }
+}
 
 // Inscrever time em um campeonato
-router.post('/inscrever', isDonoTime, async (req, res) => {
+router.post('/inscrever', async (req, res) => {
     try {
         const { timeId, campeonatoId } = req.body;
         
@@ -397,6 +425,9 @@ router.post('/inscrever', isDonoTime, async (req, res) => {
             statusPagamento: 'pendente'
         });
         
+        // Após inscrição, tenta atualizar o status do campeonato
+        await atualizarStatusCampeonato(campeonatoId);
+        
         return res.status(201).json({ message: 'Time inscrito com sucesso' });
     } catch (error) {
         console.error(error);
@@ -426,6 +457,154 @@ router.put('/confirmar-pagamento/:inscricaoId', isDonoQuadra, async (req, res) =
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Erro ao confirmar pagamento' });
+    }
+});
+
+// Listar campeonatos em andamento
+router.get('/status/em-andamento', async (req, res) => {
+    try {
+        const campeonatos = await Campeonato.findAll({
+            where: { status: 'em andamento' },
+            include: [{ model: Quadra, as: 'quadra' }]
+        });
+
+        // Mapeia para o formato esperado pelo front-end
+        const campeonatosFormatados = campeonatos.map(c => ({
+            id: c.id,
+            title: c.nome,
+            initialDate: c.data_inicio,
+            premiation: c.premiacao,
+            registration: c.registro,
+            image: c.image || '/default-campeonato.png',
+            status: c.status,
+            num_teams: c.num_times,
+            description: c.descricao,
+            court: c.quadra || null,
+            ...c.toJSON()
+        }));
+
+        return res.status(200).json(campeonatosFormatados);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Erro ao buscar campeonatos em andamento' });
+    }
+});
+
+// Listar campeonatos concluídos
+router.get('/status/concluidos', async (req, res) => {
+    try {
+        const campeonatos = await Campeonato.findAll({
+            where: { status: 'finalizado' },
+            include: [{ model: Quadra, as: 'quadra' }]
+        });
+
+        // Mapeia para o formato esperado pelo front-end
+        const campeonatosFormatados = campeonatos.map(c => ({
+            id: c.id,
+            title: c.nome,
+            initialDate: c.data_inicio,
+            premiation: c.premiacao,
+            registration: c.registro,
+            image: c.image || '/default-campeonato.png',
+            status: c.status,
+            num_teams: c.num_times,
+            description: c.descricao,
+            court: c.quadra || null,
+            ...c.toJSON()
+        }));
+
+        return res.status(200).json(campeonatosFormatados);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Erro ao buscar campeonatos concluídos' });
+    }
+});
+
+// Buscar partidas de um campeonato
+router.get('/:id/partidas', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const partidas = await Partida.findAll({
+            where: { campeonatoId: id },
+            include: [
+                { model: Time, as: 'timeA' },
+                { model: Time, as: 'timeB' }
+            ],
+            order: [['fase', 'ASC']]
+        });
+
+        return res.status(200).json(partidas);
+    } catch (error) {
+        console.error('Erro ao buscar partidas:', error);
+        return res.status(500).json({ error: 'Erro ao buscar partidas do campeonato' });
+    }
+});
+
+// Gerar chaves do campeonato
+router.post('/:id/gerar-chaves', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Buscar o campeonato
+        const campeonato = await Campeonato.findByPk(id, {
+            include: [{
+                model: Time,
+                through: TimeCampeonato
+            }]
+        });
+
+        if (!campeonato) {
+            return res.status(404).json({ error: 'Campeonato não encontrado' });
+        }
+
+        // Verificar se já tem o número mínimo de times inscritos
+        const timesInscritos = campeonato.Times.length;
+        if (timesInscritos < 2) {
+            return res.status(400).json({ error: 'Número insuficiente de times para gerar chaves' });
+        }
+
+        // Embaralhar os times aleatoriamente
+        const times = campeonato.Times.map(time => ({
+            timeId: time.id,
+            nome: time.nome
+        }));
+        for (let i = times.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [times[i], times[j]] = [times[j], times[i]];
+        }
+
+        // Criar as partidas iniciais
+        const partidas = [];
+        for (let i = 0; i < times.length; i += 2) {
+            if (i + 1 < times.length) {
+                const partida = await Partida.create({
+                    campeonatoId: id,
+                    timeAId: times[i].timeId,
+                    timeBId: times[i + 1].timeId,
+                    fase: '1',
+                    status: 'agendada'
+                });
+                partidas.push({
+                    id: partida.id,
+                    timeA: times[i].nome,
+                    timeB: times[i + 1].nome,
+                    fase: 1,
+                    status: 'agendada'
+                });
+            }
+        }
+
+        // Atualizar status do campeonato
+        await campeonato.update({ status: 'em andamento' });
+
+        return res.status(200).json({
+            message: 'Chaves geradas com sucesso',
+            partidas
+        });
+    } catch (error) {
+        console.error('Erro ao gerar chaves:', error);
+        return res.status(500).json({ error: 'Erro ao gerar chaves do campeonato' });
     }
 });
 
