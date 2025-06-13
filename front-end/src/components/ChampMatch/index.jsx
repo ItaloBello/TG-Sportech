@@ -16,11 +16,10 @@ const ChampMatch = ({ type = "",names,points,images }) => {
           alt={`${names[0]} logo`}
           style={{ width: width }}
         />
-        {type != "oitavas" ? <p>{names[0]}</p> : <></>}
+        <p>{names[0]}</p>
       </div>
       <div className="champ-match__versus-area">
-        {type != "oitavas" ? <p>{type}</p> : <></>}
-
+        <p style={{textTransform: 'capitalize'}}>{type}</p>
         <p>VS</p>
         <p>{points[0]}-{points[1]}</p>
       </div>
@@ -31,7 +30,7 @@ const ChampMatch = ({ type = "",names,points,images }) => {
           alt={`${names[1]} logo`}
           style={{ width: width }}
         />
-        {type != "oitavas" ? <p>{names[1]}</p> : <></>}
+        <p>{names[1]}</p>
       </div>
     </div>
   );

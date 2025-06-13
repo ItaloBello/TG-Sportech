@@ -63,26 +63,39 @@
   justify-content: space-around;
 }
 
+.playoffs-card {
+  background-color: #ffffff; /* White background for the card */
+  padding: 20px;
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  overflow-x: auto; /* Enable horizontal scrollbar if content overflows */
+  margin: 20px 0; /* Add some margin around the card */
+}
+
 .playoffs-bracket {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
-  padding: 2rem 0;
-  gap: 1rem;
+  flex-direction: row;
+  justify-content: flex-start; /* Align phases to the start */
+  gap: 30px; /* Increased space between phases */
+  padding: 10px; /* Reduced padding as card has its own */
+  border-radius: 8px;
+  min-width: fit-content; /* Allow bracket to expand as needed */
+  box-sizing: border-box;
 }
 
 .phase-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem; /* Space between matches in a column */
+  gap: 20px; /* Increased space between matches */
+  min-width: 280px; /* Minimum width for each phase column */
 }
 
-.phase-column h2 {
-  color: #fff;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  border-bottom: 2px solid #14ae5c;
-  padding-bottom: 0.5rem;
+.phase-title {
+  font-size: 1.6em; /* Slightly larger title */
+  font-weight: bold;
+  color: #2c3e50; /* Darker, more modern color */
+  margin-bottom: 15px;
+  text-align: center;
+  width: 100%;
 }

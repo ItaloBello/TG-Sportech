@@ -48,7 +48,8 @@ const ChampionshipProgressPlayoffs = () => {
           <button className="back-button" onClick={() => navigate(-1)}>Voltar</button>
         </div>
 
-        <div className="playoffs-bracket">
+        <div className="playoffs-card">
+          <div className="playoffs-bracket">
           {/* Oitavas de Final */}
           {matchesByPhase.oitavas.length > 0 && (
             <div className="phase-column">
@@ -88,6 +89,7 @@ const ChampionshipProgressPlayoffs = () => {
               ))}
             </div>
           )}
+          </div>
         </div>
       </div>
       <div className="my-matches-button-area">
