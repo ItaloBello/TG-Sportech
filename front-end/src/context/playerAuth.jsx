@@ -354,7 +354,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
       const matches = response.data.map(partida => ({
         id: partida.id,
         type: getPhaseType(partida.fase), // Assuming getPhaseType translates fase to 'oitavas', 'quartas', etc.
-        names: [partida.timeA?.nome || 'A definir', partida.timeB?.nome || 'A definir'],
+        names: [partida.timeA?.name || 'A definir', partida.timeB?.name || 'A definir'],
         points: [partida.gols_time_a, partida.gols_time_b],
         // IMPORTANT: Assuming the backend response for a match includes team objects with an 'img' property
         images: [partida.timeA?.img || '/default-team-icon.png', partida.timeB?.img || '/default-team-icon.png']
