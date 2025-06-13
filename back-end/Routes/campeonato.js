@@ -545,30 +545,48 @@ router.get('/:id/partidas', async (req, res) => {
 router.post('/:id/gerar-chaves', async (req, res) => {
     try {
         const { id } = req.params;
+        console.log('Gerando chaves para o campeonato:', id);
         
-        // Buscar o campeonato
-        const campeonato = await Campeonato.findByPk(id, {
+        // Primeiro vamos verificar as inscrições diretamente
+        const inscricoes = await TimeCampeonato.findAll({
+            where: { campeonatoId: id },
             include: [{
                 model: Time,
-                through: TimeCampeonato
+                required: true,
+                attributes: ['id', 'name']
             }]
         });
+
+        console.log('Detalhes das inscrições:', JSON.stringify(inscricoes.map(i => ({ 
+            timeId: i.timeId,
+            time: i.Time
+        })), null, 2));
+        
+        console.log('Times inscritos encontrados:', inscricoes.length);
+        
+        // Se não houver inscrições suficientes, retorna erro
+        if (inscricoes.length < 2) {
+            return res.status(400).json({ 
+                error: 'Número insuficiente de times para gerar chaves',
+                timesInscritos: inscricoes.length
+            });
+        }
+
+        // Buscar o campeonato
+        const campeonato = await Campeonato.findByPk(id);
 
         if (!campeonato) {
             return res.status(404).json({ error: 'Campeonato não encontrado' });
         }
-
-        // Verificar se já tem o número mínimo de times inscritos
-        const timesInscritos = campeonato.Times.length;
-        if (timesInscritos < 2) {
-            return res.status(400).json({ error: 'Número insuficiente de times para gerar chaves' });
-        }
-
+        //console.log(inscricoes)
         // Embaralhar os times aleatoriamente
-        const times = campeonato.Times.map(time => ({
-            timeId: time.id,
-            nome: time.nome
-        }));
+        const times = inscricoes.map(inscricao => {
+            const timeData = inscricao.dataValues.time.dataValues;
+            return {
+                timeId: timeData.id,
+                nome: timeData.name
+            };
+        });
         for (let i = times.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [times[i], times[j]] = [times[j], times[i]];
@@ -582,6 +600,9 @@ router.post('/:id/gerar-chaves', async (req, res) => {
                     campeonatoId: id,
                     timeAId: times[i].timeId,
                     timeBId: times[i + 1].timeId,
+                    quadraId: campeonato.donoQuadraId, // usando a quadra do campeonato
+                    data: campeonato.data_inicio, // Usando a data de início do campeonato
+                    hora: '12:00:00', // Definindo um horário padrão
                     fase: '1',
                     status: 'agendada'
                 });

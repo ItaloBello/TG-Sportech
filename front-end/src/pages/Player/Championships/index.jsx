@@ -39,9 +39,11 @@ export default function Championships() {
     loadChampionships();
   }, [player.id]);
   
-  const handleChampionshipClick = (championship) => {
+    const handleChampionshipClick = (championship) => {
+    if (!championship || !championship.id) return;
     handleSetSelectedChamp(championship);
-    navigate(`/player/championship/${championship.id}`);
+    // All championships that call this are either in-progress or finished
+    navigate(`/player/championship-progress/playoffs/${championship.id}`);
   };
   
   // Estado para modal de inscrição

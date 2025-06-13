@@ -29,6 +29,34 @@ export const PlayerAuthContextProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
+  const handlePlayoffsGetChampInfo = async (champId) => {
+    try {
+      const response = await api.get(`/api/campeonato/${champId}`);
+      // Assuming the backend returns { campeonato: {...}, timesInscritos: [...], partidas: [...] }
+      // Or just the championship object directly if it's a simpler endpoint for info only
+      const champData = response.data.campeonato || response.data; 
+      setSelectedChampionship(champData);
+      localStorage.setItem("champ", JSON.stringify(champData));
+      return champData;
+    } catch (error) {
+      console.error("Erro ao buscar informações do campeonato:", error);
+      notifyError(error.response?.data?.error || 'Erro ao buscar informações do campeonato.');
+      return null;
+    }
+  };
+
+  const handlePlayoffsGetChampTeams = async (champId) => {
+    try {
+      const response = await api.get(`/api/campeonato/${champId}`);
+      // Assuming the backend returns { campeonato: {...}, timesInscritos: [...], partidas: [...] }
+      return response.data.timesInscritos || [];
+    } catch (error) {
+      console.error("Erro ao buscar times do campeonato:", error);
+      notifyError(error.response?.data?.error || 'Erro ao buscar times do campeonato.');
+      return [];
+    }
+  };
+
   //este useEffect controla os dados armazenados em localStorage e os passa para as variaveis de estado
   useEffect(() => {
     const storedPlayer = localStorage.getItem("user");
@@ -233,44 +261,6 @@ export const PlayerAuthContextProvider = ({ children }) => {
     localStorage.setItem("champ", JSON.stringify(champ));
   };
 
-  const handlePlayoffsGetChampMatches = async (campeonatoId) => {
-    try {
-      // Primeiro, tentar buscar as partidas existentes
-      const response = await api.get(`/api/campeonato/${campeonatoId}/partidas`);
-      
-      if (response.data && response.data.length > 0) {
-        // Se já existem partidas, formatar e retornar
-        const matches = response.data.map(partida => ({
-          id: partida.id,
-          type: getPhaseType(partida.fase),
-          names: [partida.timeA?.nome || 'TBD', partida.timeB?.nome || 'TBD'],
-          points: [partida.golsTimeA || 0, partida.golsTimeB || 0],
-          images: ['/images/team-logo.png', '/images/team-logo.png']
-        }));
-        setPlayoffsMatches(matches);
-        return matches;
-      } else {
-        // Se não existem partidas, gerar as chaves
-        const gerarResponse = await api.post(`/api/campeonato/${campeonatoId}/gerar-chaves`);
-        
-        if (gerarResponse.data && gerarResponse.data.partidas) {
-          const matches = gerarResponse.data.partidas.map(partida => ({
-            id: partida.id,
-            type: getPhaseType(partida.fase),
-            names: [partida.timeA || 'TBD', partida.timeB || 'TBD'],
-            points: [0, 0],
-            images: ['/images/team-logo.png', '/images/team-logo.png']
-          }));
-          setPlayoffsMatches(matches);
-          return matches;
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao gerar chaves:', error);
-      throw error;
-    }
-  };
-
   const getPhaseType = (fase) => {
     switch (fase) {
       case 1: return 'oitavas';
@@ -358,167 +348,25 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-  const handlePlayoffsGetChampMatches = async (champId) => {
-    //TODO requisição que retorna os jogos marcados no playoffs, caso ainda não tenha algum jogo pronto, retorne o tipo, id, e o resto como arrays vazios, exemplo abaixo
-    // {
-    //     id:16,
-    //     type: "final",
-    //     names: [],
-    //     points: [],
-    //     images: [],
-    //   }
-    await setPlayoffsMatches([
-      {
-        id: 1,
-        type: "oitavas",
-        names: ["team1", "team2"],
-        points: [1, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 2,
-        type: "oitavas",
-        names: ["team3", "team4"],
-        points: [4, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 3,
-        type: "oitavas",
-        names: ["team5", "team6"],
-        points: [1, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 4,
-        type: "oitavas",
-        names: ["team7", "team8"],
-        points: [1, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 5,
-        type: "oitavas",
-        names: ["team9", "team10"],
-        points: [0, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 6,
-        type: "oitavas",
-        names: ["team11", "team12"],
-        points: [4, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 7,
-        type: "oitavas",
-        names: ["team13", "team14"],
-        points: [3, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 8,
-        type: "oitavas",
-        names: ["team15", "team16"],
-        points: [1, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 9,
-        type: "quartas",
-        names: ["team2", "team3"],
-        points: [5, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 10,
-        type: "quartas",
-        names: ["team5", "team8"],
-        points: [1, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 11,
-        type: "quartas",
-        names: ["team10", "team11"],
-        points: [0, 2],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 12,
-        type: "quartas",
-        names: ["team13", "team16"],
-        points: [1, 3],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 13,
-        type: "semi",
-        names: ["team2", "team5"],
-        points: [1, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 14,
-        type: "semi",
-        names: ["team11", "team16"],
-        points: [4, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-      {
-        id: 15,
-        type: "final",
-        names: ["team2", "team11"],
-        points: [4, 0],
-        images: [
-          "../../../public/team-1-icon.png",
-          "../../../public/team-1-icon.png",
-        ],
-      },
-    ]);
+    const handlePlayoffsGetChampMatches = async (champId) => {
+    try {
+      const response = await api.get(`/api/campeonato/${champId}/partidas`);
+      const matches = response.data.map(partida => ({
+        id: partida.id,
+        type: getPhaseType(partida.fase), // Assuming getPhaseType translates fase to 'oitavas', 'quartas', etc.
+        names: [partida.timeA?.nome || 'A definir', partida.timeB?.nome || 'A definir'],
+        points: [partida.gols_time_a, partida.gols_time_b],
+        // IMPORTANT: Assuming the backend response for a match includes team objects with an 'img' property
+        images: [partida.timeA?.img || '/default-team-icon.png', partida.timeB?.img || '/default-team-icon.png']
+      }));
+      setPlayoffsMatches(matches);
+      return matches;
+    } catch (error) {
+      console.error("Erro ao buscar partidas do campeonato:", error);
+      notifyError(error.response?.data?.error || 'Erro ao buscar partidas do campeonato.');
+      setPlayoffsMatches([]); // Clear matches on error
+      return [];
+    }
   };
 
   const handleGetChampPointsTable = async (champId) => {
@@ -717,7 +565,9 @@ export const PlayerAuthContextProvider = ({ children }) => {
         handleGetAvaliableChampionship,
         handleGetFinishedChampionships,
         handleSetSelectedChamp,
+        handlePlayoffsGetChampInfo, // Added
         handlePlayoffsGetChampMatches,
+        handlePlayoffsGetChampTeams, // Added
         handleGetChampPointsTable,
         handleGetTopPlayersChamp,
         handleSubscribeTeamToChampionship,

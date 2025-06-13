@@ -79,7 +79,7 @@ const App = () => {
               <Route path="/player/edit-team" element={<EditTeam />} />
               <Route path="/player/view-team" element={<ViewTeam />} />
               <Route path="/player/championship" element={<Championships />} />
-              <Route path="/player/championship-progress/playoffs" element={<ChampionshipProgressPlayoffs />} />
+              <Route path="/player/championship-progress/playoffs/:championshipId" element={<ChampionshipProgressPlayoffs />} />
               <Route path="/player/my-matches" element={<MyMatches />} />
               <Route path="/player/subscribe-team" element={<SubscribeTeam />} />
               <Route path="/player/choose-team" element={<ChooseTeam />} />
@@ -117,6 +117,10 @@ const App = () => {
               <Route path="/admin/select-championship/in-progress" element={<SelectInProgressChamp/>}/>
               <Route path="/admin/select-championship/in-progress/select-match" element={<SelectMatch/>}/>
               <Route path="/admin/select-championship/in-progress/select-match/edit" element={<EditMatch/>}/>
+
+              {/* Rotas para visualizar/editar detalhes do campeonato e progresso */}
+              <Route path="/admin/edit-championship/:championshipId" element={<EditChamp />} />
+              <Route path="/admin/view-championship-progress/:championshipId" element={<ChampionshipProgressPlayoffs />} />
 
               {/* <Route path="/admin/create-championship/menu" element={<CreateChampionshipMenu/>}/> 
               <Route path="/admin/create-championship/points" element={<PointsCreateChampionship/>}/> */}

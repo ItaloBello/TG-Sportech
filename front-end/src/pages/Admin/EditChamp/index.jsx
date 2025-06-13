@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { api } from "../../../services/api";
+import { notifyError } from "../../../utils/notify";
 import Header from "../../../components/Header";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,18 +27,61 @@ const schema = yup
   .required();
 
 const EditChamp = () => {
+  const { championshipId } = useParams();
+  const [initialData, setInitialData] = useState(null);
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    reset, // Add reset from useForm
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: initialData || { // Ensure defaultValues are set up
+      name: '',
+      gamesPerDay: '',
+      gamesInterval: '',
+      initialDate: new Date(),
+      teamsNumber: undefined,
+      description: '',
+      registration: '',
+      premiation: '',
+    },
     mode: "onBlur",
   });
 
   const [teamsNumber, setTeamsNumber] = useState();
 
+  useEffect(() => {
+    if (championshipId) {
+      api.get(`/api/campeonato/${championshipId}`)
+        .then(response => {
+          const champData = response.data;
+          // Adjusting field names to match form expectations if necessary
+          const formattedData = {
+            ...champData,
+            name: champData.nome || '',
+            initialDate: champData.data_inicio ? new Date(champData.data_inicio) : new Date(),
+            gamesPerDay: champData.jogos_por_dia || '', // Assuming these fields exist or have defaults
+            gamesInterval: champData.intervalo_jogos || '', // Assuming these fields exist or have defaults
+            teamsNumber: champData.max_times || undefined,
+            description: champData.descricao || '',
+            registration: champData.registro || '',
+            premiation: champData.premiacao || '',
+          };
+          setInitialData(formattedData);
+          reset(formattedData); // reset form with fetched data
+          if(formattedData.teamsNumber) setTeamsNumber(formattedData.teamsNumber.toString());
+        })
+        .catch(error => {
+          console.error("Erro ao buscar dados do campeonato:", error);
+          notifyError("Não foi possível carregar os dados do campeonato.");
+        });
+    }
+  }, [championshipId, reset]);
+
   const onSubmit = (dataForm) => {
+    // TODO: Implement update logic if championshipId exists
+    // For now, it just logs, as per the original component's behavior for creation
     const payload = {
       ...dataForm,
       initialDate: format(dataForm.initialDate, "dd-MM-yyyy"),

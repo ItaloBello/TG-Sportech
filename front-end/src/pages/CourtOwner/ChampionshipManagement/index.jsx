@@ -131,8 +131,22 @@ export default function ChampionshipManagement() {
   };
 
   
-  const handleViewChampionship = (championshipId) => {
-    navigate(`/court-owner/championship/${championshipId}`);
+  const handleViewChampionship = (championship) => {
+    if (!championship || !championship.id) {
+      console.error("Championship data is missing.");
+      notifyError("Não foi possível carregar os detalhes do campeonato.");
+      return;
+    }
+
+    if (championship.status === 'inscricoes' || championship.status === 'não iniciado') {
+      navigate(`/admin/edit-championship/${championship.id}`);
+    } else if (championship.status === 'em andamento' || championship.status === 'finalizado') {
+      navigate(`/admin/view-championship-progress/${championship.id}`);
+    } else {
+      // Fallback for any other status
+      console.warn(`Unhandled championship status: ${championship.status}`);
+      navigate(`/admin/edit-championship/${championship.id}`);
+    }
   };
   
   const handleGenerateMatches = async (championshipId) => {
@@ -359,7 +373,7 @@ export default function ChampionshipManagement() {
                     <div className="card-actions">
                       <button 
                         className="view-button"
-                        onClick={() => handleViewChampionship(championship.id)}
+                        onClick={() => handleViewChampionship(championship)}
                       >
                         Ver Detalhes
                       </button>

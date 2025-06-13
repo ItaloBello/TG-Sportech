@@ -3,116 +3,91 @@ import "./styles.css";
 import Header from "../../../components/Header";
 import ChampMatch from "../../../components/ChampMatch";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 //TODO integrar com o back
 
 const ChampionshipProgressPlayoffs = () => {
+  const { championshipId } = useParams(); // Get championshipId from URL
   const navigate = useNavigate()
   const teamNumber = 16;
-  const { selectedChampionship, playoffsMatches, handlePlayoffsGetChampMatches } = usePlayerAuth();
+  const { playoffsMatches, handlePlayoffsGetChampMatches } = usePlayerAuth(); // Removed selectedChampionship as we'll use championshipId from params
 
   useEffect(() => {
     const getMatches = async () => {
-      if (selectedChampionship?.id) {
+      if (championshipId) { // Use championshipId from URL
         try {
-          await handlePlayoffsGetChampMatches(selectedChampionship.id);
+          // For now, we are just focusing on displaying the screen.
+          // The actual data fetching might need adjustment based on how handlePlayoffsGetChampMatches works.
+          console.log(`Fetching matches for championship ID: ${championshipId}`);
+          await handlePlayoffsGetChampMatches(championshipId);
         } catch (error) {
           console.error('Erro ao buscar partidas:', error);
         }
+      } else {
+        console.log('Championship ID not found in URL for ChampionshipProgressPlayoffs');
       }
     };
     getMatches();
-  }, [selectedChampionship]);
+  }, [championshipId, handlePlayoffsGetChampMatches]); // Add handlePlayoffsGetChampMatches to dependency array
+
+  // Group matches by phase
+  const matchesByPhase = {
+    oitavas: playoffsMatches.filter(m => m.type === 'oitavas'),
+    quartas: playoffsMatches.filter(m => m.type === 'quartas'),
+    semi: playoffsMatches.filter(m => m.type === 'semi'),
+    final: playoffsMatches.filter(m => m.type === 'final'),
+  };
+
   return (
-    <div className="championship-in-progress">
+    <div className="championship-progress-playoffs-container">
       <Header link={1}/>
-      <div className="progress-card">
-        <div className="progress-card__title-area">
-          <img
-            className="progress-card__title-area-image"
-            src="../../../../public/copa-fatec-icon.png"
-            alt=""
-          />
-          <p>Copa Fatec</p>
+      <div className="display-area">
+        <div className="display-area__header">
+          <h1>Chaveamento do campeonato</h1>
+          <button className="back-button" onClick={() => navigate(-1)}>Voltar</button>
         </div>
-        <div className="progress-card__button-area">
-          <button className="progress-card__button-selected">Playoffs</button>
-          {/* <button className="progress-card__button" onClick={()=>navigate('/player/championship-progress/playoffs/top-players')}>Artilheiros</button> */}
-        </div>
-        <div className="progress-card__display-area">
-          {teamNumber >= 16 ? (
-            <>
-              <div className="display-area__row" >
-                {playoffsMatches.map((match, index) =>
-                  match.type == "oitavas" ? (
-                    <ChampMatch
-                      type={match.type}
-                      names={match.names}
-                      points={match.points}
-                      images={match.images}
-                      key={match.id}
-                    />
-                  ) : (
-                    <></>
-                  )
-                )}
-              </div>
-            </>
-          ) : (
-            <></>
+
+        <div className="playoffs-bracket">
+          {/* Oitavas de Final */}
+          {matchesByPhase.oitavas.length > 0 && (
+            <div className="phase-column">
+              <h2>Oitavas de Final</h2>
+              {matchesByPhase.oitavas.map(match => (
+                <ChampMatch key={match.id} {...match} />
+              ))}
+            </div>
           )}
-          {teamNumber >= 8 ? (
-            <>
-              <div className="display-area__row">
-                {playoffsMatches.map((match, index) =>
-                  match.type == "quartas" ? (
-                    <ChampMatch
-                      type={match.type}
-                      names={match.names}
-                      points={match.points}
-                      images={match.images}
-                      key={match.id}
-                    />
-                  ) : (
-                    <></>
-                  )
-                )}
-              </div>
-            </>
-          ) : (
-            <></>
+
+          {/* Quartas de Final */}
+          {matchesByPhase.quartas.length > 0 && (
+            <div className="phase-column">
+              <h2>Quartas de Final</h2>
+              {matchesByPhase.quartas.map(match => (
+                <ChampMatch key={match.id} {...match} />
+              ))}
+            </div>
           )}
-          <div className="display-area__row">
-            {playoffsMatches.map((match, index) =>
-              match.type == "semi" ? (
-                <ChampMatch
-                  type={match.type}
-                  names={match.names}
-                  points={match.points}
-                  images={match.images}
-                  key={match.id}
-                />
-              ) : (
-                <></>
-              )
-            )}
-          </div>
-          <div className="display-area__row">
-            {playoffsMatches.map((match, index) =>
-              match.type == "final" ? (
-                <ChampMatch
-                  type={match.type}
-                  names={match.names}
-                  points={match.points}
-                  images={match.images}
-                  key={match.id}
-                />
-              ) : (
-                <></>
-              )
-            )}
-          </div>
+
+          {/* Semifinal */}
+          {matchesByPhase.semi.length > 0 && (
+            <div className="phase-column">
+              <h2>Semifinal</h2>
+              {matchesByPhase.semi.map(match => (
+                <ChampMatch key={match.id} {...match} />
+              ))}
+            </div>
+          )}
+
+          {/* Final */}
+          {matchesByPhase.final.length > 0 && (
+            <div className="phase-column">
+              <h2>Final</h2>
+              {matchesByPhase.final.map(match => (
+                <ChampMatch key={match.id} {...match} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="my-matches-button-area">
