@@ -91,9 +91,11 @@ const FreeSchedules = () => {
           {times[0] != "" ? (
             <>
               <p>Horarios Disponíveis:</p>
-              {times.map((time) => (
-                <p>- {time}</p>
-              ))}
+              <ul>
+                {times.map((time) => (
+                  <li>{time}</li>
+                ))}
+              </ul>
             </>
           ) : (
             <p>Sem horarios disponíveis</p>

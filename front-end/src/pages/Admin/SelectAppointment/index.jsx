@@ -23,6 +23,12 @@ const SelectAppointment = () => {
     console.log(appointments);
   }, [admin.id]);
 
+  const handleDelete = (id)=>{
+    console.log('deletou', id)
+  }
+
+if(isLoading) return <></>
+
   return (
     <div className="select-appointment">
       <Header />
@@ -38,6 +44,7 @@ const SelectAppointment = () => {
             toEdit={true}
             key={index}
             id={appointment.id}
+            dell = {()=>handleDelete(appointment.id)}
           />
         ))}
       </div>

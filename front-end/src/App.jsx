@@ -50,6 +50,7 @@ import EditCourt from "./pages/Admin/EditCourt";
 import CreateMatches from "./pages/Admin/CreateMatches";
 import AppointmentMenu from "./pages/Admin/AppointmentMenu";
 import FreeSchedules from "./pages/Admin/FreeSchedules";
+import CreateAppointment from "./pages/Admin/CreateAppointment";
 
 
 const App = () => {
@@ -101,6 +102,7 @@ const App = () => {
 
               <Route path="/admin/appointment-menu" element={<AppointmentMenu/>}/>
               <Route path="/admin/free-schedules" element={<FreeSchedules/>}/>
+              <Route path="/admin/create-appointment" element={<CreateAppointment/>}/>
               <Route path="/admin/select-appointment" element={<SelectAppointment/>}/>
               <Route path="/admin/select-appointment/edit" element={<EditAppointment/>}/>
               
