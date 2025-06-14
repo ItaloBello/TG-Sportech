@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { notifySuccess, notifyError } from '../utils/notify';
@@ -172,7 +172,7 @@ export const AdminAuthContextProvider = ({ children }) => {
     return data.slots; // Return the slots
   };
 
-  const handleGetCourt = async (courtId) => {
+  const handleGetCourt = useCallback(async (courtId) => {
     try {
       const { data } = await api.get(`/api/admin/quadra/${courtId}`); 
       setCourt(data); 
@@ -183,7 +183,7 @@ export const AdminAuthContextProvider = ({ children }) => {
       setCourt(null); 
       return null;
     }
-  };
+  }, [api, setCourt, notifyError]);
 
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
@@ -220,7 +220,7 @@ export const AdminAuthContextProvider = ({ children }) => {
     }
   };
 
-  const handleEditCourt = async (payload) => {
+  const handleEditCourt = useCallback(async (payload) => {
     try {
       // The payload should contain the court's id as payload.id
       const { data } = await api.put(`/api/admin/atualizarQuadra/${payload.id}`, payload);
@@ -234,7 +234,7 @@ export const AdminAuthContextProvider = ({ children }) => {
       notifyError(error.response?.data?.message || 'Erro ao atualizar quadra.');
       return null;
     }
-  };
+  }, [api, notifySuccess, notifyError]);
 
   return (
     <AdminAuthContext.Provider

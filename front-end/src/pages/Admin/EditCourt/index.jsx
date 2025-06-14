@@ -15,38 +15,129 @@ import { useAdminAuth } from "../../../hooks/useAdminAuth";
 
 const schema = yup
   .object({
-    name: yup.string().required("Campo obrigatorio"),
-    typeCourt: yup.string(),
-    timeDivision: yup.string(),
-    percent: yup.number().required("Campo obrigatorio"),
+    name: yup.string().required("Nome da quadra é obrigatório"),
+    typeCourt: yup.string().required("Tipo da quadra é obrigatório"),
+    timeDivision: yup.string().required("Divisão de tempo é obrigatória"),
+    percent: yup.number().required("Percentual do sinal é obrigatório").typeError("Percentual deve ser um número").min(0, "Percentual não pode ser negativo").max(100, "Percentual não pode ser maior que 100"),
+
     sunday: yup.boolean(),
-    sundayHour: yup.number("deve ser um número"),
-    sundayInitial: yup.string(),
-    sundayEnd: yup.string(),
+    sundayHour: yup.number().when('sunday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Domingo").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    sundayInitial: yup.string().when('sunday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Domingo"),
+      otherwise: schema => schema.optional(),
+    }),
+    sundayEnd: yup.string().when('sunday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Domingo"),
+      otherwise: schema => schema.optional(),
+    }),
+
     monday: yup.boolean(),
-    mondayHour: yup.number("deve ser um número"),
-    mondayInitial: yup.string(),
-    mondayEnd: yup.string(),
+    mondayHour: yup.number().when('monday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Segunda").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    mondayInitial: yup.string().when('monday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Segunda"),
+      otherwise: schema => schema.optional(),
+    }),
+    mondayEnd: yup.string().when('monday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Segunda"),
+      otherwise: schema => schema.optional(),
+    }),
+
     tuesday: yup.boolean(),
-    tuesdayHour: yup.number("deve ser um número"),
-    tuesdayInitial: yup.string(),
-    tuesdayEnd: yup.string(),
+    tuesdayHour: yup.number().when('tuesday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Terça").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    tuesdayInitial: yup.string().when('tuesday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Terça"),
+      otherwise: schema => schema.optional(),
+    }),
+    tuesdayEnd: yup.string().when('tuesday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Terça"),
+      otherwise: schema => schema.optional(),
+    }),
+
     wednesday: yup.boolean(),
-    wednesdayHour: yup.number("deve ser um número"),
-    wednesdayInitial: yup.string(),
-    wednesdayEnd: yup.string(),
+    wednesdayHour: yup.number().when('wednesday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Quarta").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    wednesdayInitial: yup.string().when('wednesday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Quarta"),
+      otherwise: schema => schema.optional(),
+    }),
+    wednesdayEnd: yup.string().when('wednesday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Quarta"),
+      otherwise: schema => schema.optional(),
+    }),
+
     thursday: yup.boolean(),
-    thursdayHour: yup.number("deve ser um número"),
-    thursdayInitial: yup.string(),
-    thursdayEnd: yup.string(),
+    thursdayHour: yup.number().when('thursday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Quinta").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    thursdayInitial: yup.string().when('thursday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Quinta"),
+      otherwise: schema => schema.optional(),
+    }),
+    thursdayEnd: yup.string().when('thursday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Quinta"),
+      otherwise: schema => schema.optional(),
+    }),
+
     friday: yup.boolean(),
-    fridayHour: yup.number("deve ser um número"),
-    fridayInitial: yup.string(),
-    fridayEnd: yup.string(),
+    fridayHour: yup.number().when('friday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Sexta").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    fridayInitial: yup.string().when('friday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Sexta"),
+      otherwise: schema => schema.optional(),
+    }),
+    fridayEnd: yup.string().when('friday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Sexta"),
+      otherwise: schema => schema.optional(),
+    }),
+
     saturday: yup.boolean(),
-    saturdayHour: yup.number("deve ser um número"),
-    saturdayInitial: yup.string(),
-    saturdayEnd: yup.string(),
+    saturdayHour: yup.number().when('saturday', {
+      is: true,
+      then: schema => schema.required("Valor/hora é obrigatório para Sábado").typeError("Valor/hora deve ser um número"),
+      otherwise: schema => schema.nullable().transform(v => (isNaN(v) ? null : Number(v))),
+    }),
+    saturdayInitial: yup.string().when('saturday', {
+      is: true,
+      then: schema => schema.required("Horário inicial é obrigatório para Sábado"),
+      otherwise: schema => schema.optional(),
+    }),
+    saturdayEnd: yup.string().when('saturday', {
+      is: true,
+      then: schema => schema.required("Horário final é obrigatório para Sábado"),
+      otherwise: schema => schema.optional(),
+    }),
   })
   .required();
 
@@ -62,7 +153,7 @@ const EditCourt = () => {
     mode: "onBlur",
   });
 
-  const [selectedValue, setSelectedValue] = useState();
+
   const [selectedDays, setSelectedDays] = useState([]);
 
   // Buscar quadra ao montar ou quando selectedCourt (ID) muda
@@ -81,8 +172,58 @@ const EditCourt = () => {
       setValue("timeDivision", court.quadra.meioSlot ? "30 Minutos" : "1 hora");
       setValue("percent", (court.quadra.porcSinal || 0) * 100);
 
-      setSelectedValue(court.quadra.tipo || "");
 
+      const activeDaysForState = [];
+      // Maps backend diaSemana string to form field prefixes
+      const dayStringToPrefixMap = {
+        'domingo': "sunday",
+        'segunda': "monday",
+        'terca': "tuesday", // Adjusted to 'terca' - please verify backend string
+        'quarta': "wednesday",
+        'quinta': "thursday",
+        'sexta': "friday",
+        'sabado': "saturday", // Adjusted to 'sabado' - please verify backend string
+      };
+
+      // Maps backend diaSemana string to CheckBoxItem labels (must match exactly)
+      const dayStringToLabelMap = {
+        'domingo': "Domingo",
+        'segunda': "Segunda",
+        'terca': "Terça",    // Adjusted to 'terca' - please verify backend string
+        'quarta': "Quarta",
+        'quinta': "Quinta",
+        'sexta': "Sexta",
+        'sabado': "Sabado",  // Adjusted to 'sabado' - please verify backend string
+      };
+
+      if (court.horarios && Array.isArray(court.horarios)) {
+        // Initialize all day checkboxes to false and clear time/hour fields first
+        Object.values(dayStringToPrefixMap).forEach(prefix => {
+          setValue(prefix, false);
+          setValue(`${prefix}Initial`, "");
+          setValue(`${prefix}End`, "");
+          setValue(`${prefix}Hour`, "");
+        });
+
+        court.horarios.forEach(horario => {
+          // Normalize backend diaSemana to lowercase for consistent mapping
+          const diaSemanaNormalized = horario.diaSemana.toLowerCase(); 
+          const dayPrefix = dayStringToPrefixMap[diaSemanaNormalized];
+          
+          if (dayPrefix) {
+            setValue(dayPrefix, true); // Check the box for the day
+            setValue(`${dayPrefix}Initial`, horario.horaInicio ? horario.horaInicio.substring(0, 5) : "");
+            setValue(`${dayPrefix}End`, horario.horaFim ? horario.horaFim.substring(0, 5) : "");
+            setValue(`${dayPrefix}Hour`, horario.valorHora ? parseFloat(horario.valorHora) : "");
+            
+            const label = dayStringToLabelMap[diaSemanaNormalized];
+            if (label) {
+              activeDaysForState.push(label);
+            }
+          }
+        });
+      }
+      setSelectedDays(activeDaysForState);
     }
   }, [court, setValue]);
 
@@ -95,9 +236,8 @@ const EditCourt = () => {
 
   const onSubmit = (formData) => {
     const payload = {
-      ...formData,
-      typeCourt: selectedValue,
-      weekDays: selectedDays,
+      ...formData, // typeCourt is now part of formData
+      weekDays: selectedDays, // This still needs to be transformed for the backend
       id: court.quadra.id,
     };
     console.log(payload);
@@ -112,7 +252,7 @@ const EditCourt = () => {
           errorMessage={errors?.name?.message}
           name="name"
           label="Nome da Quadra"
-          placeholder={court.nome}
+          placeholder={court && court.quadra ? court.quadra.nome : "Carregando..."}
         />
         <ComboBoxItem
           control={control}
@@ -121,7 +261,6 @@ const EditCourt = () => {
           label="tipo da quadra"
           placeholder="selecione o tipo da quadra"
           options={["society", "gramado"]}
-          onChange={setSelectedValue}
         />
         <p className="create-court__sutitle">
           Selcione os dias de funcionamento
