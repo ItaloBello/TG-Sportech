@@ -83,7 +83,9 @@ const SchedulingSimple = () => {
   useEffect(() => {
     if (selectedCourt && selectedDate) {
       const getAvaliableTimes = async () => {
+        console.log("Buscando horários disponíveis para:", { quadra: selectedCourt, data: selectedDate });
         await handleGetAvaliableTimes(selectedCourt, selectedDate);
+        console.log("Horários disponíveis:", avaliableTimes);
       };
       getAvaliableTimes();
     }
@@ -94,9 +96,11 @@ const SchedulingSimple = () => {
   };
 
   const handleDateChange = (date) => {
-    date = format(date, "dd-MM-yyyy");
-    setSelectedDate(date);
-  };
+    // Corrigido para enviar data no formato ISO aceito pelo backend
+    const formatted = format(date, "yyyy-MM-dd");
+    console.log("Data formatada:", formatted);
+    setSelectedDate(formatted);
+  }
 
   const handleSelectedTimesChange = (label, isChecked) => {
     setSelectedTimes((prev) => {
@@ -116,11 +120,12 @@ const SchedulingSimple = () => {
   const onSubmit = (dataForm) => {
     const payload = {
       ...dataForm,
-      date: format(dataForm.date, "yyyy-MM-dd"),
+      date: format(dataForm.date, "yyyy-MM-dd"), // mantém formato ISO para o backend
       times: selectedTimes,
       court: selectedCourt,
       idJogador: player.id,
     };
+
     console.log("player", player);
     console.log("enviando");
     console.log(payload);

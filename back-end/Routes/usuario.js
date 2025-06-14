@@ -401,23 +401,40 @@ router.get("/quadras", async (req,res) =>{
 })
 
 router.get("/quadras/horarios/:id",async (req,res) => {
-  const id = req.params.id;
-  let dataInput = req.query.data.split('-');
-  const data = dataInput[2]+'-'+dataInput[1]+'-'+dataInput[0]+'T03:00:00'
-  const agendamentos = await Agendamento.findAll({where: {
-    idQuadra: id,
-    [Op.and]: [
-      where(fn('DATE', col('data')), data) // compara apenas a parte da data
-    ]
-  }});
-  let slotsOcupados = [];
-  for (let agendamento of agendamentos){
-    slotsOcupados.push(`${agendamento.horaInicio.slice(0,5)}-${agendamento.horaFim.slice(0,5)}`)
+  try {
+    const id = req.params.id;
+    
+    // Log da data recebida para debug
+    console.log('Data recebida do frontend:', req.query.data);
+    
+    // A data recebida já está no formato yyyy-MM-dd (ISO)
+    const dataFormatada = req.query.data;
+    
+    // Consulta os agendamentos existentes para esta data e quadra
+    const agendamentos = await Agendamento.findAll({where: {
+      idQuadra: id,
+      [Op.and]: [
+        where(fn('DATE', col('data')), dataFormatada) // compara apenas a parte da data
+      ]
+    }});
+    
+    // Prepara a lista de slots já ocupados
+    let slotsOcupados = [];
+    for (let agendamento of agendamentos){
+      slotsOcupados.push(`${agendamento.horaInicio.slice(0,5)}-${agendamento.horaFim.slice(0,5)}`)
+    }
+    
+    // Obtém todos os slots disponíveis para esta data
+    const slots = await getDaySlots(new Date(dataFormatada), id, slotsOcupados);
+    
+    console.log(`Enviando ${slots.length} slots disponíveis para o frontend`);
+    
+    // Retorna os dados ao cliente
+    return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
+  } catch (error) {
+    console.error('Erro ao processar horários disponíveis:', error);
+    return res.status(500).json({ error: 'Erro ao processar horários disponíveis' });
   }
-  //a data deve estar no 2025-05-14 ou ser convertida para esse formato
-  
-  const slots = await getDaySlots(new Date(req.query.data), id, slotsOcupados); // Use req.query.data for reliable Date parsing
-  return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 
 router.get('/quadras/:id/dias-bloqueados', async (req, res) => {

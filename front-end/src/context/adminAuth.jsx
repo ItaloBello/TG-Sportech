@@ -220,6 +220,22 @@ export const AdminAuthContextProvider = ({ children }) => {
     }
   };
 
+  const handleUpdateMatchResult = useCallback(async (partidaId, golsTimeA, golsTimeB) => {
+    console.log('[handleUpdateMatchResult] Attempting to update result for partidaId:', partidaId, 'with scores A:', golsTimeA, 'B:', golsTimeB);
+    try {
+      const response = await api.put(`/api/campeonato/partidas/${partidaId}/resultado`, {
+        golsTimeA,
+        golsTimeB,
+      });
+      notifySuccess('Resultado da partida atualizado com sucesso!');
+      return response.data; // Return data for potential further processing or refresh
+    } catch (error) {
+      console.error("Error updating match result for partidaId:", partidaId, "payload:", {golsTimeA, golsTimeB}, "Error:", error.response?.data || error.message, error);
+      notifyError(error.response?.data?.message || 'Erro ao atualizar resultado da partida.');
+      throw error; // Re-throw to allow caller to handle
+    }
+  }, [api, notifySuccess, notifyError]);
+
   const handleEditCourt = useCallback(async (payload) => {
     try {
       // The payload should contain the court's id as payload.id
@@ -268,7 +284,9 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetTeamNumber,
         handleSetSelectedChamp,
         handleSelectedType,
-        handleEditCourt
+        handleEditCourt,
+        handleUpdateMatchResult,
+        handleSetSelectedAppointment,
       }}
     >
       {children}

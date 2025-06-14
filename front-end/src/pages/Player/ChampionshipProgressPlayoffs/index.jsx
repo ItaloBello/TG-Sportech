@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import "./styles.css";
 import Header from "../../../components/Header";
 import ChampMatch from "../../../components/ChampMatch";
 import { usePlayerAuth } from "../../../hooks/usePlayerAuth";
+import { useAdminAuth } from "../../../hooks/useAdminAuth"; // Assuming path
 import { useNavigate, useParams } from "react-router-dom";
 
 //TODO integrar com o back
@@ -11,25 +12,47 @@ const ChampionshipProgressPlayoffs = () => {
   const { championshipId } = useParams(); // Get championshipId from URL
   const navigate = useNavigate()
   const teamNumber = 16;
-  const { playoffsMatches, handlePlayoffsGetChampMatches } = usePlayerAuth(); // Removed selectedChampionship as we'll use championshipId from params
+  const { playoffsMatches, handlePlayoffsGetChampMatches } = usePlayerAuth();
+  const { admin, handleUpdateMatchResult: adminHandleUpdateMatchResult } = useAdminAuth(); // Removed selectedChampionship as we'll use championshipId from params
+
+  const getMatches = useCallback(async () => {
+    if (championshipId) {
+      try {
+        console.log(`Fetching matches for championship ID: ${championshipId}`);
+        await handlePlayoffsGetChampMatches(championshipId);
+      } catch (error) {
+        console.error('Erro ao buscar partidas:', error);
+      }
+    } else {
+      console.log('Championship ID not found in URL for ChampionshipProgressPlayoffs');
+    }
+  }, [championshipId, handlePlayoffsGetChampMatches]);
 
   useEffect(() => {
-    const getMatches = async () => {
-      if (championshipId) { // Use championshipId from URL
-        try {
-          // For now, we are just focusing on displaying the screen.
-          // The actual data fetching might need adjustment based on how handlePlayoffsGetChampMatches works.
-          console.log(`Fetching matches for championship ID: ${championshipId}`);
-          await handlePlayoffsGetChampMatches(championshipId);
-        } catch (error) {
-          console.error('Erro ao buscar partidas:', error);
-        }
-      } else {
-        console.log('Championship ID not found in URL for ChampionshipProgressPlayoffs');
-      }
-    };
     getMatches();
-  }, [championshipId, handlePlayoffsGetChampMatches]); // Add handlePlayoffsGetChampMatches to dependency array
+  }, [getMatches]); // Changed dependency to the memoized getMatches
+
+  const handleSaveMatchResultWrapper = useCallback(async (partidaId, golsTimeA, golsTimeB) => {
+    if (!adminHandleUpdateMatchResult) {
+      console.error("handleUpdateMatchResult is not available from admin context");
+      return;
+    }
+    try {
+      await adminHandleUpdateMatchResult(partidaId, golsTimeA, golsTimeB);
+      // Notification is handled in adminHandleUpdateMatchResult
+      // Refresh matches after successful update
+      await getMatches(); 
+    } catch (error) {
+      // Error notification is also handled in adminHandleUpdateMatchResult
+      console.error("Failed to save match result from component:", error);
+    }
+  }, [adminHandleUpdateMatchResult, getMatches]);
+
+  // useEffect(() => {
+  //   const getMatches = async () => {
+    // --- Stray code removed here ---
+    // This useEffect is now replaced by the one above that calls the memoized getMatches
+  // }, [championshipId, handlePlayoffsGetChampMatches]); // Add handlePlayoffsGetChampMatches to dependency array
 
   // Group matches by phase
   const matchesByPhase = {
@@ -55,7 +78,14 @@ const ChampionshipProgressPlayoffs = () => {
             <div className="phase-column">
               <h2>Oitavas de Final</h2>
               {matchesByPhase.oitavas.map(match => (
-                <ChampMatch key={match.id} {...match} />
+                <ChampMatch 
+                  key={match.id} 
+                  {...match} 
+                  partidaId={match.id} // Ensure match.id is the correct match identifier
+                  isAdmin={!!admin && !!admin.id}
+                  matchStatus={match.status} // Ensure match.status is available (e.g., 'agendada', 'finalizada')
+                  onSaveResult={handleSaveMatchResultWrapper} 
+                />
               ))}
             </div>
           )}
@@ -65,7 +95,14 @@ const ChampionshipProgressPlayoffs = () => {
             <div className="phase-column">
               <h2>Quartas de Final</h2>
               {matchesByPhase.quartas.map(match => (
-                <ChampMatch key={match.id} {...match} />
+                <ChampMatch 
+                  key={match.id} 
+                  {...match} 
+                  partidaId={match.id} // Ensure match.id is the correct match identifier
+                  isAdmin={!!admin && !!admin.id}
+                  matchStatus={match.status} // Ensure match.status is available (e.g., 'agendada', 'finalizada')
+                  onSaveResult={handleSaveMatchResultWrapper} 
+                />
               ))}
             </div>
           )}
@@ -75,7 +112,14 @@ const ChampionshipProgressPlayoffs = () => {
             <div className="phase-column">
               <h2>Semifinal</h2>
               {matchesByPhase.semi.map(match => (
-                <ChampMatch key={match.id} {...match} />
+                <ChampMatch 
+                  key={match.id} 
+                  {...match} 
+                  partidaId={match.id} // Ensure match.id is the correct match identifier
+                  isAdmin={!!admin && !!admin.id}
+                  matchStatus={match.status} // Ensure match.status is available (e.g., 'agendada', 'finalizada')
+                  onSaveResult={handleSaveMatchResultWrapper} 
+                />
               ))}
             </div>
           )}
@@ -85,7 +129,14 @@ const ChampionshipProgressPlayoffs = () => {
             <div className="phase-column">
               <h2>Final</h2>
               {matchesByPhase.final.map(match => (
-                <ChampMatch key={match.id} {...match} />
+                <ChampMatch 
+                  key={match.id} 
+                  {...match} 
+                  partidaId={match.id} // Ensure match.id is the correct match identifier
+                  isAdmin={!!admin && !!admin.id}
+                  matchStatus={match.status} // Ensure match.status is available (e.g., 'agendada', 'finalizada')
+                  onSaveResult={handleSaveMatchResultWrapper} 
+                />
               ))}
             </div>
           )}

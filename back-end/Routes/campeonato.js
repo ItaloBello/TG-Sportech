@@ -9,14 +9,6 @@ const Usuario = require('../Models/Usuario');
 const Quadra = require('../Models/Quadra');
 const { Op } = require('sequelize');
 
-// Middleware para verificar se o usuário é dono da quadra
-const isDonoQuadra = (req, res, next) => {
-    if (req.user && req.user.tipo === 'dono') {
-        return next();
-    }
-    return res.status(401).json({ error: 'Acesso não autorizado' });
-};
-
 // Middleware para verificar se o usuário é dono do time
 const isDonoTime = async (req, res, next) => {
     try {
@@ -128,7 +120,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Atualizar informações do campeonato
-router.put('/:id', isDonoQuadra, async (req, res) => {
+router.put('/:id',  async (req, res) => {
     try {
         const { id } = req.params;
         const { nome, data_inicio, num_times, descricao, premiacao, registro, status } = req.body;
@@ -169,7 +161,7 @@ router.put('/:id', isDonoQuadra, async (req, res) => {
 });
 
 // Criar uma partida para um campeonato
-router.post('/:id/partidas', isDonoQuadra, async (req, res) => {
+router.post('/:id/partidas', async (req, res) => {
     try {
         const { id } = req.params;
         const { timeAId, timeBId, quadraId, data, hora, fase } = req.body;
@@ -219,7 +211,7 @@ router.post('/:id/partidas', isDonoQuadra, async (req, res) => {
 });
 
 // Registrar resultado de uma partida
-router.put('/partidas/:partidaId/resultado', isDonoQuadra, async (req, res) => {
+router.put('/partidas/:partidaId/resultado', async (req, res) => {
     try {
         const { partidaId } = req.params;
         const { golsTimeA, golsTimeB, gols } = req.body;
@@ -259,53 +251,51 @@ router.put('/partidas/:partidaId/resultado', isDonoQuadra, async (req, res) => {
 });
 
 // Gerar chaveamento automático para próxima fase
-router.post('/:id/gerar-chaveamento', isDonoQuadra, async (req, res) => {
+router.post('/:id/gerar-chaveamento', async (req, res) => {
     try {
         const { id } = req.params;
         const { fase, quadraId, data, hora } = req.body;
-        
+
+        // Mapeamento de fases para números
+        const faseMap = {
+            'quartas': 2,
+            'semi': 3,
+            'final': 4
+        };
+        const faseAnteriorMap = {
+            'quartas': 1,
+            'semi': 2,
+            'final': 3
+        };
+        if (!faseMap[fase] || !faseAnteriorMap[fase]) {
+            return res.status(400).json({ error: 'Fase inválida' });
+        }
+        const proximaFase = faseMap[fase];
+        const faseAnterior = faseAnteriorMap[fase];
+
         // Verificar se o campeonato existe
         const campeonato = await Campeonato.findByPk(id);
         if (!campeonato) {
             return res.status(404).json({ error: 'Campeonato não encontrado' });
         }
-        
+
         // Buscar partidas da fase anterior que já foram finalizadas
-        let faseAnterior;
-        let proximaFase;
-        
-        switch (fase) {
-            case 'quartas':
-                faseAnterior = 'oitavas';
-                proximaFase = 'quartas';
-                break;
-            case 'semi':
-                faseAnterior = 'quartas';
-                proximaFase = 'semi';
-                break;
-            case 'final':
-                faseAnterior = 'semi';
-                proximaFase = 'final';
-                break;
-            default:
-                return res.status(400).json({ error: 'Fase inválida' });
-        }
-        
         const partidasFaseAnterior = await Partida.findAll({
             where: {
                 campeonatoId: id,
-                fase: faseAnterior,
+                fase: String(faseAnterior),
                 status: 'finalizado'
             }
         });
-        
+        console.log(partidasFaseAnterior)
+        console.log(fase + ' ' + faseAnterior + ' ' + proximaFase)
         // Verificar se todas as partidas da fase anterior foram finalizadas
         const numEsperado = fase === 'quartas' ? 8 : (fase === 'semi' ? 4 : 2);
-        if (partidasFaseAnterior.length < numEsperado) {
+        /*if (partidasFaseAnterior.length < numEsperado) {
             return res.status(400).json({ 
                 error: `Nem todas as partidas da fase ${faseAnterior} foram finalizadas` 
             });
-        }
+        }*/
         
         // Determinar os vencedores
         const vencedores = partidasFaseAnterior.map(partida => {
@@ -436,7 +426,7 @@ router.post('/inscrever', async (req, res) => {
 });
 
 // Confirmar pagamento da inscrição (dono da quadra)
-router.put('/confirmar-pagamento/:inscricaoId', isDonoQuadra, async (req, res) => {
+router.put('/confirmar-pagamento/:inscricaoId' , async (req, res) => {
     try {
         const { inscricaoId } = req.params;
         

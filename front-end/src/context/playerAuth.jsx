@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { notifySuccess, notifyError } from '../utils/notify';
@@ -153,11 +153,26 @@ export const PlayerAuthContextProvider = ({ children }) => {
   };
 
   const handleGetAvaliableTimes = async (selectedCourt, selectedDate) => {
-    const { data } = await api.get(
-      `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
-    );
-
-    setAvaliableTimes(data.slots);
+    try {
+      console.log(`Chamando API com: quadra=${selectedCourt}, data=${selectedDate}`);
+      const { data } = await api.get(
+        `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
+      );
+      
+      console.log('Resposta da API:', data);
+      
+      if (data && Array.isArray(data.slots)) {
+        console.log(`Recebidos ${data.slots.length} horários disponíveis`);
+        setAvaliableTimes(data.slots);
+      } else {
+        console.error('Formato inesperado na resposta:', data);
+        setAvaliableTimes([]);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar horários disponíveis:', error.response || error);
+      setAvaliableTimes([]);
+      notifyError('Erro ao carregar horários disponíveis');
+    }
   };
 
   const handleCreateAppointment = async (dataForm) => {
@@ -261,7 +276,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
     localStorage.setItem("champ", JSON.stringify(champ));
   };
 
-  const getPhaseType = (fase) => {
+  const getPhaseType = useCallback((fase) => {
     switch (fase) {
       case 1: return 'oitavas';
       case 2: return 'quartas';
@@ -269,7 +284,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
       case 4: return 'final';
       default: return 'oitavas';
     }
-  };
+  });
 
   // Função para inscrever um time em um campeonato
   const handleSubscribeTeamToChampionship = async (timeId, campeonatoId) => {
@@ -348,7 +363,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-    const handlePlayoffsGetChampMatches = async (champId) => {
+    const handlePlayoffsGetChampMatches = useCallback(async (champId) => {
     try {
       const response = await api.get(`/api/campeonato/${champId}/partidas`);
       const matches = response.data.map(partida => ({
@@ -367,7 +382,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
       setPlayoffsMatches([]); // Clear matches on error
       return [];
     }
-  };
+  });
 
   const handleGetChampPointsTable = async (champId) => {
     //TODO retornar cada linha da tabela de pontos do campeonato de pontos corridos, ordenado pela posição

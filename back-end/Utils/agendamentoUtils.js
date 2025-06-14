@@ -24,13 +24,34 @@ function decimalToTimeString(decimal) {
 }
 
 async function getDaySlots(data, idQuadra, unavailableSlots) {
+    console.log(`getDaySlots chamado para: data=${data} (${data.toISOString()}), idQuadra=${idQuadra}`);
+    
     const quadra = await Quadra.findOne({where: {id: idQuadra}});
-    const diaSemana = arrayDias[data.getDay()]  
-    const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
-    if(!horario){
-        
+    if (!quadra) {
+        console.log(`Quadra ${idQuadra} não encontrada`);
         return [];
     }
+    
+    // Identifica o dia da semana
+    const diaSemana = arrayDias[data.getDay()];
+    console.log(`Dia da semana identificado: ${diaSemana} (dia ${data.getDay()})`);
+    
+    if (diaSemana === undefined) {
+        // Proteção extra: se diaSemana for undefined, retorna slots vazios para evitar erro do Sequelize
+        console.log('Dia da semana indefinido!');
+        return [];
+    }
+    
+    // Busca horário configurado para essa quadra nesse dia da semana
+    const horario = await Horario.findOne({where: {quadraId: parseInt(idQuadra), diaSemana: diaSemana}});
+    
+    if(!horario){
+        console.log(`Nenhum horário encontrado para quadra ${idQuadra} no dia ${diaSemana}`);
+        return [];
+    }
+    
+    console.log(`Horário encontrado: ${JSON.stringify(horario)}`);
+
     let tempoInicial = timeStringToDecimal(horario.horaInicio);
     let tempoFinal = timeStringToDecimal(horario.horaFim);
     let contador = tempoInicial;
