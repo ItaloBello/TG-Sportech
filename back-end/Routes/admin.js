@@ -437,12 +437,11 @@ router.delete('/excluirQuadra/:id', async (req, res) => {
 router.put('/agendamentos/pagamento/confirmar/:id', async (req,res) => {
     try{
         const id = req.params.id;
-        const agendamento = Agendamento.findOne({where: {id}});
+        const agendamento = await Agendamento.findOne({where: {id}}); // Added await
         if (!agendamento){
             res.status(404).json({error: "Agendamento não encontrado"});
         }else{
-            agendamento.pago = true;
-            await Agendamento.update(agendamento,{where: {id}});
+            await Agendamento.update({ pago: true }, { where: { id } }); 
             res.status(200).json({message: "Pagamento confirmado"});
         }
     }catch(err){

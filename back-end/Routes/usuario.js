@@ -416,7 +416,7 @@ router.get("/quadras/horarios/:id",async (req,res) => {
   }
   //a data deve estar no 2025-05-14 ou ser convertida para esse formato
   
-  const slots = await getDaySlots(new Date(data), id, slotsOcupados);
+  const slots = await getDaySlots(new Date(req.query.data), id, slotsOcupados); // Use req.query.data for reliable Date parsing
   return res.status(200).json({slotsOcupados: slotsOcupados, slots: slots});
 })
 

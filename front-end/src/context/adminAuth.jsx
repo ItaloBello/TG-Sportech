@@ -11,8 +11,8 @@ export const AdminAuthContextProvider = ({ children }) => {
   const [selectedChamp, setSelectedChamp] = useState({});
   const [champMatches, setChampMatches] = useState([]);
   const [myCourts, setMyCourts] = useState([]);
-  const [court, setCourt] = useState([]);
-  const [selectedCourt, setSelectedCourt] = useState([]);
+  const [court, setCourt] = useState(null); // Initialize court state to null
+  const [selectedCourt, setSelectedCourt] = useState(null); // Initialize selectedCourt to null
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(() => {
     const saved = localStorage.getItem('selectedAppointment');
@@ -168,10 +168,22 @@ export const AdminAuthContextProvider = ({ children }) => {
       `/api/jogador/quadras/horarios/${selectedCourt}?data=${selectedDate}`
     );
     console.log(data);
-    setAvaliableTimes(data.slots);
+    setAvaliableTimes(data.slots); // Keep for other potential consumers
+    return data.slots; // Return the slots
   };
 
-  const handleGetCourt = async ()=>{}
+  const handleGetCourt = async (courtId) => {
+    try {
+      const { data } = await api.get(`/api/admin/quadra/${courtId}`); 
+      setCourt(data); 
+      return data;    
+    } catch (error) {
+      console.error("Error fetching court details:", error);
+      notifyError(error.response?.data?.message || 'Erro ao buscar detalhes da quadra.');
+      setCourt(null); 
+      return null;
+    }
+  };
 
   const handleSetSelectedCourt = (courtId) => {
     setSelectedCourt(courtId);
@@ -194,6 +206,34 @@ export const AdminAuthContextProvider = ({ children }) => {
       id: 1,
     });
     localStorage.setItem("championship", JSON.stringify(selectedChamp));
+  };
+
+  const handleSelectedType = async (appointmentId) => {
+    try {
+      const { data } = await api.get(`/api/admin/agendamentos/type/${appointmentId}`);
+      setSelectedType(data); // Assuming data is the type or an object containing it
+      return data; // Return data for the .then() in EditAppointment
+    } catch (error) {
+      console.error("Error fetching appointment type:", error);
+      notifyError(error.response?.data?.message || 'Erro ao buscar tipo de agendamento.');
+      return null; 
+    }
+  };
+
+  const handleEditCourt = async (payload) => {
+    try {
+      // The payload should contain the court's id as payload.id
+      const { data } = await api.put(`/api/admin/atualizarQuadra/${payload.id}`, payload);
+      notifySuccess('Quadra atualizada com sucesso!');
+      // Optionally, you might want to re-fetch the court list or navigate the user
+      // For example, navigate back to a court listing page:
+      // navigate('/admin/my-courts'); // (Adjust route as needed)
+      return data;
+    } catch (error) {
+      console.error("Error updating court:", error);
+      notifyError(error.response?.data?.message || 'Erro ao atualizar quadra.');
+      return null;
+    }
   };
 
   return (
@@ -220,12 +260,15 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleGetInProgressChamp,
         handleGetChampMatches,
         handleGetMyCourts,
+        handleGetAvaliableTimes, // Added this function to the context
         handleGetCourt,
         handleSetSelectedCourt,
         handleGetAppointmens,
         handleSetSelectedAppointment,
         handleGetTeamNumber,
-        handleSetSelectedChamp
+        handleSetSelectedChamp,
+        handleSelectedType,
+        handleEditCourt
       }}
     >
       {children}

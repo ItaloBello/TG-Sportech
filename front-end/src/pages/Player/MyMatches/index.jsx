@@ -8,13 +8,13 @@ const MyMatches = () => {
       <Header link={1}/>
       <p className='my-matches__title'>Partidas Finalizadas</p>
       <div className="cards-area">
-        <MatchCard date={'1/1/1000'} teams={['japioca', 'japioca']} title={'oitavas'} points={[2,4]}/>
-        <MatchCard date={'1/1/1000'} teams={['japioca', 'tridentina']} title={'oitavas'} points={[2,4]}/>
+        <MatchCard date={'1/1/1000'} teams={['São Bernardo', 'Inter-regional']} title={'oitavas'} points={[2,4]}/>
+        <MatchCard date={'1/1/1000'} teams={['São Bento FC', 'Inter-regional']} title={'oitavas'} points={[2,4]}/>
       </div>
       <p className='my-matches__title'>Proximas Partidas</p>
       <div className="cards-area">
-        <MatchCard date={'1/1/1000'} teams={['japioca', 'japioca']} title={'oitavas'} points={[2,4]}/>
-        <MatchCard date={'1/1/1000'} teams={['japioca', 'tridentina']} title={'oitavas'} points={[2,4]}/>
+        <MatchCard date={'1/1/1000'} teams={['São Bento FC', 'Inter-regional']} title={'oitavas'} points={[2,4]}/>
+        <MatchCard date={'1/1/1000'} teams={['São Bento FC', 'Grêmio Fatecano']} title={'oitavas'} points={[2,4]}/>
       </div>
     </div>
   )

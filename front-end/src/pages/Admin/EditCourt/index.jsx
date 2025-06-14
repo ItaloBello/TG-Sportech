@@ -65,14 +65,17 @@ const EditCourt = () => {
   const [selectedValue, setSelectedValue] = useState();
   const [selectedDays, setSelectedDays] = useState([]);
 
-  // Buscar quadra ao montar
+  // Buscar quadra ao montar ou quando selectedCourt (ID) muda
   useEffect(() => {
-    handleGetCourt(selectedCourt);
-  }, []);
+    if (selectedCourt) { // Only call if selectedCourt (ID) exists
+      handleGetCourt(selectedCourt);
+    }
+  }, [selectedCourt, handleGetCourt]); // Rerun if selectedCourt or handleGetCourt changes
 
   // Popular formulário quando os dados da quadra chegarem
   useEffect(() => {
     if (court && court.quadra) {
+      console.log('Fetched court data for edit page:', court);
       setValue("name", court.quadra.nome || "");
       setValue("typeCourt", court.quadra.tipo || "");
       setValue("timeDivision", court.quadra.meioSlot ? "30 Minutos" : "1 hora");

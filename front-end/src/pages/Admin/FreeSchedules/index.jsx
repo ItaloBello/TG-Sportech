@@ -15,8 +15,10 @@ const schema = yup
   })
   .required();
 const FreeSchedules = () => {
+  const adminAuth = useAdminAuth();
+  console.log('Admin Auth Context in FreeSchedules:', adminAuth);
   const { admin, handleGetMyCourts, myCourts, handleGetAvaliableTimes } =
-    useAdminAuth();
+    adminAuth;
   const [selectedCourt, setSelectedCourt] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [myCourtsName, setMyCourtsName] = useState([]);
@@ -52,16 +54,15 @@ const FreeSchedules = () => {
     getCourts();
   }, [admin.id, myCourts.length]);
 
-  const onSubmit = (dataForm) => {
+  const onSubmit = async (dataForm) => { // Made async
     const payload = {
       ...dataForm,
       court: selectedCourt,
     };
     console.log(payload);
 
-    // handleGetAvaliableTimes(payload.court,payload.date)
-
-    setHorarios(["19:00-20:00", "20:00-21:00"]);
+    const availableSlots = await handleGetAvaliableTimes(payload.court, payload.date); // Call and await
+    setHorarios(availableSlots || []); // Set state with result or empty array
   };
 
   if (isLoading) return <></>;
