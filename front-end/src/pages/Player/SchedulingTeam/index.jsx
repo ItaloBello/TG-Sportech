@@ -205,7 +205,7 @@ const SchedulingTeam = () => {
         ) : (
           <></>
         )}
-        <FormButton label="enviar" />
+        <FormButton label="Enviar" />
       </form>
     </div>
   );

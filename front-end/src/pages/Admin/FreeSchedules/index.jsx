@@ -74,7 +74,7 @@ const FreeSchedules = () => {
         <ComboBoxItem
           control={control}
           name="court"
-          label="selecione a quadra"
+          label="Selecione a quadra"
           options={myCourtsName}
           onChange={setSelectedCourt}
           values={myCourtsId}
@@ -83,9 +83,9 @@ const FreeSchedules = () => {
           control={control}
           name="date"
           type="date"
-          label="selcione o dia"
+          label="Selecione o dia"
         />
-        <FormButton label="pesquisar" />
+        <FormButton label="Pesquisar" />
       </form>
       {times.length ? (
         <>

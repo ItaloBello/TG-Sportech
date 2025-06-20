@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import MatchCard from '../../../components/MatchCard'
 import Header from '../../../components/Header'
 import { api } from '../../../services/api'
+import { PlayerAuthContext } from '../../../context/playerAuth'
+import { useAdminAuth } from '../../../hooks/useAdminAuth'
 
 const championshipId = localStorage.getItem('championshipId') || 1 // ajuste conforme seu fluxo
 const quadraId = 1 // ajuste conforme seu banco
@@ -11,6 +13,13 @@ const MyMatches = () => {
   const [proximas, setProximas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  
+  const { player } = useContext(PlayerAuthContext)
+  const { isAdmin } = useAdminAuth()
+  
+  // Verificar se o usuário é admin ou dono de quadra
+  const isCourtOwner = player && player.role === 'courtOwner'
+  const canGeneratePhases = isAdmin || isCourtOwner
 
   const fetchMatches = () => {
     setLoading(true)
@@ -74,11 +83,13 @@ const MyMatches = () => {
           />
         ))}
       </div>
-      <div style={{marginTop: '2rem'}}>
-        <button onClick={() => gerarChaveamento('quartas')}>Gerar Quartas de Final</button>{' '}
-        <button onClick={() => gerarChaveamento('semi')}>Gerar Semifinal</button>{' '}
-        <button onClick={() => gerarChaveamento('final')}>Gerar Final</button>
-      </div>
+      {canGeneratePhases && (
+        <div style={{marginTop: '2rem'}}>
+          <button onClick={() => gerarChaveamento('quartas')}>Gerar Quartas de Final</button>{' '}
+          <button onClick={() => gerarChaveamento('semi')}>Gerar Semifinal</button>{' '}
+          <button onClick={() => gerarChaveamento('final')}>Gerar Final</button>
+        </div>
+      )}
     </div>
   )
 }

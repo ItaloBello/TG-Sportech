@@ -81,7 +81,7 @@ const CreateAppointment = () => {
         <InputItem
           control={control}
           name={"name"}
-          label={"Nome do "}
+          label={"Nome do time"}
           placeholder={"nome"}
         />
         <Controller
@@ -125,7 +125,7 @@ const CreateAppointment = () => {
         ) : (
           <></>
         )} */}
-        <FormButton label="enviar" />
+        <FormButton label="Enviar" />
       </form>
     </div>
   );

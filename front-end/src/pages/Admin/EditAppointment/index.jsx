@@ -104,12 +104,6 @@ const EditAppointment = () => {
   return (
     <div className="edit-appointment">
       <Header />
-      {/* DEBUG INFO */}
-      <div style={{background: '#eee', padding: 10, marginBottom: 10, fontSize: 14}}>
-        <strong>Debug:</strong><br/>
-        <div><b>selectedAppointment:</b> {JSON.stringify(selectedAppointment)}</div>
-        <div><b>appointmentType:</b> {appointmentType}</div>
-      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="edit-appointment__main">
           {appointmentType == "rachão" ? (

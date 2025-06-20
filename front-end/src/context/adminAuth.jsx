@@ -223,11 +223,15 @@ export const AdminAuthContextProvider = ({ children }) => {
   const handleUpdateMatchResult = useCallback(async (partidaId, golsTimeA, golsTimeB) => {
     console.log('[handleUpdateMatchResult] Attempting to update result for partidaId:', partidaId, 'with scores A:', golsTimeA, 'B:', golsTimeB);
     try {
+      // Simplificando a chamada API - apenas atualizar o resultado
       const response = await api.put(`/api/campeonato/partidas/${partidaId}/resultado`, {
         golsTimeA,
         golsTimeB,
       });
+      
+      // Mostrar notificação de sucesso
       notifySuccess('Resultado da partida atualizado com sucesso!');
+      
       return response.data; // Return data for potential further processing or refresh
     } catch (error) {
       console.error("Error updating match result for partidaId:", partidaId, "payload:", {golsTimeA, golsTimeB}, "Error:", error.response?.data || error.message, error);
@@ -249,6 +253,26 @@ export const AdminAuthContextProvider = ({ children }) => {
       console.error("Error updating court:", error);
       notifyError(error.response?.data?.message || 'Erro ao atualizar quadra.');
       return null;
+    }
+  }, [api, notifySuccess, notifyError]);
+  
+  // Função para gerar a próxima fase do campeonato (quartas, semi ou final)
+  const handleGenerateNextPhase = useCallback(async (championshipId, fase, quadraId) => {
+    try {
+      console.log(`Gerando próxima fase: ${fase} para campeonato ${championshipId}`);
+      const response = await api.post(`/api/campeonato/${championshipId}/gerar-chaveamento`, {
+        fase, // 'quartas', 'semi', 'final'
+        quadraId,
+        data: new Date().toISOString().split('T')[0], // Data atual
+        hora: '12:00:00' // Horário padrão
+      });
+      
+      notifySuccess(`Fase de ${fase} gerada com sucesso!`);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao gerar próxima fase:", error);
+      notifyError(error.response?.data?.error || `Erro ao gerar fase de ${fase}.`);
+      throw error;
     }
   }, [api, notifySuccess, notifyError]);
 
@@ -286,6 +310,7 @@ export const AdminAuthContextProvider = ({ children }) => {
         handleSelectedType,
         handleEditCourt,
         handleUpdateMatchResult,
+        handleGenerateNextPhase,
         handleSetSelectedAppointment,
       }}
     >

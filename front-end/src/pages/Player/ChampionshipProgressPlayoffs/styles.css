@@ -63,6 +63,28 @@
   justify-content: space-around;
 }
 
+.display-area__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-controls {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.admin-notice {
+  background-color: #f8f9fa;
+  border-left: 4px solid #0d6efd;
+  padding: 8px 15px;
+  color: #495057;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 .playoffs-card {
   background-color: #ffffff; /* White background for the card */
   padding: 20px;
@@ -98,4 +120,161 @@
   margin-bottom: 15px;
   text-align: center;
   width: 100%;
+}
+
+/* Estilos para os botões de geração de fases */
+.next-phase-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.generate-phase-button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.generate-phase-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.generate-phase-button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+/* Estilos para a exibição do campeão */
+.champion-display {
+  width: 100%;
+  margin: 20px 0;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #ffdf70, #ffcc00);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.champion-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.champion-title {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.champion-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.champion-subtitle {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #d4af37;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.trophy-image-large {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.9));
+}
+
+.champion-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.champion-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #d4af37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+}
+
+.champion-name {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Estilos para o placar final */
+.final-score {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 10px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.final-match-title {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.final-match-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+}
+
+.final-team-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.final-score-value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0 15px;
+  min-width: 40px;
+}
+
+.final-score-separator {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin: 0 5px;
+  color: #333;
 }

@@ -38,7 +38,7 @@ router.get('/quadra/:quadraId', async (req, res) => {
     try {
         const { quadraId } = req.params;
         const campeonatos = await Campeonato.findAll({
-            where: { donoQuadraId: quadraId },
+            where: { quadraId: quadraId },
             order: [['data_inicio', 'DESC']]
         });
         
@@ -54,9 +54,11 @@ router.get('/disponiveis', async (req, res) => {
     try {
         const campeonatos = await Campeonato.findAll({
             where: {
-                status: 'não iniciado',
+                status: { [Op.or]: ['não iniciado', 'inscricoes'] },
+                // We might want to reconsider the data_inicio filter if 'inscricoes' can have past start dates
+                // For now, keeping it to ensure only future-starting or currently-inscribable-for-future-start championships are shown.
                 data_inicio: {
-                    [Op.gt]: new Date() // Data de início maior que hoje
+                    [Op.gt]: new Date() 
                 }
             },
             include: [{ model: Quadra, as: 'quadra' }]
@@ -241,6 +243,23 @@ router.put('/partidas/:partidaId/resultado', async (req, res) => {
                     quantidade: gol.quantidade || 1
                 });
             }
+        }
+        
+        // Verificar se é uma final (fase 4) e finalizar o campeonato se for
+        if (partida.fase === '4') { // fase 4 = final
+            console.log('Partida final finalizada. Atualizando status do campeonato...');
+            // Determinar o campeão baseado nos gols
+            const campeaoId = golsTimeA > golsTimeB ? partida.timeAId : partida.timeBId;
+            console.log(`Time campeão ID: ${campeaoId}`);
+            
+            // Atualizar o status do campeonato para finalizado e registrar o campeão
+            await Campeonato.update({
+                status: 'finalizado',
+                campeaoId: campeaoId
+            }, { 
+                where: { id: partida.campeonatoId } 
+            });
+            console.log(`Campeonato ${partida.campeonatoId} finalizado com sucesso!`);
         }
         
         return res.status(200).json({ message: 'Resultado registrado com sucesso' });
@@ -582,6 +601,23 @@ router.post('/:id/gerar-chaves', async (req, res) => {
             [times[i], times[j]] = [times[j], times[i]];
         }
 
+        // Determinar a fase inicial baseada no número de times
+        // - Para 16 times: fase 1 (oitavas)
+        // - Para 8 times: fase 2 (quartas)
+        // - Para 4 times: fase 3 (semifinais)
+        // - Para 2 times: fase 4 (final)
+        let faseInicial = '1'; // oitavas por padrão
+        
+        if (times.length <= 2) {
+            faseInicial = '4'; // final
+        } else if (times.length <= 4) {
+            faseInicial = '3'; // semifinais
+        } else if (times.length <= 8) {
+            faseInicial = '2'; // quartas
+        }
+        
+        console.log(`Iniciando campeonato na fase ${faseInicial} com ${times.length} times`);
+        
         // Criar as partidas iniciais
         const partidas = [];
         for (let i = 0; i < times.length; i += 2) {
@@ -590,10 +626,10 @@ router.post('/:id/gerar-chaves', async (req, res) => {
                     campeonatoId: id,
                     timeAId: times[i].timeId,
                     timeBId: times[i + 1].timeId,
-                    quadraId: campeonato.donoQuadraId, // usando a quadra do campeonato
+                    quadraId: campeonato.quadraId, // usando a quadra do campeonato
                     data: campeonato.data_inicio, // Usando a data de início do campeonato
                     hora: '12:00:00', // Definindo um horário padrão
-                    fase: '1',
+                    fase: faseInicial,
                     status: 'agendada'
                 });
                 partidas.push({

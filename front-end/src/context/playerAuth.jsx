@@ -29,6 +29,50 @@ export const PlayerAuthContextProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
+  const handlePlayoffsGetChampMatches = useCallback(async (champId) => {
+    if (!champId) {
+      console.warn("handlePlayoffsGetChampMatches called without champId");
+      setPlayoffsMatches([]); // Clear matches or handle as appropriate
+      return;
+    }
+    try {
+      console.log(`Fetching matches for championship ID: ${champId}`);
+      const response = await api.get(`/api/campeonato/${champId}`);
+      
+      // Get the partidas array from the response
+      const partidas = response.data?.partidas || [];
+      
+      // Process each match to include team names and images
+      const processedMatches = partidas.map(match => {
+        // Map the type/phase
+        const phaseMapping = {
+          '1': 'oitavas',
+          '2': 'quartas', 
+          '3': 'semi',
+          '4': 'final'
+        };
+        
+        return {
+          ...match,
+          type: phaseMapping[match.fase] || match.fase,
+          // Extract team data
+          time1_nome: match.timeA?.name || 'Time A',
+          time2_nome: match.timeB?.name || 'Time B',
+          time1_logo: match.timeA?.logo || null,
+          time2_logo: match.timeB?.logo || null,
+          time1_pontos: match.golsTimeA,
+          time2_pontos: match.golsTimeB
+        };
+      });
+      
+      console.log('Processed matches:', processedMatches);
+      setPlayoffsMatches(processedMatches);
+    } catch (error) {
+      console.error(`Erro ao buscar partidas para o campeonato ${champId}:`, error);
+      notifyError(error.response?.data?.error || 'Erro ao buscar partidas do campeonato.');
+      setPlayoffsMatches([]); // Set to empty array on error to prevent crashes
+    }
+  }, [setPlayoffsMatches]); // Assuming api and notifyError are stable or defined outside/memoized
   const handlePlayoffsGetChampInfo = async (champId) => {
     try {
       const response = await api.get(`/api/campeonato/${champId}`);
@@ -251,24 +295,26 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-  const handleGetAvaliableChampionship = async (playerId) => {
+  const handleGetAvaliableChampionship = async (playerId) => { // playerId is passed but not used by /disponiveis
     try {
-      // Buscar todos os campeonatos disponíveis para inscrição
-      const response = await api.get('/api/campeonato/disponiveis');
-      const campeonatosDisponiveis = response.data;
-      console.log('LOG: campeonatosDisponiveis BRUTO da API:', campeonatosDisponiveis);
-      
-      if (!campeonatosDisponiveis || campeonatosDisponiveis.length === 0) {
-        setAvaliableChampionship([]);
-        return;
-      }
-      
-      // Usar diretamente todos os campeonatos disponíveis, sem filtrar por inscrições existentes
-      setAvaliableChampionship(campeonatosDisponiveis);
-      console.log('CONTEXTO: Campeonatos disponíveis definidos:', campeonatosDisponiveis);
+      // Use the backend endpoint that pre-filters and formats championships
+      const response = await api.get('/api/campeonato/disponiveis'); 
+      const availableChampionshipsFromAPI = response.data;
+
+      // The backend /disponiveis route already filters by status ('inscricoes', 'não iniciado')
+      // and formats the data (e.g., 'title', 'initialDate', 'image').
+      // The component Player/Championships/index.jsx expects fields like:
+      // id, title, initialDate, status, image, premiation, registration.
+      // The backend /disponiveis provides these directly.
+
+      setAvaliableChampionship(availableChampionshipsFromAPI);
+      console.log('PLAYERAUTH: Campeonatos disponíveis da API /disponiveis:', availableChampionshipsFromAPI);
+      return availableChampionshipsFromAPI; // Return the data for potential chaining or direct use
     } catch (error) {
-      console.error('Erro ao buscar campeonatos disponíveis:', error);
-      setAvaliableChampionship([]);
+      console.error("PLAYERAUTH: Erro ao buscar campeonatos disponíveis:", error.response?.data || error.message);
+      notifyError(error.response?.data?.error || 'Erro ao buscar campeonatos disponíveis.');
+      setAvaliableChampionship([]); // Clear or set to empty on error
+      return []; // Return empty array on error
     }
   };
   const handleSetSelectedChamp = (champ) => {
@@ -363,7 +409,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
     }
   };
 
-    const handlePlayoffsGetChampMatches = useCallback(async (champId) => {
+    /*const handlePlayoffsGetChampMatches = useCallback(async (champId) => {
     try {
       const response = await api.get(`/api/campeonato/${champId}/partidas`);
       const matches = response.data.map(partida => ({
@@ -382,7 +428,7 @@ export const PlayerAuthContextProvider = ({ children }) => {
       setPlayoffsMatches([]); // Clear matches on error
       return [];
     }
-  });
+  });*/
 
   const handleGetChampPointsTable = async (champId) => {
     //TODO retornar cada linha da tabela de pontos do campeonato de pontos corridos, ordenado pela posição

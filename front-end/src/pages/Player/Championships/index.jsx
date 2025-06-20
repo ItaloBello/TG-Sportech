@@ -41,9 +41,14 @@ export default function Championships() {
   
     const handleChampionshipClick = (championship) => {
     if (!championship || !championship.id) return;
-    handleSetSelectedChamp(championship);
-    // All championships that call this are either in-progress or finished
-    navigate(`/player/championship-progress/playoffs/${championship.id}`);
+
+    // Only navigate to progress page if the championship is in progress or finished
+    if (championship.status === 'em andamento' || championship.status === 'finalizado') {
+      handleSetSelectedChamp(championship);
+      navigate(`/player/championship-progress/playoffs/${championship.id}`);
+    }
+    // For 'inscricoes' or 'não iniciado', clicking the card/image won't navigate.
+    // The "Inscrever Time" button handles the primary action for these statuses.
   };
   
   // Estado para modal de inscrição

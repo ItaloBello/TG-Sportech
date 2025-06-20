@@ -3,9 +3,9 @@ import "./styles.css";
 
 const ChampMatch = ({ 
   type = "", 
-  names, 
+  names = [], 
   // points, // Assuming scores come as golsTimeA, golsTimeB from ...match
-  images, 
+  images = [], 
   partidaId, 
   isAdmin, 
   onSaveResult, 
@@ -18,7 +18,9 @@ const ChampMatch = ({
   else if (type == "quartas") width = "6.25rem";
   else if (type == "semi") width = "7.5rem";
   else width = "8rem";
-    const [scoreA, setScoreA] = useState(golsTimeA !== null && golsTimeA !== undefined ? String(golsTimeA) : '');
+  
+  // Garantir que sempre comecem como strings vazias se não tiverem valor
+  const [scoreA, setScoreA] = useState(golsTimeA !== null && golsTimeA !== undefined ? String(golsTimeA) : '');
   const [scoreB, setScoreB] = useState(golsTimeB !== null && golsTimeB !== undefined ? String(golsTimeB) : '');
 
   useEffect(() => {
@@ -52,18 +54,24 @@ const ChampMatch = ({
   // Determine if inputs should be enabled
   // Assuming 'finalizada' is the status for a completed match where scores can no longer be edited.
   // And 'agendada' or 'em_andamento' (or other non-finalized statuses) allow editing.
-  const canEditScores = isAdmin && matchStatus !== 'finalizada';
+  const canEditScores = isAdmin; // Removida a verificação de status para debugging
+  
+  // Debug para ver se a lógica de permissão está funcionando
+  console.log(`Match ${partidaId} - isAdmin: ${isAdmin}, matchStatus: ${matchStatus}, canEditScores: ${canEditScores}`);
+  
+  // Imprimir os dados do match para debug
+  console.log('Match data:', { partidaId, type, names, images, golsTimeA, golsTimeB });
 
   return (
     <div className="champ-match">
       <div className="champ-match__team-area">
         <img
           className="champ-match__team-area-image"
-          src={images[0]}
-          alt={`${names[0]} logo`}
+          src={images[0] || "../../../../public/copa-fatec-icon.png"}
+          alt={`${names[0] || 'Time 1'} logo`}
           style={{ width: width }}
         />
-        <p>{names[0]}</p>
+        <p>{names[0] || 'Time 1'}</p>
       </div>
       <div className="champ-match__versus-area">
         <p style={{textTransform: 'capitalize'}}>{type}</p>
@@ -96,11 +104,11 @@ const ChampMatch = ({
       <div className="champ-match__team-area">
         <img
           className="champ-match__team-area-image"
-          src={images[1]}
-          alt={`${names[1]} logo`}
+          src={images[1] || "../../../../public/copa-fatec-icon.png"}
+          alt={`${names[1] || 'Time 2'} logo`}
           style={{ width: width }}
         />
-        <p>{names[1]}</p>
+        <p>{names[1] || 'Time 2'}</p>
       </div>
     </div>
   );

@@ -36,6 +36,14 @@ const Campeonato = sequelize.define('campeonato',{
         type: Sequelize.DECIMAL,
         allowNull: false
     },
+    quadraId: { 
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Quadra, 
+            key: 'id' 
+        }
+    },
     status: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -47,5 +55,8 @@ const Campeonato = sequelize.define('campeonato',{
 
 Campeonato.belongsTo(DonoQuadra);
 DonoQuadra.hasMany(Campeonato);
+
+Campeonato.belongsTo(Quadra, { foreignKey: 'quadraId', as: 'quadra' });
+Quadra.hasMany(Campeonato, { foreignKey: 'quadraId', as: 'campeonatos' });
 
 module.exports = Campeonato;

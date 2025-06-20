@@ -89,6 +89,15 @@ export default function ChampionshipManagement() {
       }
 
       // Converter valores monetários para números
+      // Garantir que selectedCourt seja uma string válida e depois convertê-la para número
+      const courtId = selectedCourt ? parseInt(selectedCourt, 10) : null;
+      
+      if (!courtId) {
+        notifyError("Quadra inválida selecionada. Por favor, selecione uma quadra.");
+        setLoading(false);
+        return;
+      }
+      
       const dataToSend = {
         name: formData.nome,
         initialDate: formData.data_inicio,
@@ -97,7 +106,7 @@ export default function ChampionshipManagement() {
         teamsNumber: parseInt(formData.max_times) || 16,
         description: formData.descricao,
         status: formData.status,
-        quadraId: selectedCourt
+        quadraId: courtId // Usando o ID da quadra como número
       };
       console.log('Enviando para backend:', dataToSend);
 
@@ -179,7 +188,18 @@ export default function ChampionshipManagement() {
   
   const filteredChampionships = championships.filter(championship => {
     if (activeTab === 'all') return true;
-    return championship.status === activeTab;
+    
+    // Mapeamento dos status do backend para as categorias da interface
+    switch (activeTab) {
+      case 'inscricoes':
+        return championship.status === 'inscricoes' || championship.status === 'não iniciado';
+      case 'em andamento':
+        return championship.status === 'em andamento';
+      case 'finalizado':
+        return championship.status === 'finalizado';
+      default:
+        return false;
+    }
   });
   
   return (

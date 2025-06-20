@@ -476,6 +476,7 @@ router.post('/campeonato/:id', async (req, res) => {
             num_times: numTimes,
             premiacao: premiacao,
             donoQuadraId: id, // Corrected: Links to the DonoQuadra (owner account)
+            quadraId: quadraId // Added: Links to the specific Quadra (court)
         };
         await Campeonato.create(campeonatoData);
         res.status(200).json({message: "Campeonato criado com sucesso!"})

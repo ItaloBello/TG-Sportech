@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../../../services/api";
-import { notifyError } from "../../../utils/notify";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 import Header from "../../../components/Header";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -79,15 +79,34 @@ const EditChamp = () => {
     }
   }, [championshipId, reset]);
 
-  const onSubmit = (dataForm) => {
-    // TODO: Implement update logic if championshipId exists
-    // For now, it just logs, as per the original component's behavior for creation
-    const payload = {
-      ...dataForm,
-      initialDate: format(dataForm.initialDate, "dd-MM-yyyy"),
-      teamsNumber: teamsNumber,
-    };
-    console.log(payload);
+  const onSubmit = async (dataForm) => {
+    try {
+      const payload = {
+        ...dataForm,
+        nome: dataForm.name,
+        data_inicio: format(dataForm.initialDate, "yyyy-MM-dd"),
+        max_times: parseInt(teamsNumber),
+        registro: parseFloat(dataForm.registration) || 0,
+        premiacao: parseFloat(dataForm.premiation) || 0,
+        descricao: dataForm.description,
+        jogos_por_dia: parseInt(dataForm.gamesPerDay),
+        intervalo_jogos: parseInt(dataForm.gamesInterval)
+      };
+
+      console.log('Enviando atualização para o backend:', payload);
+      
+      // Chama a API para atualizar o campeonato
+      await api.put(`/api/campeonato/${championshipId}`, payload);
+      
+      // Notifica sucesso
+      notifySuccess("Campeonato atualizado com sucesso!");
+      
+      // Redireciona de volta para a página de gerenciamento
+      window.history.back();
+    } catch (error) {
+      console.error("Erro ao atualizar campeonato:", error);
+      notifyError(error.response?.data?.error || "Erro ao atualizar campeonato");
+    }
   };
 
   return (

@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 sequelize.authenticate()
     .then(() => {
         console.log(`Conexão com o MySQL estabelecida com sucesso na porta ${PORT}.`);
-        return sequelize.sync(); // Sincroniza as tabelas automaticamente
+        return sequelize.sync({ alter: true }); // Sincroniza as tabelas, aplicando alterações como novas colunas
     })
     .then(() => {
         console.log("Tabelas sincronizadas com sucesso.");

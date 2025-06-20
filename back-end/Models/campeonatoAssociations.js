@@ -20,9 +20,6 @@ TimeCampeonato.belongsTo(Campeonato);
 Time.hasMany(TimeCampeonato);
 TimeCampeonato.belongsTo(Time);
 
-// Associação entre Campeonato e Quadra
-Campeonato.belongsTo(Quadra, { foreignKey: 'donoQuadraId', as: 'quadra' });
-Quadra.hasMany(Campeonato, { foreignKey: 'donoQuadraId', as: 'campeonatos' });
 
 module.exports = {
   Campeonato,
