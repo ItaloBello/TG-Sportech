@@ -31,13 +31,13 @@ const TeamCard = ({
 }} />
           {addPlayer ? (<>
             <CardButton label="Editar" colorButton="#14AE5C" link={`/player/edit-team/${id}`}/>
-            <button style={{border:'none', background:'transparent'}}>
+            {/* <button style={{border:'none', background:'transparent'}}>
               <img
                 className="button-area__image"
                 src="../../public/add-player-icon.png"
                 alt="icone de adiconar o jogador"
                 />
-            </button>
+            </button> */}
                 </>
           ) : (
             <><CardButton label="Visualizar" colorButton="#14AE5C" link={`/player/view-team/${id}`}/></>
