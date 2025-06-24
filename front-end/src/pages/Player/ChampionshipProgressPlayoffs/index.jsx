@@ -212,9 +212,9 @@ const ChampionshipProgressPlayoffs = () => {
             <div className="champion-container">
               <h2 className="champion-title">CAMPEONATO FINALIZADO</h2>
               <div className="champion-badge">
-                <img src="/trophy.png" alt="Troféu" className="trophy-image-large" 
+                {/* <img src="/trophy.png" alt="Troféu" className="trophy-image-large" 
                      onError={(e) => { e.target.src = '/default-trophy.png'; }}
-                />
+                /> */}
                 <h3 className="champion-subtitle">CAMPEÃO</h3>
               </div>
               
