@@ -304,7 +304,7 @@ const ChampionshipProgressPlayoffs = () => {
                   isAdmin={canEdit}
                 />
               ))}
-            </div>
+            </div> 
           )}
 
           {/* Final */}

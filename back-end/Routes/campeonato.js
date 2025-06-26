@@ -99,7 +99,7 @@ router.get('/:id', async (req, res) => {
             where: { campeonatoId: id },
             include: [{ model: Time }]
         });
-        
+         
         // Buscar partidas
         const partidas = await Partida.findAll({
             where: { campeonatoId: id },

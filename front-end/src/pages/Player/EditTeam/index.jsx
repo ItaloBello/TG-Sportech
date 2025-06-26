@@ -25,6 +25,7 @@ const EditTeam = () => {
   const navigate = useNavigate();
   const { player, handleGetTeamDetails, selectedTeam, teamPlayers, isTeamOwner } = usePlayerAuth();
   const [loading, setLoading] = useState(true);
+  const [teamImg, setTeamImg] = useState(null);
   
   const {
     control,
@@ -48,6 +49,7 @@ const EditTeam = () => {
             setValue('name', data.time.name);
             setValue('primaryColor', data.time.primaryColor || data.time.cor_primaria);
             setValue('secondaryColor', data.time.secondaryColor || data.time.cor_secundaria);
+            setTeamImg(data.time.img);
           }
         } catch (error) {
           console.error('Erro ao carregar dados do time:', error);
@@ -125,8 +127,9 @@ const EditTeam = () => {
       <div className="edit-team__header">
         <p>Editar Time</p>
         <img
-          src="../../../public/add-img-team.png"
+          src={!teamImg? "../../../public/add-img-team.png" : teamImg}
           alt="adicione a imagem time"
+          name="teamImg"
         />
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>

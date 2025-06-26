@@ -10,7 +10,10 @@
 }
 
 .champ-match__team-area-image{
-    border-radius: .5rem;
+    border-radius: 50%;
+    width: 60px;
+    padding: 10px;
+    height: auto
 }
 
 .champ-match__team-area,.champ-match__versus-area{

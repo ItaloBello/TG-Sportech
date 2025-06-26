@@ -122,3 +122,61 @@
   color: #666;
   font-style: italic;
 }
+
+.subscribe-btn{
+  background-color: #1a73e8;
+  color: #ddd;
+  border-radius: 5px;
+  height: 2.5em;
+  width: 8em;
+  border: 2px white;
+}
+
+.subscribe-btn:hover{
+  background-color: rgb(45, 100, 196);
+  font-weight: bold;
+}
+
+.confirm-btn{
+  background-color: rgb(62, 194, 88);
+  color: #ddd;
+  border-radius: 5px;
+  height: 2em;
+  border: 1px black solid;
+  margin-left: 10px;
+  align-items: center;
+}
+
+.confirm-btn:hover{
+  background-color: rgb(38, 141, 24);
+  font-weight: bold;
+}
+
+.close-btn{
+  background-color: rgb(201, 76, 34);
+  color: #ddd;
+  border-radius: 5px;
+  height: 2em;
+  border: 1px black solid;
+  margin-left: 10px;
+  align-items: center;
+}
+
+.close-btn:hover{
+  background-color: rgb(119, 7, 7);
+  font-weight: bold;
+}
+
+
+.modal-overlay{
+  margin-top: 1.5em;
+}
+
+.subscription-form{
+  padding: 1em;
+}
+
+.team-select{
+  margin: 5px;
+  border-radius: 6px;
+}

@@ -239,18 +239,18 @@ export default function Championships() {
                   {(!myTeams || myTeams.length === 0) ? (
                     <p>Você não possui nenhum time. Crie um time antes de se inscrever!</p>
                   ) : (
-                    <>
+                    <div className='subscription-form'>
                       <label htmlFor="team-select">Selecione o time:</label>
-                      <select id="team-select" value={selectedTeamId} onChange={e => setSelectedTeamId(e.target.value)}>
+                      <select id="team-select" className="team-select" value={selectedTeamId} onChange={e => setSelectedTeamId(e.target.value)}>
                         <option value="">Selecione...</option>
                         {myTeams.map(team => (
                           <option key={team.id} value={team.id}>{team.name}</option>
                         ))}
                       </select>
                       <button className="confirm-btn" onClick={handleSubscribe}>
-                        Confirmar Inscrição
+                          Confirmar  
                       </button>
-                    </>
+                    </div>
                   )}
                   {feedback && (
                     <div className={`feedback-message ${feedback.success ? 'success' : 'error'}`}>{feedback.message}</div>

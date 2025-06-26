@@ -49,12 +49,13 @@ const AppointmentCard = ({
       {toEdit ? (
         <div className="appointment-card__button-area">
           <Link
-            to="/admin/select-appointment/edit"
-            onClick={() => handleSetSelectedAppointment(id)}
+          to="/admin/select-appointment/edit"
+          onClick={() => handleSetSelectedAppointment(id)}
+          style={{color: "CadetBlue", borderColor: "Beige"}}
           >
-            Editar
+          Gerenciar
           </Link>
-          <button className="appointment-card__delete-button" onClick={dell}>Excluir</button>
+          {/*<button className="appointment-card__delete-button" onClick={dell}>Excluir</button>*/}
         </div>
       ) : (
         <></>

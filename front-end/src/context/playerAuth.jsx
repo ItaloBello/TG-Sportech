@@ -58,8 +58,8 @@ export const PlayerAuthContextProvider = ({ children }) => {
           // Extract team data
           time1_nome: match.timeA?.name || 'Time A',
           time2_nome: match.timeB?.name || 'Time B',
-          time1_logo: match.timeA?.logo || null,
-          time2_logo: match.timeB?.logo || null,
+          time1_logo: match.timeA?.img || null,
+          time2_logo: match.timeB?.img || null,
           time1_pontos: match.golsTimeA,
           time2_pontos: match.golsTimeB
         };
