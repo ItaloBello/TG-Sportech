@@ -98,24 +98,7 @@ const CreateTeam = () => {
           name="secondaryColor"
           type="text"
         />
-        <div className="create-team__input-and-button">
-          <InputItem
-            id="btnCopy"
-            placeholder={"Code"}
-            label={"Invite Code"}
-            control={control}
-            errorMessage={errors?.inviteCode?.message}
-            name="inviteCode"
-            type="text"
-            isDisabled={true}
-          />
-          <ButtonItem
-            label={"Copiar"}
-            link={"/player/create-team"}
-            color={"#ffffff"}
-            onClick={copyCode}
-          />
-        </div>
+       
         <div className="create-team__button-area">
           <ButtonItem
             label={"Cancelar"}

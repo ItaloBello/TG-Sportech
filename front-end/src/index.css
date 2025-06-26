@@ -10,6 +10,8 @@ body {
   background-color: #d9d9d9;
   color: #49454f;
   font-family: "Roboto", sans-serif;
+  overflow-y: scroll;
+  padding: 1rem;
 }
 
 #root {
