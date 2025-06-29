@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const DonoQuadra = require('../Models/DonoQuadra');
+const nodemailer = require("nodemailer");
+const Usuario = require("../Models/Usuario");
 const Quadra = require('../Models/Quadra');
 const Agendamento = require('../Models/Agendamentos')
 const bcrypt = require('bcrypt');
@@ -11,7 +13,16 @@ const Estabelecimento = require("../Models/Estabelecimento");
 const Campeonato = require("../Models/Campeonato")
 const { message } = require("statuses");
 
-
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'oenhacker123@gmail.com',
+      pass: 'uxvw jhij gdxa ryxz'
+    },
+    tls: {
+      rejectUnauthorized: false  // This will solve the self-signed certificate issue
+    }
+  });
 
 router.post("/registro", async (req, res) => {
     let erros = [];
@@ -178,6 +189,60 @@ router.post('/cadastrarQuadra/:id', async (req, res) => {
     }
 });
 
+router.post("/recover/password/:email", async (req,res) => {
+  const emailJogador = req.params.email;
+  const novaSenha = req.query.newPassword;
+  try{
+  const jogador = await DonoQuadra.findOne({where:{email: emailJogador}});
+  if (!jogador){
+    res.status(404).json({ error: "Jogador não encontrado." });
+    return
+  }
+  const mailOptions = {
+            from: 'oenhacker123@gmail.com',
+            to: emailJogador,
+            subject: 'Troca de Senha Requisitada',
+            html: `
+                <html style="font-family: 'Lato', sans-serif;">
+                <head>
+                <title>Troca de senha</title>
+                </head>
+                <body style="background-color: #f2f2f2; margin: 0;">
+                <div style="display: flex; flex-direction: column; align-items: center;"
+                    <h1 style="color: #4CAF50;">Clique no link abaixo para redefinir sua senha:</h1>
+                    <button onclick="http://localhost:8081/api/admin/change/password?email=${emailJogador}&newPassword=${novaSenha}">Redefinir senha para: ${novaSenha}</button>
+                </div>
+                </body>
+                </html>
+            `
+        };
+          await transporter.sendMail(mailOptions);
+          res.status(200).json({ message: 'Notificação enviada com sucesso' });
+        }catch(err){
+          console.log(err.message);
+          res.status(400).json({ error: err.message });
+        }
+});
+
+router.get("/change/password", async (req,res) => {
+  const email = req.query.email;
+  const novaSenha = req.query.newPassword;
+  const jogador = await DonoQuadra.findOne({where:{email: email}});
+  if (!jogador){
+    res.status(401).json({ error: "Jogador não encontrado." });
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(novaSenha, salt);
+        try{
+          jogador.password = hash
+          await DonoQuadra.update(jogador,{where:{email: email}});
+          res.status(200).json({ message: 'Senha Alterada com sucesso' });
+        }catch(err){
+          console.log(err.message);
+          res.status(400).json({ error: err.message });
+        }
+});
+
 router.post('/cadastrarEstabelecimento/:id', async (req, res) => {
     
     try{
@@ -260,11 +325,13 @@ router.get("/agendamentos", async (req, res) => {
     });
     for (let agend of agendamentos) {
       const data = new Date(agend.data);
-      const quadra = await Quadra.findOne({where: {id: agend.idQuadra}})
+      const quadra = await Quadra.findOne({where: {id: agend.idQuadra}});
+      const jogador = await Usuario.findOne({where: {id: agend.idJogador}});
       appointments.push({
         type: "rachão",
         date: data.toLocaleDateString('pt-BR'),
         adversary: "",
+        player: jogador.name,
         times: [`${agend.horaInicio.slice(0, 5)}-${agend.horaFim.slice(0, 5)}`],
         status: agend.pago ? "Pago" : "Pagamento Pendente",
         court: quadra.nome,

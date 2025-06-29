@@ -5,6 +5,7 @@ import { useAdminAuth } from "../../hooks/useAdminAuth";
 const AppointmentCard = ({
   type,
   adversary = null,
+  player = "",
   date,
   times,
   status,
@@ -19,6 +20,11 @@ const AppointmentCard = ({
       <p className="appointment-card__text">Tipo de Jogo: {type}</p>
       {adversary ? (
         <p className="appointment-card__text">Advesario: {adversary}</p>
+      ) : (
+        <></>
+      )}
+      {player ? (
+        <p className="appointment-card__text">Jogador: {player}</p>
       ) : (
         <></>
       )}

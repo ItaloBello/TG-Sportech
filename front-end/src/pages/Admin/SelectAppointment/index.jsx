@@ -40,6 +40,7 @@ if(isLoading) return <></>
             times={appointment.times}
             type={appointment.type}
             adversary={appointment.adversary}
+            player={appointment.player}
             court={appointment.court}
             toEdit={true}
             key={index}

@@ -55,11 +55,11 @@ const AdminLogin = () => {
             placeholder="senha"
             type="password"
           />
-          <Link className="link__message">
+          <Link className="link__message" to="/admin/recovery">
             <p>Esqueceu a senha?</p>
           </Link>
           <FormButton label="entrar" />
-        </form>
+        </form> 
       </div>
       <p className="admin-login__p">
         Não possúi cadastro?{"  "}

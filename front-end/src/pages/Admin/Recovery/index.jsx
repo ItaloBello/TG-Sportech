@@ -18,7 +18,7 @@ const schema = yup
   })
   .required();
 
-const PlayerRecovery = () => {
+const AdminRecovery = () => {
   const {
     control,
     handleSubmit,
@@ -31,10 +31,10 @@ const PlayerRecovery = () => {
   const navigate = useNavigate()
   const onSubmit = async (formData)=>{
     console.log(formData);
-    const response = await api.post(`/api/jogador/recover/password/${formData.email}?newPassword=${formData.newPassword}`);
+    const response = await api.post(`/api/admin/recover/password/${formData.email}?newPassword=${formData.newPassword}`);
     console.log(response);
     if (response.status == 200){
-      navigate("/player/recovery/email");
+      navigate("/admin/recovery/email");
     }else{
       alert("algo deu errado");
     }
@@ -63,4 +63,4 @@ const PlayerRecovery = () => {
   );
 };
 
-export default PlayerRecovery;
+export default AdminRecovery;

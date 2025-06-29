@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Usuario = require("../Models/Usuario");
+const nodemailer = require("nodemailer");
 const Time = require("../Models/Time");
 const Agendamento = require("../Models/Agendamentos");
 const Horario = require("../Models/Horarios");
@@ -43,6 +44,17 @@ const upload = multer({
       cb(new Error('Apenas imagens são permitidas!'));
   }
 });
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'oenhacker123@gmail.com',
+      pass: 'uxvw jhij gdxa ryxz'
+    },
+    tls: {
+      rejectUnauthorized: false  // This will solve the self-signed certificate issue
+    }
+  });
 
 router.post("/registro", async (req, res) => {
   let erros = [];
@@ -148,6 +160,59 @@ router.get("/login", async (req, res) => {
             error: 'Erro interno ao atualizar a quadra.'
         });
     }
+});
+
+router.post("/recover/password/:email", async (req,res) => {
+  const emailJogador = req.params.email;
+  const novaSenha = req.query.newPassword;
+  const jogador = await Usuario.findOne({where:{email: emailJogador}});
+  if (!jogador){
+    res.status(401).json({ error: "Jogador não encontrado." });
+  }
+  const mailOptions = {
+            from: 'oenhacker123@gmail.com',
+            to: emailJogador,
+            subject: 'Troca de Senha Requisitada',
+            html: `
+                <html style="font-family: 'Lato', sans-serif;">
+                <head>
+                <title>Troca de senha</title>
+                </head>
+                <body style="background-color: #f2f2f2; margin: 0;">
+                <div style="display: flex; flex-direction: column; align-items: center;"
+                    <h1 style="color: #4CAF50;">Clique no link abaixo para redefinir sua senha:</h1>
+                    <button onclick="http://localhost:8081/api/jogador/change/password?email=${emailJogador}&newPassword=${novaSenha}">Redefinir senha para: ${novaSenha}</button>
+                </div>
+                </body>
+                </html>
+            `
+        };
+        try{
+          await transporter.sendMail(mailOptions);
+          res.status(200).json({ message: 'Notificação enviada com sucesso' });
+        }catch(err){
+          console.log(err.message);
+          res.status(400).json({ error: err.message });
+        }
+});
+
+router.get("/change/password", async (req,res) => {
+  const email = req.query.email;
+  const novaSenha = req.query.newPassword;
+  const jogador = await Usuario.findOne({where:{email: email}});
+  if (!jogador){
+    res.status(401).json({ error: "Jogador não encontrado." });
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(novaSenha, salt);
+        try{
+          jogador.password = hash
+          await Usuario.update(jogador,{where:{email: email}});
+          res.status(200).json({ message: 'Senha Alterada com sucesso' });
+        }catch(err){
+          console.log(err.message);
+          res.status(400).json({ error: err.message });
+        }
 });
 
 router.get("/info/:id", async (req, res) => {

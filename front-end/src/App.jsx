@@ -4,6 +4,8 @@ import PlayerLogin from "./pages/Player/Login";
 import { PlayerSingUp } from "./pages/Player/SingUp";
 import PlayerRecovery from "./pages/Player/Recovery";
 import PlayerEmail from "./pages/Player/Email";
+import AdminRecovery from "./pages/Admin/Recovery";
+import AdminEmail from "./pages/Admin/Email";
 import PlayerMenu from "./pages/Player/Menu";
 import TeamMenu from "./pages/Player/TeamMenu";
 import CreateTeam from "./pages/Player/CreateTeam";
@@ -67,6 +69,8 @@ const App = () => {
               <Route path="/player/singup" element={<PlayerSingUp />} />
               <Route path="/player/recovery" element={<PlayerRecovery />} />
               <Route path="/player/recovery/email" element={<PlayerEmail />} />
+              <Route path="/admin/recovery" element={<AdminRecovery />} />
+              <Route path="/admin/recovery/email" element={<AdminEmail />} />
               
               <Route path="/player/menu" element={<PlayerMenu />} />
               <Route path="/player/profile/" element={<PlayerProfile />} />
