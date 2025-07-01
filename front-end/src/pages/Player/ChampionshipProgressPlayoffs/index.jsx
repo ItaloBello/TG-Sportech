@@ -104,20 +104,23 @@ const ChampionshipProgressPlayoffs = () => {
       champion = {
         name: finalMatch.time1_nome || finalMatch.nameTimeA || 'Campeão',
         id: finalMatch.time1_id || finalMatch.timeAId,
-        image: finalMatch.time1_image || finalMatch.imgTimeA || '../../../../public/copa-zn-icon.png',
+        image: finalMatch.time1_image || finalMatch.imgTimeA || finalMatch.timeA.img,
         score: finalMatch.time1_pontos
       };
-    } else {
+    } else if (finalMatch.time1_pontos < finalMatch.time2_pontos){
       // Time B venceu
       champion = {
         name: finalMatch.time2_nome || finalMatch.nameTimeB || 'Campeão',
         id: finalMatch.time2_id || finalMatch.timeBId,
-        image: finalMatch.time2_image || finalMatch.imgTimeB || '../../../../public/copa-zn-icon.png',
+        image: finalMatch.time2_image || finalMatch.imgTimeB || finalMatch.timeB.img,
         score: finalMatch.time2_pontos
       };
     }
-    console.log('Time campeão:', champion);
+    else{
+      champion=null
+    }
   }
+  console.log('Time campeão:', champion);
 
   const getTeamNames = (match) => {
     // Assuming team names are available in match object
@@ -166,6 +169,8 @@ const ChampionshipProgressPlayoffs = () => {
     }
   };
 
+
+  
   return (
     <div className="championship-progress-playoffs-container">
       <Header link={1}/>
@@ -219,11 +224,13 @@ const ChampionshipProgressPlayoffs = () => {
               </div>
               
               <div className="champion-team">
+                
                 <img 
                   src={champion.image} 
                   alt={`${champion.name} - Campeão`} 
                   className="champion-image"
                   onError={(e) => { e.target.src = '/default-team.png'; }}
+                  onClick={()=>console.log(champion.image)}
                 />
                 <h3 className="champion-name">{champion.name}</h3>
               </div>
