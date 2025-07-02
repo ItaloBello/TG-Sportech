@@ -238,11 +238,11 @@ const ChampionshipProgressPlayoffs = () => {
               <div className="final-score">
                 <p className="final-match-title">Placar da Final</p>
                 <div className="final-match-score">
-                  <span className="final-team-name">{finalMatch.nameTimeA || finalMatch.time1?.name || 'Time A'}</span>
+                  <span className="final-team-name">{finalMatch.nameTimeA || finalMatch.time1?.name || finalMatch.timeA.name ||'Time A'}</span>
                   <span className="final-score-value">{finalMatch.time1_pontos}</span>
                   <span className="final-score-separator">x</span>
                   <span className="final-score-value">{finalMatch.time2_pontos}</span>
-                  <span className="final-team-name">{finalMatch.nameTimeB || finalMatch.time2?.name || 'Time B'}</span>
+                  <span className="final-team-name">{finalMatch.nameTimeB || finalMatch.time2?.name ||finalMatch.timeB.name || 'Time B'}</span>
                 </div>
               </div>
             </div>

@@ -8,7 +8,7 @@ const AppointmentMenu = () => {
       <Header />
       <MenuItem label="Agendamentos Feitos" link="/admin/select-appointment" />
       <MenuItem label="Verificar Horários Livres" link="/admin/free-schedules" />
-      <MenuItem label="Agendar" link="/admin/create-appointment" />
+      {/* <MenuItem label="Agendar" link="/admin/create-appointment" /> */}
       <MenuItem
         src="../../public/arrow-icon.png"
         alt="icone de voltar"

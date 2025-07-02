@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlayerAuthContext } from '../../../context/playerAuth';
 import './styles.css';
 
-export default function Championships() {
+export default function  Championships() {
   const navigate = useNavigate();
   const { 
     player, 

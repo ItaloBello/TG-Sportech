@@ -50,10 +50,11 @@
   min-height: 300px;
 }
 
-.championships-list h2 {
+.championship-list h2 {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: .5rem;
   color: #444;
+  
 }
 
 .cards-grid {
