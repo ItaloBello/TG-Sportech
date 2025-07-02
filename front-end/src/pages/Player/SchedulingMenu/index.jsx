@@ -10,7 +10,7 @@ const SchedulingMenu = () => {
 
         <Header link={1}/>
         <MenuItem label='Agendar Rachão' link='/player/scheduling-simple'/>
-        <MenuItem label='Agendar Amistoso' link='/player/scheduling-team'/>
+        {/* <MenuItem label='Agendar Amistoso' link='/player/scheduling-team'/> */}
         <MenuItem label='Meus Agendamentos' link='/player/my-appointments'/>
         <MenuItem
         src="../../public/arrow-icon.png"
